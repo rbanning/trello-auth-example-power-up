@@ -1,0 +1,16 @@
+{
+  "name": "trg-trello-meeting-power-up",
+  "version": "0.1.0",
+  "description": "TRG Meeting Manager Trello Power Up",
+  "main": "index.js",
+  "repository": "https://github.com/rbanning/trg-trello-meeting-power-up.git",
+  "author": "rbanning <rob@myhallpass.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "parcel build src/html/*.html"
+  },
+  "dependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}
