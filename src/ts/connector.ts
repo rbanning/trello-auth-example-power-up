@@ -1,4 +1,4 @@
-import {env, currentUserMembership} from './_common';
+import {env, currentUserMembership, currentUserIsAdmin, trello} from './_common';
 
 console.log("connector", {env});
 
@@ -59,8 +59,11 @@ function exploreMembers(t: any) {
       console.log("DEBUG: exploreMember - Card", {card});
     });
 
-  currentUserMembership(t)
-    .then((result: any) => {
-      console.log("DEBUG: exploreMember - Card", {result});
+  trello.Promise.all([
+    currentUserMembership(t),
+    currentUserIsAdmin(t),
+  ]).then((result: any) => {
+      const [member, isAdmin] = result;
+      console.log("DEBUG: exploreMember - currentUserMembership", {result, member, isAdmin});
     })
 }

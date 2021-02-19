@@ -81,7 +81,7 @@ t.render(() => {
     console.log("DEBUG:// settings", {results, settings, lists});
 
     //ADD THE LISTs TO SELECT
-    const select: HTMLSelectElement = (window.document.getElementById('#list_id') as HTMLSelectElement);
+    const select: HTMLSelectElement = (window.document.getElementById('list_id') as HTMLSelectElement);
     if (!select) { throw new Error("Unable to find the list select dropdown"); }
 
     lists.forEach((item: any) => {
@@ -93,7 +93,7 @@ t.render(() => {
 
     //SET THE VALUES
     Object.keys(settings).forEach(key => {
-      const el = (window.document.getElementById(`#${key}`) as HTMLInputElement); 
+      const el = (window.document.getElementById(`${key}`) as HTMLInputElement); 
       if (el) { el.value = settings[key]; }
     })
 

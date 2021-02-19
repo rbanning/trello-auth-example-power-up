@@ -37,3 +37,10 @@ export const currentUserMembership = (t: any) => {
     return member;
   })
 }
+
+export const currentUserIsAdmin = (t: any) => {
+  return currentUserIsAdmin(t)
+    .then((member: any) => {
+      return member?.memberType === 'admin';
+    });
+}
