@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "npx tsc && parcel build src/html/*.html"
+    "build": "tsc && parcel build src/html/*.html"
   },
   "dependencies": {
     "parcel-bundler": "^1.12.4",

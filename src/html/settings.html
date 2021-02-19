@@ -5,11 +5,28 @@
     <meta charset="utf-8">
     <link href="styles.css" rel="stylesheet" />
     <style>
+      body {
+        font-size: 14px;
+      }
+      label {
+        display: block;
+        font-weight: 500;
+      }
+      input, select {
+        display: block;
+        width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+      code {
+        display: inline-block;
+        padding-right: 5px;
+        font-family: monospace;
+        color: gray;
+      }
+
       .field {
         margin: 1em 0;
-      }
-      .label {
-        display: block;
       }
     </style>
 </head>
@@ -58,7 +75,7 @@
     
     <div class="actions">
       <button type="button" class="button close">Close</button>
-      <button type="button" class="button" disabled>Save</button>
+      <button type="button" class="button primary" id="save" disabled>Save</button>
     </div>
 
     <script src="https://p.trellocdn.com/power-up.min.js" crossorigin="anonymous"></script>
