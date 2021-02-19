@@ -8,9 +8,14 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "parcel build src/html/*.html"
+    "build": "npx tsc && parcel build src/html/*.html"
   },
   "dependencies": {
-    "parcel-bundler": "^1.12.4"
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-interpolate-env": "^0.0.1",
+    "parcel-plugin-static-files-copy": "^2.5.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.5"
   }
 }

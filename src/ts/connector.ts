@@ -1,7 +1,8 @@
+import {env} from './_common';
 
 const connector: any = {
-  name: "Connector",
-  version: "0.1",
+  name: env.name,
+  version: env.version,
 };
 
 console.log("connector", `${connector.name} - v ${connector.version}`);
