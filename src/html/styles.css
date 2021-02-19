@@ -27,6 +27,9 @@ h1 {
 .button.primary {
   background: rgb(4, 107, 241);
 }
+.button.caution {
+  background: rgb(206, 49, 49);
+}
 .button + .button { margin: 0 1em; }
 .button[disabled] {
   opacity: 0.4;

@@ -1,4 +1,6 @@
 import { LoadingService } from "./loading.service";
+import { SettingsService } from "./settings.service";
+import { toastr } from "./toastr.service";
 import { trello, env } from "./_common";
 
 const saveBtn: HTMLButtonElement = (window.document.getElementById('save') as HTMLButtonElement);
@@ -9,6 +11,8 @@ if (!saveBtn) {
 const t = trello.t();
 const loading = new LoadingService();
 loading.show();
+
+const settingsService = new SettingsService();
 
 //HELPERS
 const close = () => {
@@ -55,15 +59,37 @@ const save = () => {
 
   if (isValid) {
     loading.show();
-    t.set('board', 'private', env.SETTINGS_KEY, data)
+    settingsService.save(t, data)
       .then(_ => {
         loading.hide();
+        toastr.success(t, "Saved Settings");        
         t.closePopup();
       }, (reason) => {
+        toastr.error(t, "Error saving settings");
         console.warn("Unable to save settings", {reason});
         loading.hide();
       });
   }
+}
+
+const _revert = (t) => {
+  console.log("RESET");
+}
+const _no_revert = (t) => {
+  console.log("NO RESET");
+}
+
+const revert = () => {
+  t.popup({
+    type: 'confirm',
+    title: 'Reset Settings',
+    message: 'Are you sure you want to reset the settings back to their original?',
+    confirmText: 'Reset',
+    onConfirm: _revert,
+    confirmStyle: 'danger',
+    cancelText: 'Cancel',
+    onCancel: _no_revert    
+  });
 }
 
 
@@ -75,6 +101,10 @@ window.document.querySelectorAll('.close')
     btn.addEventListener('click', close);
   });
 
+
+//SETUP RESET/REVERT BUTTON
+window.document.getElementById('reset')
+  .addEventListener('click', revert);
 
 //SETUP SAVE BUTTON
 saveBtn.addEventListener('click', save);
@@ -89,7 +119,7 @@ window.document.querySelectorAll('input')
 //START RENDERING
 t.render(() => {
   return trello.Promise.all([
-    t.get('board', 'private', env.SETTINGS_KEY),
+    settingsService.get(t),
     t.lists('id','name')
     //add others as needed
   ])
