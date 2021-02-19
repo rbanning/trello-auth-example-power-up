@@ -16,6 +16,7 @@ const close = () => {
 };
 
 const toggleSave = (enabled: boolean) => {
+  console.log("DEBUG:// toggleSave", {saveBtn, enabled});
   if (enabled) {
     saveBtn.setAttribute('disabled','true');
   } else {
@@ -27,12 +28,18 @@ const getFormData = () => {
   const data = {};
   window.document.querySelectorAll('input')
     .forEach(input => {
-      data[input.id] = input.value;
+      if (input?.id) {
+        data[input.id] = input.value;
+      }
     });  
   window.document.querySelectorAll('select')
     .forEach(input => {
-      data[input.id] = input.value;
+      if (input?.id) {
+        data[input.id] = input.value;
+      }
     });
+
+  console.log("DEBUG:// getFormData", data);
   return data;
 }
 
@@ -40,7 +47,7 @@ const validateForm = () => {
   const data = getFormData();
   return Object.keys(data).every(key => {
     if (!data[key]) {
-      console.log("DEBUG:// validateForm", {key, value: data[key]});
+      console.log("DEBUG:// validateForm - found invalid", {key, value: data[key]});
     }
 
     return !!data[key];
@@ -98,17 +105,10 @@ t.render(() => {
     })
 
     //DONE
+    console.log("DEBUG: - done setting up ... now finishing");
     toggleSave(validateForm());
     loading.hide();
     t.sizeTo('#content').done();
   });
-
-
-  //todo: get
-
-  //DONE
-  toggleSave(validateForm());
-  loading.hide();
-
 });
 
