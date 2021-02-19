@@ -5,4 +5,4 @@ const connector: any = {
   version: env.version,
 };
 
-console.log("connector", `${connector.name} - v ${connector.version}`);
+console.log("connector", {connector, env});
