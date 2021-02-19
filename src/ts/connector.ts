@@ -1,4 +1,4 @@
-import {env} from './_common';
+import {env, currentUserMembership} from './_common';
 
 console.log("connector", {env});
 
@@ -59,4 +59,8 @@ function exploreMembers(t: any) {
       console.log("DEBUG: exploreMember - Card", {card});
     });
 
+  currentUserMembership(t)
+    .then((result: any) => {
+      console.log("DEBUG: exploreMember - Card", {result});
+    })
 }

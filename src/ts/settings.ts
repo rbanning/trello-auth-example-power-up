@@ -1,7 +1,7 @@
 import { LoadingService } from "./loading.service";
 import { trello, env } from "./_common";
 
-const saveBtn: HTMLButtonElement = window.document.querySelector('.save');
+const saveBtn: HTMLButtonElement = (window.document.getElementById('save') as HTMLButtonElement);
 if (!saveBtn) {
   throw new Error("Could not locate the save button");
 }
