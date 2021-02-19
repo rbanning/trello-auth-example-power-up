@@ -44,16 +44,24 @@ const validateForm = () => {
   });
 }
 
+const updateSaveBtn = () => {
+  toggleSave(validateForm());
+}
+
 const save = () => {
-  loading.show();
   const data = getFormData();
   const isValid = validateForm();
   console.log("DEBUG:// save", {data, isValid});
 
   if (isValid) {
+    loading.show();
     t.set('board', 'private', env.SETTINGS_KEY, data)
       .then(_ => {
+        loading.hide();
         t.closePopup();
+      }, (reason) => {
+        console.warn("Unable to save settings", {reason});
+        loading.hide();
       });
   }
 }
@@ -70,6 +78,12 @@ window.document.querySelectorAll('.close')
 
 //SETUP SAVE BUTTON
 saveBtn.addEventListener('click', save);
+
+//SETUP THE INPUT BUTTONS (onChange)
+window.document.querySelectorAll('input')
+  .forEach(input => {
+    input.addEventListener('change', updateSaveBtn);
+  });
 
 
 //START RENDERING
@@ -97,6 +111,7 @@ t.render(() => {
       option.innerText = item.name;
       select.add(option);
     });
+    select.addEventListener('change', updateSaveBtn);
 
 
     if (settings) {
@@ -108,7 +123,7 @@ t.render(() => {
     }
 
     //DONE
-    toggleSave(validateForm());
+    updateSaveBtn();
     loading.hide();
     t.sizeTo('#content').done();
   });

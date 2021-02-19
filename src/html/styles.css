@@ -28,6 +28,9 @@ h1 {
   background: rgb(4, 107, 241);
 }
 .button + .button { margin: 0 1em; }
+.button[disabled] {
+  opacity: 0.4;
+}
 
 .divider {
   width: 100%;
