@@ -1,5 +1,5 @@
 import { LoadingService } from "./loading.service";
-import { SettingsService } from "./settings.service";
+import { ISettings, SettingsService, setting_fields } from "./settings.service";
 import { toastr } from "./toastr.service";
 import { trello, env } from "./_common";
 
@@ -72,11 +72,25 @@ const save = () => {
   }
 }
 
-const _revert = (t) => {
-  console.log("RESET");
+const updateElementValues = (settings: ISettings) => {
+  settings = settings || {};
+
+  setting_fields.forEach(key => {
+    const el = (window.document.getElementById(key) as HTMLInputElement);
+    if (el) {
+      el.value = settings[key];
+    }
+  });
+
 }
-const _no_revert = (t) => {
-  console.log("NO RESET");
+
+const _revert = (t: any) => {
+  settingsService.reset(t)
+    .then(settings => {
+      updateElementValues(settings);
+      toastr.info(t, 'Settings have been reset');
+      t.closePopup();
+    });
 }
 
 const revert = () => {
@@ -88,7 +102,6 @@ const revert = () => {
     onConfirm: _revert,
     confirmStyle: 'danger',
     cancelText: 'Cancel',
-    onCancel: _no_revert    
   });
 }
 
@@ -143,14 +156,7 @@ t.render(() => {
     });
     select.addEventListener('change', updateSaveBtn);
 
-
-    if (settings) {
-      //SET THE VALUES
-      Object.keys(settings).forEach(key => {
-        const el = (window.document.getElementById(`${key}`) as HTMLInputElement); 
-        if (el) { el.value = settings[key]; }
-      });
-    }
+    updateElementValues(settings);
 
     //DONE
     updateSaveBtn();

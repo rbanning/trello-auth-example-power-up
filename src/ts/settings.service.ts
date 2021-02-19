@@ -1,6 +1,6 @@
 import { env } from "./_common";
 
-const setting_fields = ['list_id', 'scope', 'scope_code', 'base_url'];
+export const setting_fields = ['list_id', 'scope', 'scope_code', 'base_url'];
 
 export interface ISettings {
   list_id?: string;
