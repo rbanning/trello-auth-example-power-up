@@ -91,6 +91,10 @@ t.render(() => {
     const select: HTMLSelectElement = (window.document.getElementById('list_id') as HTMLSelectElement);
     if (!select) { throw new Error("Unable to find the list select dropdown"); }
 
+    if (!Array.isArray(lists)) {
+      console.warn("Error getting board lists", {lists});
+      throw new Error("Unable to find the board lists");
+    }
     lists.forEach((item: any) => {
       const option = window.document.createElement('option');
       option.value = item.id;
@@ -98,11 +102,14 @@ t.render(() => {
       select.add(option);
     });
 
-    //SET THE VALUES
-    Object.keys(settings).forEach(key => {
-      const el = (window.document.getElementById(`${key}`) as HTMLInputElement); 
-      if (el) { el.value = settings[key]; }
-    })
+
+    if (settings) {
+      //SET THE VALUES
+      Object.keys(settings).forEach(key => {
+        const el = (window.document.getElementById(`${key}`) as HTMLInputElement); 
+        if (el) { el.value = settings[key]; }
+      });
+    }
 
     //DONE
     console.log("DEBUG: - done setting up ... now finishing");
