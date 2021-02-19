@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="styles.css" rel="stylesheet" />
+    <style>
+      .field {
+        margin: 1em 0;
+      }
+      .label {
+        display: block;
+      }
+    </style>
+</head>
+
+<body id="content">
+    <div class="loading"><span class="bar"></span></div>
+
+    <h1>Meeting Popup Settings</h1>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label for="list_id">Active List</label>
+      <select name="list_id" id="list_id" required>
+        <option value="">[select one]</option>
+      </select>
+      <div class="hint">Select the list from the dropdown where your <em>active</em> cards are located.</div>
+    </div>
+
+    <p class="small">
+      <strong><em>Important: </em></strong>
+      Do not change any of the <code>*</code> starred settings without first consulting your <em>Hallpass and Friends</em> representative.
+    </p>
+    
+    <div class="field">
+      <label for="scope"><code>*</code>Scope Id</label>
+      <input type="text" id="scope" placeholder="Enter your Hallpass App scope id" required>
+      <div class="hint">Please contact your <em>Hallpass and Friends</em> representative.</div>
+    </div>
+
+    <div class="field">
+      <label for="scope_code"><code>*</code>Scope Code</label>
+      <input type="text" id="scope_code" placeholder="Enter your Hallpass App scope code" required>
+      <div class="hint">Please contact your <em>Hallpass and Friends</em> representative.</div>
+    </div>
+
+    <div class="field">
+      <label for="base_url"><code>*</code>Base Url</label>
+      <input type="text" id="base_url" placeholder="Enter your Hallpass App base url" required>
+      <div class="hint">Please contact your <em>Hallpass and Friends</em> representative.</div>
+    </div>
+
+
+
+    <div class="divider"></div>
+    
+    <div class="actions">
+      <button type="button" class="button close">Close</button>
+      <button type="button" class="button" disabled>Save</button>
+    </div>
+
+    <script src="https://p.trellocdn.com/power-up.min.js" crossorigin="anonymous"></script>
+    <script src="../js/settings.js"></script>
+</body>
+
+</html>

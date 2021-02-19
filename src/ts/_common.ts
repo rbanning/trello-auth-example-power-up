@@ -1,5 +1,5 @@
 export interface ITrelloEnvironment {
-  Promise: Promise<any>;
+  Promise: any;
   t: () => any;
 }
 export const trello: ITrelloEnvironment = {
@@ -14,5 +14,7 @@ export const env = {
   base_url: '%%BASE_URL%%',
   platform: '%%PLATFORM%%',
   version: '%%VERSION%%',
+
+  SETTINGS_KEY: 'hallpass_meeting_settings'
 };
 

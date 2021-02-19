@@ -22,7 +22,8 @@ console.log("connector", {env});
         callback: exploreMembers
       }
     ]
-  }
+  },
+  'show-settings': meetingSettings
 });
 
 
@@ -30,6 +31,14 @@ function meetingSummary(t: any) {
   return t.popup({
     title: 'Meeting Summary',
     url: './meeting-summary.html',
+    height: 300
+  });
+}
+
+function meetingSettings(t: any) {
+  return t.popup({
+    title: 'Settings',
+    url: './settings.html',
     height: 300
   });
 }
