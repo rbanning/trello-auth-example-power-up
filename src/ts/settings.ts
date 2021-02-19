@@ -16,12 +16,7 @@ const close = () => {
 };
 
 const toggleSave = (enabled: boolean) => {
-  console.log("DEBUG:// toggleSave", {saveBtn, enabled});
-  if (enabled) {
-    saveBtn.setAttribute('disabled','true');
-  } else {
-    saveBtn.removeAttribute('disabled');
-  }
+  saveBtn.disabled = !enabled;
 }
 
 const getFormData = () => {
@@ -39,17 +34,12 @@ const getFormData = () => {
       }
     });
 
-  console.log("DEBUG:// getFormData", data);
   return data;
 }
 
 const validateForm = () => {
   const data = getFormData();
   return Object.keys(data).every(key => {
-    if (!data[key]) {
-      console.log("DEBUG:// validateForm - found invalid", {key, value: data[key]});
-    }
-
     return !!data[key];
   });
 }
@@ -58,8 +48,14 @@ const save = () => {
   loading.show();
   const data = getFormData();
   const isValid = validateForm();
-
   console.log("DEBUG:// save", {data, isValid});
+
+  if (isValid) {
+    t.set('board', 'private', env.SETTINGS_KEY, data)
+      .then(_ => {
+        t.closePopup();
+      });
+  }
 }
 
 
@@ -112,7 +108,6 @@ t.render(() => {
     }
 
     //DONE
-    console.log("DEBUG: - done setting up ... now finishing");
     toggleSave(validateForm());
     loading.hide();
     t.sizeTo('#content').done();
