@@ -1,9 +1,16 @@
+import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
 import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
 
 
 (window as any).TrelloPowerUp.initialize({
   'board-buttons': (t: any) => {
+    const settingService = new SettingsService();
+    settingService.get(t)
+      .then(settings => {
+        console.log("DEBUG:// SETTINGS", settings);
+      });
+      
     return [
       {
         text: 'Meeting Summary',

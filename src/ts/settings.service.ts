@@ -10,6 +10,8 @@ export interface ISettings {
 }
 
 export class SettingsService {
+  private readonly VISIBILITY = 'public';
+
   private _cache: ISettings = {};
   get cache(): ISettings {
     return {...this._cache};  //clone
@@ -20,7 +22,7 @@ export class SettingsService {
   }
 
   get(t: any) {
-    return t.get('board', 'private', env.SETTINGS_KEY, {})
+    return t.get('board', this.VISIBILITY, env.SETTINGS_KEY, {})
       .then((result: any) => {
         if (result) {
           this._cache = this.mergeSettings(this._cache, result);
@@ -31,12 +33,12 @@ export class SettingsService {
 
   save(t: any, data: ISettings) {
     this._cache = this.mergeSettings(this._cache, data);
-    return t.set('board', 'private', env.SETTINGS_KEY, data);
+    return t.set('board', this.VISIBILITY, env.SETTINGS_KEY, data);
   }
 
   reset(t: any) {
     this._cache = this.mergeSettings(env);
-    return t.remove('board', 'private', env.SETTINGS_KEY)
+    return t.remove('board', this.VISIBILITY, env.SETTINGS_KEY)
       .then(_ => {
         return this.cache;
       });
