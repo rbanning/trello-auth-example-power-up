@@ -55,8 +55,6 @@ const updateSaveBtn = () => {
 const save = () => {
   const data = getFormData();
   const isValid = validateForm();
-  console.log("DEBUG:// save", {data, isValid});
-
   if (isValid) {
     loading.show();
     settingsService.save(t, data)
@@ -84,40 +82,12 @@ const updateElementValues = (settings: ISettings) => {
 
 }
 
-const _revert = (t: any) => {
-  settingsService.reset(t)
-    .then(settings => {
-      updateElementValues(settings);
-      toastr.info(t, 'Settings have been reset');
-      t.closePopup();
-    });
-}
-
-const revert = () => {
-  t.popup({
-    type: 'confirm',
-    title: 'Reset Settings',
-    message: 'Are you sure you want to reset the settings back to their original?',
-    confirmText: 'Reset',
-    onConfirm: _revert,
-    confirmStyle: 'danger',
-    cancelText: 'Cancel',
-  });
-}
-
-
-
 
 //SETUP CLOSE BUTTON(S)
 window.document.querySelectorAll('.close')
   .forEach(btn => {
     btn.addEventListener('click', close);
   });
-
-
-//SETUP RESET/REVERT BUTTON
-window.document.getElementById('reset')
-  .addEventListener('click', revert);
 
 //SETUP SAVE BUTTON
 saveBtn.addEventListener('click', save);
@@ -138,7 +108,6 @@ t.render(() => {
   ])
   .then((results: any[]) => {
     const [settings, lists] = results;
-    console.log("DEBUG:// settings", {results, settings, lists});
 
     //ADD THE LISTs TO SELECT
     const select: HTMLSelectElement = (window.document.getElementById('list_id') as HTMLSelectElement);
