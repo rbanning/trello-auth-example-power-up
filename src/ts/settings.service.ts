@@ -10,7 +10,7 @@ export interface ISettings {
 }
 
 export class SettingsService {
-  private readonly VISIBILITY = 'public';
+  private readonly VISIBILITY = 'shared';
 
   private _cache: ISettings = {};
   get cache(): ISettings {
