@@ -1,3 +1,4 @@
+import { toastr } from './toastr.service';
 import {env, currentUserMembership, currentUserIsAdmin, trello} from './_common';
 
 console.log("connector", {env});
@@ -36,11 +37,16 @@ function meetingSummary(t: any) {
 }
 
 function meetingSettings(t: any) {
-  return t.popup({
-    title: 'Settings',
-    url: './settings.html',
-    height: 300
-  });
+  if (currentUserIsAdmin(t)) {
+    return t.popup({
+      title: 'Settings',
+      url: './settings.html',
+      height: 300
+    });  
+  } else {
+    toastr.warning(t, 'Sorry - only Admins can change the settings');
+    return null;
+  }
 }
 
 function exploreMembers(t: any) {
