@@ -100,7 +100,7 @@ export namespace DynamicIdentity {
       d.dow[d.dow.length - 1]
     ];
     sections[0] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 1", {parts: [...parts], section: sections[0]});
+    console.log("DEBUG: Dynamic Identity Challenge - section 1", {scope, parts: [...parts], section: sections[0]});
 
     //section two
     length = 3 + d.day % 3;
@@ -112,7 +112,7 @@ export namespace DynamicIdentity {
       d.dow[1]
     ];
     sections[1] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 2", {parts: [...parts], section: sections[1]});
+    console.log("DEBUG: Dynamic Identity Challenge - section 2", {scope, parts: [...parts], section: sections[1]});
     
     //section three
     length = 8 + d.day % 3;
@@ -127,7 +127,7 @@ export namespace DynamicIdentity {
         ).split('')),
     ];
     sections[2] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 3", {parts: [...parts], section: sections[3]});
+    console.log("DEBUG: Dynamic Identity Challenge - section 3", {scope, parts: [...parts], section: sections[2]});
 
     return sections.join('-').toLowerCase();
   }
