@@ -1,5 +1,3 @@
-import { currentUserIsAdmin } from "./_common";
-
 export namespace DynamicIdentity {
   const HEADER_KEYS = {
     "scope-id": "X-Hallpass-Scope",

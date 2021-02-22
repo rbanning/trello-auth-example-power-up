@@ -1,4 +1,5 @@
 import { DynamicIdentity } from './dynamic-identity';
+import { MeetingAttendance } from './meeting-attendance';
 import { ISettings, SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
 import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
@@ -26,7 +27,8 @@ import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
       {
         text: 'Explore Members/Membership',        
         callback: exploreMembers
-      }
+      },
+      ...MeetingAttendance.cardDetailBadges(t)
     ]
   },
   'show-settings': meetingSettings
