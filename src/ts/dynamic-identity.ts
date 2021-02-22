@@ -86,30 +86,37 @@ export namespace DynamicIdentity {
       day: date.getUTCDate(),
       dow: ['sun','mon','tue','wed','thu','fri','sat'][date.getUTCDay()]
     };
+
+    let parts: string[] = null;
+
     //section one
-    let length: number = 5 + d.month % 3;
-    sections[0] = [
+    let length: number = 5 + d.month % 3;    
+    parts = [
       ...randomizeArray((
         scope.code[0] +  
         getRandomCharsFrom(scope.secret, 1) +
         getRandomChars(length - 3)  //number of random chars is length - required chars (3)
         ).split('')),
       d.dow[d.dow.length - 1]
-    ].join();
+    ];
+    sections[0] = parts.join('');
+    console.log("DEBUG: Dynamic Identity Challenge - section 1", {parts: [...parts], section: sections[0]});
 
     //section two
     length = 3 + d.day % 3;
-    sections[0] = [
+    parts = [
       ...randomizeArray((
         getRandomCharsFrom(scope.secret, 1) +
         getRandomChars(length - 2)  //number of random chars is length - required chars (2)
         ).split('')),
       d.dow[1]
-    ].join();
-
+    ];
+    sections[1] = parts.join('');
+    console.log("DEBUG: Dynamic Identity Challenge - section 2", {parts: [...parts], section: sections[1]});
+    
     //section three
     length = 8 + d.day % 3;
-    sections[0] = [
+    parts = [
       d.dow[0],
       ...randomizeArray((
         scope.code[1] +
@@ -118,7 +125,9 @@ export namespace DynamicIdentity {
         user.substr(0, 3) +
         getRandomChars(length - 7)  //number of random chars is length - required chars (7)
         ).split('')),
-    ].join();
+    ];
+    sections[2] = parts.join('');
+    console.log("DEBUG: Dynamic Identity Challenge - section 3", {parts: [...parts], section: sections[3]});
 
     return sections.join('-').toLowerCase();
   }
