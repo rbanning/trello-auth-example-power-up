@@ -5,11 +5,31 @@ import { isMemberOf, trello } from "./_common";
 export namespace MeetingAttendance {
 
   export const addMeToCard = (t) => {
+    t.popup({
+      'type': 'confirm',
+      title: 'Meeting Attendance',
+      message: 'Have you read or watched all of the content associated with this card?',
+      confirmText: 'Yes',
+      onConfirm: _addMeToCard,
+      cancelText: 'No'
+    });
+  };
+  const _addMeToCard = (t) => {
     const service = new HallpassService();
     return service.addMeToCurrentCard(t);
   };
 
   export const removeMeFromCard = (t) => {
+    t.popup({
+      'type': 'confirm',
+      title: 'Meeting Attendance',
+      message: 'You are marked as having read this card. Would you to be removed?',
+      confirmText: 'Remove Me',
+      onConfirm: _removeMeFromCard,
+      cancelText: 'Cancel'
+    });
+  };
+  const _removeMeFromCard = (t) => {
     const service = new HallpassService();
     return service.removeMeFromCurrentCard(t);
   };
@@ -32,20 +52,28 @@ export namespace MeetingAttendance {
         const isActiveList = card.idList === settings.list_id;
         console.log("DEBUG: - cardDetailBadges", {member, card, isMemberBoard, isMemberCard, isActiveList});
         
-        return [
-          {
-            title: 'Attendance',
-            text: '⚪ Add Me to Card',
-            color: 'orange',
-            callback: addMeToCard
-          },
-          {
-            title: 'Attendance',
-            text: '👍 I am on this Card',
-            color: 'green',
-            callback: removeMeFromCard
-          }
-        ];
+        if (!isActiveList || !isMemberBoard) { return []; }
+        else if (isMemberCard) {
+          return [
+            {
+              title: 'Attendance',
+              text: '👍 I Attended!',
+              color: 'green',
+              callback: removeMeFromCard
+            }          
+          ];
+  
+        } else {
+          return [
+            {
+              title: 'Attendance',
+              text: '⚪ Add Me to Attendance',
+              color: 'orange',
+              callback: addMeToCard
+            }          
+          ];
+  
+        }
       });
   }
 

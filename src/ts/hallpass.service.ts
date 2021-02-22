@@ -8,8 +8,7 @@ export class HallpassService {
     this.settings = new SettingsService();
   }  
 
-
-
+ 
   /// - Add Current User (Member) to Card
   ///     . Verify that current user is a member of the Board
   ///     . Send fetch to hallpass with DynamicIdentity headers
