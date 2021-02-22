@@ -18,13 +18,21 @@ const scopes = [
     },
     {
         id: "00392dfa-415f-4de5-b898-7bb7a94f9f37",
-        code: "gwên",
+        code: "gwenu",
         secret: "2xTV3"
     },
 ];
-const dates = [
-    new Date(2021, 1, 28),
-];
+const years = [2019, 2020, 2021];
+const months = [0, 1, 10, 11]; //MONTHS ARE ZERO (0) INDEXED
+const days = [1, 10, 11, 20, 21, 28];
+const dates = [];
+years.forEach(year => {
+    months.forEach(month => {
+        days.forEach(day => {
+            dates.push(new Date(year, month, day));
+        });
+    });
+});
 const buildTests = () => {
     const ret = [];
     scopes.forEach(scope => {
@@ -44,7 +52,6 @@ const buildTests = () => {
 };
 const URL = "https://localhost:44309/api/trello/dynamic/dynamic-identity";
 const runTest = (index, scope, dateParts) => {
-    console.log("===== TEST ======", index);
     var url = `${URL}?year=${dateParts.year}&month=${dateParts.month}&day=${dateParts.day}`;
     const headers = DynamicIdentity.getHeaders(scope, `test.bob-${index}.${dateParts.dow}@domain.com`, dateParts);
     const debug = {};
@@ -52,29 +59,49 @@ const runTest = (index, scope, dateParts) => {
         debug[key] = value;
     });
     console.log("Request", { url, headers: debug });
-    fetch(url, { headers })
-        .then((response) => {
-        if (!response.ok) {
-            console.error("Invalid request", { response });
-            throw new Error("Aborting test");
-        }
-        //else
-        return response.json();
-    })
-        .then((json) => {
-        const obj = JSON.parse(json);
-        console.log("Response", { obj });
-    })
-        .catch((error) => {
-        console.warn("There was a problem with the fetch", error);
+    return new Promise((resolve, reject) => {
+        fetch(url, { headers })
+            .then((response) => {
+            if (!response.ok) {
+                console.error("Invalid request", { response });
+                throw new Error("Aborting test");
+            }
+            //else
+            console.log("Raw Response", response);
+            return response.json();
+        })
+            .then((json) => {
+            var _a, _b;
+            console.log("JSON Response", { json, valid: (_a = json === null || json === void 0 ? void 0 : json.identity) === null || _a === void 0 ? void 0 : _a.isValid });
+            if (!((_b = json === null || json === void 0 ? void 0 : json.identity) === null || _b === void 0 ? void 0 : _b.isValid)) {
+                console.warn("FAILED");
+                reject("Failed Test");
+            }
+            else {
+                console.log('-------------------------');
+                console.log('');
+                resolve(true);
+            }
+        })
+            .catch((error) => {
+            console.warn("There was a problem with the fetch", error);
+            reject("Error");
+        });
     });
-    console.log('-------------------------');
-    console.log('');
 };
-const runTests = () => {
-    const tests = buildTests();
-    //start with the first
-    runTest(1, tests[0].scope, tests[0].dateParts);
+const tests = buildTests();
+const runTestAt = (index) => {
+    if (index < tests.length) {
+        const test = tests[index];
+        console.log("===== TEST ======", `${index + 1} of ${tests.length}`, test.scope.code);
+        runTest(index, test.scope, test.dateParts)
+            .then(_ => {
+            window.setTimeout(() => { runTestAt(index + 1); }, 1000);
+        });
+    }
+    else {
+        console.log("DONE");
+    }
 };
-runTests();
+runTestAt(0);
 //# sourceMappingURL=test-dynamic-identity.js.map

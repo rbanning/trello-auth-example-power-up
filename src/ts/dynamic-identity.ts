@@ -72,7 +72,7 @@ export namespace DynamicIdentity {
         scope.secret?.length >= 5;
   }
 
-  export const buildChallenge = (scope: IDynamicIdentityScope, user: string, dateParts: any = null /*DEBUG: FOR TESTING ONLY */): string => {
+  export const buildChallenge = (scope: IDynamicIdentityScope, user: string): string => {
     if (!isValidScope(scope)) {
       console.warn("Cannot build Dynamic Identity challenge: Invalid Scope", {scope});
       return null;
@@ -80,7 +80,7 @@ export namespace DynamicIdentity {
 
     const sections: string[] = ['','',''];
     const date = new Date();
-    const d = dateParts || {
+    const d = {
       year: date.getUTCFullYear(),
       month: date.getUTCMonth() + 1,
       day: date.getUTCDate(),
@@ -99,7 +99,6 @@ export namespace DynamicIdentity {
       d.dow[d.dow.length - 1]
     ];
     sections[0] = parts.join('');
-    //console.log("DEBUG: Dynamic Identity Challenge - section 1", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[0]});
 
     //section two
     length = 3 + d.day % 3;
@@ -110,8 +109,7 @@ export namespace DynamicIdentity {
       d.dow[1]
     ];
     sections[1] = parts.join('');
-    //console.log("DEBUG: Dynamic Identity Challenge - section 2", {scope, putAnyWhere: [...putAnyWhere],  parts: [...parts], section: sections[1]});
-    
+        
     //section three
     length = 8 + d.year % 3;
     //number of random chars is length - required chars (7)
@@ -121,7 +119,6 @@ export namespace DynamicIdentity {
       ...randomizeArray(([...putAnyWhere]).join('').split('')),
     ];
     sections[2] = parts.join('');
-    //console.log("DEBUG: Dynamic Identity Challenge - section 3", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[2]});
 
     return sections.join('-').toLowerCase();
   }
@@ -155,11 +152,11 @@ export namespace DynamicIdentity {
   }
 
   
-  export const getHeaders = (scope: IDynamicIdentityScope, user: string, dateParts: any = null /*DEBUG: FOR TESTING ONLY */): Headers => {
+  export const getHeaders = (scope: IDynamicIdentityScope, user: string): Headers => {
     if (!scope) { throw new Error("Missing/Invalid scope"); }
     if (!user) { throw new Error("Missing/Invalid user"); }
 
-    const challenge = buildChallenge(scope, user, dateParts);
+    const challenge = buildChallenge(scope, user);
     const code = buildCode(scope, user, challenge);
 
     const headers = new Headers();

@@ -51,14 +51,14 @@ export var DynamicIdentity;
             ((_b = scope.code) === null || _b === void 0 ? void 0 : _b.length) >= 3 &&
             ((_c = scope.secret) === null || _c === void 0 ? void 0 : _c.length) >= 5;
     };
-    DynamicIdentity.buildChallenge = (scope, user, dateParts = null /*DEBUG: FOR TESTING ONLY */) => {
+    DynamicIdentity.buildChallenge = (scope, user) => {
         if (!DynamicIdentity.isValidScope(scope)) {
             console.warn("Cannot build Dynamic Identity challenge: Invalid Scope", { scope });
             return null;
         }
         const sections = ['', '', ''];
         const date = new Date();
-        const d = dateParts || {
+        const d = {
             year: date.getUTCFullYear(),
             month: date.getUTCMonth() + 1,
             day: date.getUTCDate(),
@@ -75,7 +75,6 @@ export var DynamicIdentity;
             d.dow[d.dow.length - 1]
         ];
         sections[0] = parts.join('');
-        console.log("DEBUG: Dynamic Identity Challenge - section 1", { scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[0] });
         //section two
         length = 3 + d.day % 3;
         //number of random chars is length - required chars (2)
@@ -85,7 +84,6 @@ export var DynamicIdentity;
             d.dow[1]
         ];
         sections[1] = parts.join('');
-        console.log("DEBUG: Dynamic Identity Challenge - section 2", { scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[1] });
         //section three
         length = 8 + d.year % 3;
         //number of random chars is length - required chars (7)
@@ -95,7 +93,6 @@ export var DynamicIdentity;
             ...randomizeArray(([...putAnyWhere]).join('').split('')),
         ];
         sections[2] = parts.join('');
-        console.log("DEBUG: Dynamic Identity Challenge - section 3", { scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[2] });
         return sections.join('-').toLowerCase();
     };
     DynamicIdentity.buildCode = (scope, user, challenge) => {
@@ -124,14 +121,14 @@ export var DynamicIdentity;
             scope.id[sections[2].length % length] + //5
             scope.id[challenge.charCodeAt(0) % length]; //6
     };
-    DynamicIdentity.getHeaders = (scope, user, dateParts = null /*DEBUG: FOR TESTING ONLY */) => {
+    DynamicIdentity.getHeaders = (scope, user) => {
         if (!scope) {
             throw new Error("Missing/Invalid scope");
         }
         if (!user) {
             throw new Error("Missing/Invalid user");
         }
-        const challenge = DynamicIdentity.buildChallenge(scope, user, dateParts);
+        const challenge = DynamicIdentity.buildChallenge(scope, user);
         const code = DynamicIdentity.buildCode(scope, user, challenge);
         const headers = new Headers();
         headers.append(HEADER_KEYS["scope-id"], scope.id);
