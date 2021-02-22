@@ -28,7 +28,7 @@ import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
         text: 'Explore Members/Membership',        
         callback: exploreMembers
       },
-      ...MeetingAttendance.cardDetailBadges(t)
+      ...(MeetingAttendance.cardDetailBadges(t))
     ]
   },
   'show-settings': meetingSettings

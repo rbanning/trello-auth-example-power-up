@@ -13,6 +13,8 @@ export namespace MeetingAttendance {
     return service.removeMeFromCurrentCard(t);
   };
 
+
+  //NOTE - need to only add these badges on cards from the settings.list_id
   export const cardDetailBadges = (t): any[] => {
     const actions =[ 
       t.member('id'),
@@ -36,7 +38,7 @@ export namespace MeetingAttendance {
             callback: removeMeFromCard
           }
         ]
-      })
+      });
   }
 
 };
