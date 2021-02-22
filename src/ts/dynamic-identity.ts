@@ -72,7 +72,7 @@ export namespace DynamicIdentity {
         scope.secret?.length >= 5;
   }
 
-  export const buildChallenge = (scope: IDynamicIdentityScope, user: string): string => {
+  export const buildChallenge = (scope: IDynamicIdentityScope, user: string, dateParts: any = null /*DEBUG: FOR TESTING ONLY */): string => {
     if (!isValidScope(scope)) {
       console.warn("Cannot build Dynamic Identity challenge: Invalid Scope", {scope});
       return null;
@@ -80,7 +80,7 @@ export namespace DynamicIdentity {
 
     const sections: string[] = ['','',''];
     const date = new Date();
-    const d = {
+    const d = dateParts || {
       year: date.getUTCFullYear(),
       month: date.getUTCMonth() + 1,
       day: date.getUTCDate(),
@@ -155,11 +155,11 @@ export namespace DynamicIdentity {
   }
 
   
-  export const getHeaders = (scope: IDynamicIdentityScope, user: string): Headers => {
+  export const getHeaders = (scope: IDynamicIdentityScope, user: string, dateParts: any = null /*DEBUG: FOR TESTING ONLY */): Headers => {
     if (!scope) { throw new Error("Missing/Invalid scope"); }
     if (!user) { throw new Error("Missing/Invalid user"); }
 
-    const challenge = buildChallenge(scope, user);
+    const challenge = buildChallenge(scope, user, dateParts);
     const code = buildCode(scope, user, challenge);
 
     const headers = new Headers();

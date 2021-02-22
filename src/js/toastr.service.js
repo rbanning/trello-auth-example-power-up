@@ -11,7 +11,7 @@ const showToast = (t, display, message, duration) => {
     });
 };
 const toastFn = (display) => {
-    return (t, message, duration) => {
+    return (t, message, duration = 5) => {
         return showToast(t, display, message, duration);
     };
 };
