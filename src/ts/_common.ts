@@ -45,3 +45,10 @@ export const currentUserIsAdmin = (t: any) => {
       return member?.memberType === 'admin';
     });
 }
+
+export const isMemberOf = (id: string, members: any | any[]): boolean => {
+  if (Array.isArray(members.members)) { members = members.members; }
+  if (!id || !Array.isArray(members)) { return null; }
+
+  return members.some(m => m.id === id);
+}

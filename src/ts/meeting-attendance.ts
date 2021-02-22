@@ -1,5 +1,6 @@
 import { HallpassService } from "./hallpass.service";
-import { trello } from "./_common";
+import { SettingsService } from "./settings.service";
+import { isMemberOf, trello } from "./_common";
 
 export namespace MeetingAttendance {
 
@@ -16,14 +17,21 @@ export namespace MeetingAttendance {
 
   //NOTE - need to only add these badges on cards from the settings.list_id
   export const cardDetailBadges = (t): Promise<any[]> => {
+    const settingsService = new SettingsService();
     const actions =[ 
+      settingsService.get(t),
       t.member('id'),
-      t.card('id','members')
+      t.board('id','members'),
+      t.card('id', 'idList', 'members')
     ];
     return trello.Promise.all(actions)
       .then((results: any[]) => {
-        const [member, card] = results;
-        console.log("DEBUG: - cardDetailBadges", {member, card});
+        const [settings, member, board, card] = results;
+        const isMemberBoard = isMemberOf(member?.id, board?.members);
+        const isMemberCard = isMemberOf(member?.id, card?.members);
+        const isActiveList = card.idList === settings.list_id;
+        console.log("DEBUG: - cardDetailBadges", {member, card, isMemberBoard, isMemberCard, isActiveList});
+        
         return [
           {
             title: 'Attendance',

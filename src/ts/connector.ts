@@ -1,6 +1,6 @@
 import { DynamicIdentity } from './dynamic-identity';
 import { MeetingAttendance } from './meeting-attendance';
-import { ISettings, SettingsService } from './settings.service';
+import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
 import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
 
