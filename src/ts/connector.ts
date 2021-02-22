@@ -23,13 +23,16 @@ import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
   },
   'card-detail-badges': (t: any) => {
     //todo: restrict access to admins... how?
-    return [
-      {
-        text: 'Explore Members/Membership',        
-        callback: exploreMembers
-      },
-      ...(MeetingAttendance.cardDetailBadges(t))
-    ]
+    return MeetingAttendance.cardDetailBadges(t)
+      .then((results: any[]) => {
+        return [
+          {
+            text: 'Explore Members/Membership',        
+            callback: exploreMembers
+          },
+          ...results
+        ];
+      });
   },
   'show-settings': meetingSettings
 });

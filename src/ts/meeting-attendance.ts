@@ -15,7 +15,7 @@ export namespace MeetingAttendance {
 
 
   //NOTE - need to only add these badges on cards from the settings.list_id
-  export const cardDetailBadges = (t): any[] => {
+  export const cardDetailBadges = (t): Promise<any[]> => {
     const actions =[ 
       t.member('id'),
       t.card('id','members')
@@ -37,7 +37,7 @@ export namespace MeetingAttendance {
             color: 'green',
             callback: removeMeFromCard
           }
-        ]
+        ];
       });
   }
 
