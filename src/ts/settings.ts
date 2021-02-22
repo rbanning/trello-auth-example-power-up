@@ -1,7 +1,7 @@
 import { LoadingService } from "./loading.service";
 import { ISettings, SettingsService, setting_fields } from "./settings.service";
 import { toastr } from "./toastr.service";
-import { trello, env } from "./_common";
+import { trello } from "./_common";
 
 const saveBtn: HTMLButtonElement = (window.document.getElementById('save') as HTMLButtonElement);
 if (!saveBtn) {

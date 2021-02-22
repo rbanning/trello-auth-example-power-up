@@ -11,6 +11,7 @@ export const env = {
   name: '%%NAME%%',
   scope: '%%SCOPE%%',
   scope_code: '%%SCOPE_CODE%%',
+  scope_secret: '%%SCOPE_SECRET%%',
   base_url: '%%BASE_URL%%',
   platform: '%%PLATFORM%%',
   version: '%%VERSION%%',
