@@ -88,19 +88,17 @@ export namespace DynamicIdentity {
     };
 
     let parts: string[] = null;
+    let putAnyWhere: string[] = null;
 
     //section one
     let length: number = 5 + d.month % 3;    
+    putAnyWhere = [scope.code[0], getRandomCharsFrom(scope.secret, 1), getRandomChars(length - 3)];  //number of random chars is length - required chars (3)
     parts = [
-      ...randomizeArray((
-        scope.code[0] +  
-        getRandomCharsFrom(scope.secret, 1) +
-        getRandomChars(length - 3)  //number of random chars is length - required chars (3)
-        ).split('')),
+      ...randomizeArray(([...putAnyWhere]).join('').split('')),
       d.dow[d.dow.length - 1]
     ];
     sections[0] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 1", {scope, parts: [...parts], section: sections[0]});
+    console.log("DEBUG: Dynamic Identity Challenge - section 1", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[0]});
 
     //section two
     length = 3 + d.day % 3;
@@ -115,7 +113,7 @@ export namespace DynamicIdentity {
     console.log("DEBUG: Dynamic Identity Challenge - section 2", {scope, parts: [...parts], section: sections[1]});
     
     //section three
-    length = 8 + d.day % 3;
+    length = 8 + d.year % 3;
     parts = [
       d.dow[0],
       ...randomizeArray((
