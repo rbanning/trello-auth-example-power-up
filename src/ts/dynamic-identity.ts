@@ -65,9 +65,19 @@ export namespace DynamicIdentity {
   
   //#endregion
 
-
+  export const isValidScope = (scope: IDynamicIdentityScope): boolean => {
+    return !!scope && 
+        scope.id?.length > 30 &&
+        scope.code?.length >= 3 &&
+        scope.secret?.length >= 5;
+  }
 
   export const buildChallenge = (scope: IDynamicIdentityScope, user: string): string => {
+    if (!isValidScope(scope)) {
+      console.warn("Cannot build Dynamic Identity challenge: Invalid Scope", {scope});
+      return null;
+    }
+
     const sections: string[] = ['','',''];
     const date = new Date();
     const d = {
@@ -114,6 +124,20 @@ export namespace DynamicIdentity {
   }
 
   export const buildCode = (scope: IDynamicIdentityScope, user: string, challenge: string): string => {
+    if (!isValidScope(scope)) {
+      console.warn("Cannot build Dynamic Identity code: Invalid scope", {scope});
+      return null;
+    }
+    if (!challenge || challenge.length < 16) {
+      console.warn("Cannot build Dynamic Identity code: Invalid challenge", {challenge});
+      return null;
+    }
+    if (!user || user.length < 3) {
+      console.warn("Cannot build Dynamic Identity code: Invalid user", {user});
+      return null;
+    }
+    
+
     //convert challenge to sections (three)
     const sections = challenge.split('-'); 
     if (sections.length !== 3) { return null; }

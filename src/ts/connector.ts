@@ -65,7 +65,7 @@ function exploreMembers(t: any) {
       const settingService = new SettingsService();
       settingService.scope(t)
         .then((scope: DynamicIdentity.IDynamicIdentityScope) => {
-          console.log("DEBUG: DynamicIdentity.getHeaders", DynamicIdentity.getHeaders(scope, "member@name.com"));
+          console.log("DEBUG: DynamicIdentity.getHeaders", {scope, headers: DynamicIdentity.getHeaders(scope, "member@name.com")});
         });
     
     });
