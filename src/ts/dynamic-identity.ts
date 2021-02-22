@@ -92,7 +92,8 @@ export namespace DynamicIdentity {
 
     //section one
     let length: number = 5 + d.month % 3;    
-    putAnyWhere = [scope.code[0], getRandomCharsFrom(scope.secret, 1), getRandomChars(length - 3)];  //number of random chars is length - required chars (3)
+    //number of random chars is length - required chars (3)
+    putAnyWhere = [scope.code[0], getRandomCharsFrom(scope.secret, 1), getRandomChars(length - 3)];  
     parts = [
       ...randomizeArray(([...putAnyWhere]).join('').split('')),
       d.dow[d.dow.length - 1]
@@ -102,30 +103,25 @@ export namespace DynamicIdentity {
 
     //section two
     length = 3 + d.day % 3;
+    //number of random chars is length - required chars (2)
+    putAnyWhere = [getRandomCharsFrom(scope.secret, 1), getRandomChars(length - 2)]; 
     parts = [
-      ...randomizeArray((
-        getRandomCharsFrom(scope.secret, 1) +
-        getRandomChars(length - 2)  //number of random chars is length - required chars (2)
-        ).split('')),
+      ...randomizeArray(([...putAnyWhere]).join('').split('')),
       d.dow[1]
     ];
     sections[1] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 2", {scope, parts: [...parts], section: sections[1]});
+    console.log("DEBUG: Dynamic Identity Challenge - section 2", {scope, putAnyWhere: [...putAnyWhere],  parts: [...parts], section: sections[1]});
     
     //section three
     length = 8 + d.year % 3;
+    //number of random chars is length - required chars (7)
+    putAnyWhere = [scope.code[1], scope.code[2], getRandomCharsFrom(scope.secret, 1), user.substr(0, 3), getRandomChars(length - 7)]; 
     parts = [
       d.dow[0],
-      ...randomizeArray((
-        scope.code[1] +
-        scope.code[2] +        
-        getRandomCharsFrom(scope.secret, 1) +
-        user.substr(0, 3) +
-        getRandomChars(length - 7)  //number of random chars is length - required chars (7)
-        ).split('')),
+      ...randomizeArray(([...putAnyWhere]).join('').split('')),
     ];
     sections[2] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 3", {scope, parts: [...parts], section: sections[2]});
+    console.log("DEBUG: Dynamic Identity Challenge - section 3", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[2]});
 
     return sections.join('-').toLowerCase();
   }
