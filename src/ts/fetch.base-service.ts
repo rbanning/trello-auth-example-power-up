@@ -38,9 +38,8 @@ export class FetchBaseService {
         return this._fetch(url, method, headers, data);
       });
   }
-  protected fetchUsingSettingsAndMember(url: string, method: string, scope: DynamicIdentity.IDynamicIdentityScope, user: string, data?: any) {
-    const headers: Headers = DynamicIdentity.getHeaders(scope, user);
-    return this._fetch(url, method, headers, data);
+  protected fetchUsingSettingsAndMember(url: string, method: string, settings: ISettings, member: any, data?: any) {
+    return this.fetchUsingScope(url, method, DynamicIdentity.buildScopeFromSettings(settings), member.username, data);
   }
   protected fetchUsingScope(url: string, method: string, scope: DynamicIdentity.IDynamicIdentityScope, user: string, data?: any) {
     const headers: Headers = DynamicIdentity.getHeaders(scope, user);
