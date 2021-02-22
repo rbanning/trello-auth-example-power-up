@@ -1,4 +1,5 @@
-import { SettingsService } from './settings.service';
+import { DynamicIdentity } from './dynamic-identity';
+import { ISettings, SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
 import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
 
@@ -60,6 +61,13 @@ function exploreMembers(t: any) {
   t.member('all')
     .then((member: any) => {
       console.log("DEBUG: exploreMember - Me", {member, canWriteToModel: t.memberCanWriteToModel('card')});
+
+      const settingService = new SettingsService();
+      settingService.scope(t)
+        .then((scope: DynamicIdentity.IDynamicIdentityScope) => {
+          console.log("DEBUG: DynamicIdentity.getHeaders", DynamicIdentity.getHeaders(scope, "member@name.com"));
+        });
+    
     });
     
   t.board('id', 'name', 'members', 'memberships')
@@ -78,5 +86,6 @@ function exploreMembers(t: any) {
   ]).then((result: any) => {
       const [member, isAdmin] = result;
       console.log("DEBUG: exploreMember - currentUserMembership", {result, member, isAdmin});
-    })
+    });
+
 }

@@ -1,3 +1,4 @@
+import { DynamicIdentity } from "./dynamic-identity";
 import { env } from "./_common";
 
 export const setting_fields = ['list_id', 'scope', 'scope_code', 'base_url'];
@@ -6,6 +7,7 @@ export interface ISettings {
   list_id?: string;
   scope?: string;
   scope_code?: string;
+  scope_secret?: string;
   base_url?: string;
 }
 
@@ -42,6 +44,18 @@ export class SettingsService {
       .then(_ => {
         return this.cache;
       });
+  }
+
+  //special get
+  scope(t: any) {
+    return this.get(t)
+      .then((settings: ISettings) => {
+        return {
+          id: settings.scope,
+          code: settings.scope_code,
+          secret: settings.scope_secret
+        } as DynamicIdentity.IDynamicIdentityScope;
+      })
   }
 
   protected mergeSettings(...params: ISettings[]): ISettings {
