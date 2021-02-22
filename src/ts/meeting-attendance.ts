@@ -15,6 +15,7 @@ export namespace MeetingAttendance {
     });
   };
   const _addMeToCard = (t) => {
+    t.closePopup();
     const service = new HallpassService();
     return service.addMeToCurrentCard(t);
   };
@@ -23,13 +24,15 @@ export namespace MeetingAttendance {
     t.popup({
       'type': 'confirm',
       title: 'Meeting Attendance',
-      message: 'You are marked as having read this card. Would you to be removed?',
+      message: 'You are marked as having read this card. Would you like to be removed?',
       confirmText: 'Remove Me',
+      confirmStyle: 'danger',
       onConfirm: _removeMeFromCard,
       cancelText: 'Cancel'
     });
   };
   const _removeMeFromCard = (t) => {
+    t.closePopup();
     const service = new HallpassService();
     return service.removeMeFromCurrentCard(t);
   };

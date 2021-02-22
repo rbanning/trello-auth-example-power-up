@@ -1,11 +1,11 @@
-import { SettingsService } from "./settings.service";
-import { trello } from "./_common";
+import { FetchBaseService } from "./fetch.base-service";
+import { ISettings, SettingsService } from "./settings.service";
+import { isMemberOf, trello } from "./_common";
 
-export class HallpassService {
-  private settings: SettingsService;
+export class HallpassService extends FetchBaseService {
 
   constructor() {
-    this.settings = new SettingsService();
+    super();
   }  
 
  
@@ -27,8 +27,23 @@ export class HallpassService {
       trello.Promise.all(actions)
         .then((results: any[]) => {
           const [settings, member, board, card] = results;
-          console.log("DEBUG: - addMeToCurrentCard", {settings, member, board, card});
-          resolve(true);
+          if (isMemberOf(member.id, board.members)) {
+
+            console.log("DEBUG: - addMeToCurrentCard", {settings, member, board, card});
+
+            const url = this.buildUrl(settings, 'cards', card.id, 'members');
+            this.fetchUsingSettingsAndMember(url, 'GET', settings, member)
+              .then((result: any[]) => {
+                console.log("DEBUG: - addMeToCurrentCard ... should have gotten list of members on the card", result);
+                resolve(result);
+              })
+              .catch(error => {
+                console.error("Error adding member to current card", error);
+                reject(error);
+              });  
+          } else {
+            reject("Sorry - you are not a member of this board");
+          }
         });
     });
   }

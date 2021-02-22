@@ -1,3 +1,5 @@
+import { ISettings, setting_fields } from "./settings.service";
+
 export namespace DynamicIdentity {
   const HEADER_KEYS = {
     "scope-id": "X-Hallpass-Scope",
@@ -62,6 +64,18 @@ export namespace DynamicIdentity {
   }
   
   //#endregion
+
+  export const buildScopeFromSettings = (settings: ISettings): IDynamicIdentityScope => {
+    if (settings) {
+      return {
+        id: settings.scope,
+        code: settings.scope_code,
+        secret: settings.scope_secret
+      };
+    }
+    //else
+    return null;
+  }
 
   export const isValidScope = (scope: IDynamicIdentityScope): boolean => {
     return !!scope && 
