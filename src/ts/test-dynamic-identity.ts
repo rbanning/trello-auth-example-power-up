@@ -70,11 +70,13 @@ const runTest = (index: number, scope: DynamicIdentity.IDynamicIdentityScope, da
         throw new Error("Aborting test");
       }
       //else
+      console.log("Raw Response", response);
       return response.json();
     })
     .then((json) => {
+      console.log("JSON Response", {json});
       const obj = JSON.parse(json);
-      console.log("Response", {obj});
+      console.log("Parsed Response", {obj});
     })
     .catch((error) => {
       console.warn("There was a problem with the fetch", error);

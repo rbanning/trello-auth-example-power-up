@@ -99,7 +99,7 @@ export namespace DynamicIdentity {
       d.dow[d.dow.length - 1]
     ];
     sections[0] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 1", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[0]});
+    //console.log("DEBUG: Dynamic Identity Challenge - section 1", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[0]});
 
     //section two
     length = 3 + d.day % 3;
@@ -110,7 +110,7 @@ export namespace DynamicIdentity {
       d.dow[1]
     ];
     sections[1] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 2", {scope, putAnyWhere: [...putAnyWhere],  parts: [...parts], section: sections[1]});
+    //console.log("DEBUG: Dynamic Identity Challenge - section 2", {scope, putAnyWhere: [...putAnyWhere],  parts: [...parts], section: sections[1]});
     
     //section three
     length = 8 + d.year % 3;
@@ -121,7 +121,7 @@ export namespace DynamicIdentity {
       ...randomizeArray(([...putAnyWhere]).join('').split('')),
     ];
     sections[2] = parts.join('');
-    console.log("DEBUG: Dynamic Identity Challenge - section 3", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[2]});
+    //console.log("DEBUG: Dynamic Identity Challenge - section 3", {scope, putAnyWhere: [...putAnyWhere], parts: [...parts], section: sections[2]});
 
     return sections.join('-').toLowerCase();
   }
