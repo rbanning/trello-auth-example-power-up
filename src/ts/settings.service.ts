@@ -4,6 +4,7 @@ import { env } from "./_common";
 export const setting_fields = ['active_list_id', 'scope', 'scope_code', 'scope_secret', 'base_url'];
 
 export interface ISettings {
+  pending_list_id?: string;
   active_list_id?: string;
   done_list_id?: string;
   scope?: string;

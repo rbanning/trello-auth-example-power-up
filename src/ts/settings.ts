@@ -82,6 +82,14 @@ const updateElementValues = (settings: ISettings) => {
 
 }
 
+const memberHtml = (member, membership, locked) => {
+  return `<div class="member${locked ? ' locked' :''}" title="${member.username}">` +
+      `<img src="${member.avatar}" alt="avatar"/>` +
+      `<span class="name">${member.fullName}</span>` +
+      `<span class="membership">${membership?.memberType || 'unknown'}</span>` +
+      `</div>`;
+}
+
 
 //SETUP CLOSE BUTTON(S)
 window.document.querySelectorAll('.close')
@@ -103,23 +111,37 @@ window.document.querySelectorAll('input')
 t.render(() => {
   return trello.Promise.all([
     settingsService.get(t),
-    t.lists('id','name')
+    t.lists('id','name'),
+    t.board('id','name','members','memberships'),
+    t.member('all')
     //add others as needed
   ])
   .then((results: any[]) => {
-    const [settings, lists] = results;
+    const [settings, lists, board, me] = results;
+
+    //VALIDATION
+    if (!Array.isArray(lists)) {
+      console.warn("Error getting board lists", {lists});
+      throw new Error("Unable to find the board lists");
+    }
+    if (!Array.isArray(board?.members) || !Array.isArray(board.memberships)) {
+      console.warn("Error getting board members/memberships", {board});
+      throw new Error("Unable to find the board members/memberships");
+    }
+    me.membership = board.memberships.find(m => m.memberId === me.id);
+    if (!me.membership) {
+      console.warn("Error getting my board membership", {me, board});
+      throw new Error("Unable to find your board membership");
+    }
 
     //ADD THE LISTs TO SELECTs
     const selects: HTMLSelectElement[] = [
+      (window.document.getElementById('pending_list_id') as HTMLSelectElement),
       (window.document.getElementById('active_list_id') as HTMLSelectElement),
       (window.document.getElementById('done_list_id') as HTMLSelectElement)
     ];    
     if (selects.some(el => !el)) { throw new Error("Unable to find one or more of the list select dropdown"); }
 
-    if (!Array.isArray(lists)) {
-      console.warn("Error getting board lists", {lists});
-      throw new Error("Unable to find the board lists");
-    }
     selects.forEach(select => {
       lists.forEach((item: any) => {
         const option = window.document.createElement('option');
@@ -130,7 +152,15 @@ t.render(() => {
       select.addEventListener('change', updateSaveBtn);  
     });
 
+    //PRESET THE Input/Select ELEMENTS
     updateElementValues(settings);
+
+    //SETUP THE MEMBERSHIPs
+    const members = window.document.getElementById('members');
+    if (!members) { throw new Error("Unable to find the #members element"); }
+    members.innerHTML = board.members.map(m => {
+      return memberHtml(m, board.memberships.find(x => x.memberId === m.id), m.id === me.id);
+    });
 
     //DONE
     updateSaveBtn();

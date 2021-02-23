@@ -37,9 +37,11 @@ function meetingSettings(t: any) {
   return currentUserIsAdmin(t)
     .then((isAdmin: boolean) => {
       if (isAdmin) {
-        return t.popup({
+        return t.modal({
           title: 'Settings',
           url: './settings.html',
+          fullscreen: false,
+          accentColor: 'yellow',
           height: 300
         });  
       } else {

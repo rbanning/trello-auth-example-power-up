@@ -47,6 +47,22 @@ h3 {
   margin: 1em;
 }
 
+.member {
+  margin: 0 0.5em 0.2em 0;
+  display: flex;
+  align-items: center;
+}
+.member img {
+  display: inline-block;
+  width: 20px;
+  height: auto;
+  border-radius: 50%;
+}
+.member span {
+  margin: 0 0.4em;
+}
+
+
 .loading {
   position: relative;
   display: none;
