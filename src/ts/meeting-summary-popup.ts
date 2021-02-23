@@ -44,7 +44,7 @@ export namespace MeetingSummaryPopup {
         }
 
         return t.popup({
-          text: 'Meeting Summary',
+          title: 'Meeting Summary',
           items
         });
       });
