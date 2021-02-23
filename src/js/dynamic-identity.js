@@ -44,6 +44,17 @@ export var DynamicIdentity;
         return getRandomCharsFrom(CHARS, count);
     };
     //#endregion
+    DynamicIdentity.buildScopeFromSettings = (settings) => {
+        if (settings) {
+            return {
+                id: settings.scope,
+                code: settings.scope_code,
+                secret: settings.scope_secret
+            };
+        }
+        //else
+        return null;
+    };
     DynamicIdentity.isValidScope = (scope) => {
         var _a, _b, _c;
         return !!scope &&

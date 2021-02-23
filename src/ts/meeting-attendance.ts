@@ -53,7 +53,6 @@ export namespace MeetingAttendance {
         const isMemberBoard = isMemberOf(member?.id, board?.members);
         const isMemberCard = isMemberOf(member?.id, card?.members);
         const isActiveList = card.idList === settings.active_list_id;
-        console.log("DEBUG: - cardDetailBadges", {member, card, isMemberBoard, isMemberCard, isActiveList});
         
         if (!isActiveList || !isMemberBoard) { return []; }
         else if (isMemberCard) {

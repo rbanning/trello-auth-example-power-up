@@ -29,12 +29,10 @@ export class HallpassService extends FetchBaseService {
           const [settings, member, board, card] = results;
           if (isMemberOf(member.id, board.members)) {
 
-            console.log("DEBUG: - addMeToCurrentCard", {settings, member, board, card});
 
             const url = this.buildUrl(settings, 'cards', card.id, 'members', member.id);
             this.fetchUsingSettingsAndMember(url, 'PUT', settings, member)
               .then((result: any[]) => {
-                console.log("DEBUG: - addMeToCurrentCard ... should have gotten list of members on the card", result);
                 resolve(result);
               })
               .catch(error => {
@@ -68,12 +66,9 @@ export class HallpassService extends FetchBaseService {
           const [settings, member, board, card] = results;
           if (isMemberOf(member.id, board.members)) {
 
-            console.log("DEBUG: - removeMeFromCurrentCard", {settings, member, board, card});
-
             const url = this.buildUrl(settings, 'cards', card.id, 'members', member.id);
             this.fetchUsingSettingsAndMember(url, 'DELETE', settings, member)
               .then((result: any[]) => {
-                console.log("DEBUG: - removeMeFromCurrentCard ... should have gotten list of members on the card", result);
                 resolve(result);
               })
               .catch(error => {

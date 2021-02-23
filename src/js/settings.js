@@ -89,22 +89,27 @@ t.render(() => {
     ])
         .then((results) => {
         const [settings, lists] = results;
-        //ADD THE LISTs TO SELECT
-        const select = window.document.getElementById('active_list_id');
-        if (!select) {
-            throw new Error("Unable to find the list select dropdown");
+        //ADD THE LISTs TO SELECTs
+        const selects = [
+            window.document.getElementById('active_list_id'),
+            window.document.getElementById('done_list_id')
+        ];
+        if (selects.some(el => !el)) {
+            throw new Error("Unable to find one or more of the list select dropdown");
         }
         if (!Array.isArray(lists)) {
             console.warn("Error getting board lists", { lists });
             throw new Error("Unable to find the board lists");
         }
-        lists.forEach((item) => {
-            const option = window.document.createElement('option');
-            option.value = item.id;
-            option.innerText = item.name;
-            select.add(option);
+        selects.forEach(select => {
+            lists.forEach((item) => {
+                const option = window.document.createElement('option');
+                option.value = item.id;
+                option.innerText = item.name;
+                select.add(option);
+            });
+            select.addEventListener('change', updateSaveBtn);
         });
-        select.addEventListener('change', updateSaveBtn);
         updateElementValues(settings);
         //DONE
         updateSaveBtn();

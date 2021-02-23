@@ -10,7 +10,11 @@ export const env = {
     base_url: '%%BASE_URL%%',
     platform: '%%PLATFORM%%',
     version: '%%VERSION%%',
-    SETTINGS_KEY: 'hallpass_meeting_settings'
+    SETTINGS_KEY: 'hallpass_meeting_settings',
+    logo: {
+        white: 'https://trg-meeting-power-up.netlify.app/meeting-white.png',
+        black: 'https://trg-meeting-power-up.netlify.app/meeting-black.png'
+    }
 };
 export const currentUserMembership = (t) => {
     return trello.Promise.all([
@@ -32,5 +36,14 @@ export const currentUserIsAdmin = (t) => {
         .then((member) => {
         return (member === null || member === void 0 ? void 0 : member.memberType) === 'admin';
     });
+};
+export const isMemberOf = (id, members) => {
+    if (Array.isArray(members.members)) {
+        members = members.members;
+    }
+    if (!id || !Array.isArray(members)) {
+        return null;
+    }
+    return members.some(m => m.id === id);
 };
 //# sourceMappingURL=_common.js.map

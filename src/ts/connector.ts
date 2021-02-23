@@ -52,7 +52,6 @@ function meetingSettings(t: any) {
 function exploreMembers(t: any) {
   t.member('all')
     .then((member: any) => {
-      console.log("DEBUG: exploreMember - Me", {member, canWriteToModel: t.memberCanWriteToModel('card')});
 
       const settingService = new SettingsService();
       settingService.scope(t)
@@ -61,19 +60,16 @@ function exploreMembers(t: any) {
           DynamicIdentity.getHeaders(scope, "member@name.com").forEach((value, key) => {
             headers[key] = value;
           });
-          console.log("DEBUG: DynamicIdentity.getHeaders", {scope, headers});
         });
     
     });
     
   t.board('id', 'name', 'members', 'memberships')
     .then((board: any) => {
-      console.log("DEBUG: exploreMember - Board", {board});
     });
 
   t.card('id', 'name', 'members', 'due', 'dueComplete')
     .then((card: any) => {
-      console.log("DEBUG: exploreMember - Card", {card});
     });
 
   trello.Promise.all([
@@ -81,7 +77,6 @@ function exploreMembers(t: any) {
     currentUserIsAdmin(t),
   ]).then((result: any) => {
       const [member, isAdmin] = result;
-      console.log("DEBUG: exploreMember - currentUserMembership", {result, member, isAdmin});
     });
 
 }

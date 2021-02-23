@@ -1,40 +1,33 @@
 import { DynamicIdentity } from './dynamic-identity';
+import { MeetingAttendance } from './meeting-attendance';
+import { MeetingSummaryPopup } from './meeting-summary-popup';
 import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
-import { currentUserMembership, currentUserIsAdmin, trello } from './_common';
+import { currentUserMembership, currentUserIsAdmin, trello, env } from './_common';
 window.TrelloPowerUp.initialize({
     'board-buttons': (t) => {
-        const settingService = new SettingsService();
-        settingService.get(t)
-            .then(settings => {
-            console.log("DEBUG:// SETTINGS", settings);
-        });
-        return [
-            {
-                text: 'Meeting Summary',
-                condition: 'edit',
-                callback: meetingSummary
+        return currentUserIsAdmin(t)
+            .then(isAdmin => {
+            if (isAdmin) {
+                return [
+                    {
+                        text: 'View Attendance',
+                        icon: {
+                            dark: env.logo.white,
+                            light: env.logo.black
+                        },
+                        condition: 'edit',
+                        callback: MeetingSummaryPopup.show
+                    }
+                ];
             }
-        ];
+        });
     },
     'card-detail-badges': (t) => {
-        //todo: restrict access to admins... how?
-        return [
-            {
-                text: 'Explore Members/Membership',
-                callback: exploreMembers
-            }
-        ];
+        return MeetingAttendance.cardDetailBadges(t);
     },
     'show-settings': meetingSettings
 });
-function meetingSummary(t) {
-    return t.popup({
-        title: 'Meeting Summary',
-        url: './meeting-summary.html',
-        height: 300
-    });
-}
 function meetingSettings(t) {
     return currentUserIsAdmin(t)
         .then((isAdmin) => {
@@ -54,7 +47,6 @@ function meetingSettings(t) {
 function exploreMembers(t) {
     t.member('all')
         .then((member) => {
-        console.log("DEBUG: exploreMember - Me", { member, canWriteToModel: t.memberCanWriteToModel('card') });
         const settingService = new SettingsService();
         settingService.scope(t)
             .then((scope) => {
@@ -62,23 +54,19 @@ function exploreMembers(t) {
             DynamicIdentity.getHeaders(scope, "member@name.com").forEach((value, key) => {
                 headers[key] = value;
             });
-            console.log("DEBUG: DynamicIdentity.getHeaders", { scope, headers });
         });
     });
     t.board('id', 'name', 'members', 'memberships')
         .then((board) => {
-        console.log("DEBUG: exploreMember - Board", { board });
     });
     t.card('id', 'name', 'members', 'due', 'dueComplete')
         .then((card) => {
-        console.log("DEBUG: exploreMember - Card", { card });
     });
     trello.Promise.all([
         currentUserMembership(t),
         currentUserIsAdmin(t),
     ]).then((result) => {
         const [member, isAdmin] = result;
-        console.log("DEBUG: exploreMember - currentUserMembership", { result, member, isAdmin });
     });
 }
 //# sourceMappingURL=connector.js.map
