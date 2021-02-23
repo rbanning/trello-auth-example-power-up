@@ -15,6 +15,9 @@ t.render(() => {
     trello.t().closePopup();
   };
 
+  const memberHtml = (member: any) => {
+    return `<div class="member" title="${member.username}"><img src="${member.avatar}" alt="avatar"/> <span>${member.fullName}</span></div>`;
+  };
 
   //SETUP CLOSE BUTTON
   window.document.querySelectorAll('.close')
@@ -32,14 +35,23 @@ t.render(() => {
 
       console.log("Meeting Summary", "todo: need to implement the meeting summary", {card, board, missing});      
 
+      const content = window.document.getElementById('content');
 
-      //DEBUG:  Turn off loading
-      window.setTimeout( () => {
-        loading.hide();
-      }, 5000);
+      //missing
+      const secMissing = window.document.createElement('section');
+      secMissing.innerHTML = '<h3>Missing</h3>'
+        + (missing.length === 0 ? '<p><strong>None</strong></p>' : `<ul><li>${missing.map(memberHtml).join('</li><li>')}</li></ul>`);
 
+      //attended
+      const secAttended = window.document.createElement('section');
+      secAttended.innerHTML = '<h3>Attended</h3>'
+        + (card.members.length === 0 ? '<p><strong>None</strong></p>' : `<ul><li>${card.members.map(memberHtml).join('</li><li>')}</li></ul>`);
+      
+      content.append(secMissing);
+      content.append(secAttended);     
+    })
+    .then(() => {
+      loading.hide();
+      return t.sizeTo('#page');
     });
-
-
-
 });
