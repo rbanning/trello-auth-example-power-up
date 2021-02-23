@@ -42,6 +42,11 @@ export namespace MeetingSummaryPopup {
             });
           });
         }
+
+        return t.popup({
+          text: 'Meeting Summary',
+          items
+        });
       });
   };
 }
