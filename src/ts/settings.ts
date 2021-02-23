@@ -128,7 +128,7 @@ t.render(() => {
       console.warn("Error getting board members/memberships", {board});
       throw new Error("Unable to find the board members/memberships");
     }
-    me.membership = board.memberships.find(m => m.memberId === me.id);
+    me.membership = board.memberships.find(m => m.idMember === me.id);
     if (!me.membership) {
       console.warn("Error getting my board membership", {me, board});
       throw new Error("Unable to find your board membership");
@@ -159,7 +159,7 @@ t.render(() => {
     const members = window.document.getElementById('members');
     if (!members) { throw new Error("Unable to find the #members element"); }
     members.innerHTML = board.members.map(m => {
-      return memberHtml(m, board.memberships.find(x => x.memberId === m.id), m.id === me.id);
+      return memberHtml(m, board.memberships.find(x => x.idMember === m.id), m.id === me.id);
     });
 
     //DONE
