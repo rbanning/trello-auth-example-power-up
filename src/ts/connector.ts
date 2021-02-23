@@ -1,5 +1,6 @@
 import { DynamicIdentity } from './dynamic-identity';
 import { MeetingAttendance } from './meeting-attendance';
+import { MeetingSummaryPopup } from './meeting-summary-popup';
 import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
 import {currentUserMembership, currentUserIsAdmin, trello, env} from './_common';
@@ -19,9 +20,9 @@ import {currentUserMembership, currentUserIsAdmin, trello, env} from './_common'
                 light: env.logo.black
               },
               condition: 'edit',
-              callback: meetingSummary 
+              callback: MeetingSummaryPopup.show 
             }
-          ]
+          ];
         }
       })
   },
@@ -31,14 +32,6 @@ import {currentUserMembership, currentUserIsAdmin, trello, env} from './_common'
   'show-settings': meetingSettings
 });
 
-
-function meetingSummary(t: any) {
-  return t.popup({
-    title: 'Meeting Summary',
-    url: './meeting-summary.html',
-    height: 300
-  });
-}
 
 function meetingSettings(t: any) {
   return currentUserIsAdmin(t)
