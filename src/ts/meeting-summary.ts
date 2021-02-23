@@ -5,7 +5,9 @@ const t = trello.t();
 const loading = new LoadingService();
 loading.show();
 
-console.log("Meeting Summary", "todo: need to implement the meeting summary");
+//get the card
+const card = t.arg('card');
+console.log("Meeting Summary", "todo: need to implement the meeting summary", {card});
 
 //HELPERS
 const close = () => {

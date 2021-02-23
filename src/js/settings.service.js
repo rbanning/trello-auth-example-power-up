@@ -1,5 +1,5 @@
 import { env } from "./_common";
-export const setting_fields = ['list_id', 'scope', 'scope_code', 'scope_secret', 'base_url'];
+export const setting_fields = ['active_list_id', 'scope', 'scope_code', 'scope_secret', 'base_url'];
 export class SettingsService {
     constructor() {
         this.VISIBILITY = 'shared';

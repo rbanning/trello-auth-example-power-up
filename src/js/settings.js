@@ -90,7 +90,7 @@ t.render(() => {
         .then((results) => {
         const [settings, lists] = results;
         //ADD THE LISTs TO SELECT
-        const select = window.document.getElementById('list_id');
+        const select = window.document.getElementById('active_list_id');
         if (!select) {
             throw new Error("Unable to find the list select dropdown");
         }

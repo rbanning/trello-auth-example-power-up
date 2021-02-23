@@ -38,7 +38,7 @@ export namespace MeetingAttendance {
   };
 
 
-  //NOTE - need to only add these badges on cards from the settings.list_id
+  //NOTE - need to only add these badges on cards from the settings.active_list_id
   export const cardDetailBadges = (t): Promise<any[]> => {
     const settingsService = new SettingsService();
     const actions =[ 
@@ -52,7 +52,7 @@ export namespace MeetingAttendance {
         const [settings, member, board, card] = results;
         const isMemberBoard = isMemberOf(member?.id, board?.members);
         const isMemberCard = isMemberOf(member?.id, card?.members);
-        const isActiveList = card.idList === settings.list_id;
+        const isActiveList = card.idList === settings.active_list_id;
         console.log("DEBUG: - cardDetailBadges", {member, card, isMemberBoard, isMemberCard, isActiveList});
         
         if (!isActiveList || !isMemberBoard) { return []; }

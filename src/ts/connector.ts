@@ -14,7 +14,7 @@ import {currentUserMembership, currentUserIsAdmin, trello, env} from './_common'
           return [
             {
               text: 'View Attendance',
-              logo: {
+              icon: {
                 dark: env.logo.white,
                 light: env.logo.black
               },
