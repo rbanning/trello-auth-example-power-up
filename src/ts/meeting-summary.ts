@@ -46,12 +46,12 @@ t.render(() => {
       //missing
       const secMissing = window.document.createElement('section');
       secMissing.innerHTML = '<h3>Missing</h3>'
-        + (missing.length === 0 ? '<p><strong>None</strong></p>' : `<ul><li>${missing.map(memberHtml).join('</li><li>')}</li></ul>`);
+        + (missing.length === 0 ? '<p><strong>None</strong></p>' : `${missing.map(memberHtml).join(' ')}`);
 
       //attended
       const secAttended = window.document.createElement('section');
       secAttended.innerHTML = '<h3>Attended</h3>'
-        + (card.members.length === 0 ? '<p><strong>None</strong></p>' : `<ul><li>${card.members.map(memberHtml).join('</li><li>')}</li></ul>`);
+        + (card.members.length === 0 ? '<p><strong>None</strong></p>' : `${card.members.map(memberHtml).join(' ')}`);
       
       content.append(secMissing);
       content.append(secAttended);     
