@@ -2,37 +2,31 @@ import { DynamicIdentity } from './dynamic-identity';
 import { MeetingAttendance } from './meeting-attendance';
 import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
-import {currentUserMembership, currentUserIsAdmin, trello} from './_common';
+import {currentUserMembership, currentUserIsAdmin, trello, env} from './_common';
 
 
 (window as any).TrelloPowerUp.initialize({
   'board-buttons': (t: any) => {
-    const settingService = new SettingsService();
-    settingService.get(t)
-      .then(settings => {
-        console.log("DEBUG:// SETTINGS", settings);
-      });
-      
-    return [
-      {
-        text: 'Meeting Summary',
-        condition: 'edit',
-        callback: meetingSummary 
-      }
-    ]
+    
+    return currentUserIsAdmin(t)
+      .then(isAdmin => {
+        if (isAdmin) {
+          return [
+            {
+              text: 'View Attendance',
+              logo: {
+                dark: env.logo.white,
+                light: env.logo.black
+              },
+              condition: 'edit',
+              callback: meetingSummary 
+            }
+          ]
+        }
+      })
   },
   'card-detail-badges': (t: any) => {
-    //todo: restrict access to admins... how?
-    return MeetingAttendance.cardDetailBadges(t)
-      .then((results: any[]) => {
-        return [
-          {
-            text: 'Explore Members/Membership',        
-            callback: exploreMembers
-          },
-          ...results
-        ];
-      });
+    return MeetingAttendance.cardDetailBadges(t);
   },
   'show-settings': meetingSettings
 });

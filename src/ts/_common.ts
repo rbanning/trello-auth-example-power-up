@@ -16,7 +16,11 @@ export const env = {
   platform: '%%PLATFORM%%',
   version: '%%VERSION%%',
 
-  SETTINGS_KEY: 'hallpass_meeting_settings'
+  SETTINGS_KEY: 'hallpass_meeting_settings',
+  logo: {
+    white: 'https://trg-meeting-power-up.netlify.app/meeting-white.png',
+    black: 'https://trg-meeting-power-up.netlify.app/meeting-black.png'
+  }
 };
 
 export const currentUserMembership = (t: any) => {
