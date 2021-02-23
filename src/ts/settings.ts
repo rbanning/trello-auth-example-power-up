@@ -82,15 +82,6 @@ const updateElementValues = (settings: ISettings) => {
 
 }
 
-const memberHtml = (member, membership, locked) => {
-  return `<div class="member${locked ? ' locked' :''}" title="${member.username}">` +
-      `<img src="${member.avatar}" alt="avatar"/>` +
-      `<span class="name">${member.fullName}</span>` +
-      `<span class="membership">${membership?.memberType || 'unknown'}</span>` +
-      `</div>`;
-}
-
-
 //SETUP CLOSE BUTTON(S)
 window.document.querySelectorAll('.close')
   .forEach(btn => {
@@ -112,8 +103,6 @@ t.render(() => {
   return trello.Promise.all([
     settingsService.get(t),
     t.lists('id','name'),
-    t.board('id','name','members','memberships'),
-    t.member('all')
     //add others as needed
   ])
   .then((results: any[]) => {
@@ -123,15 +112,6 @@ t.render(() => {
     if (!Array.isArray(lists)) {
       console.warn("Error getting board lists", {lists});
       throw new Error("Unable to find the board lists");
-    }
-    if (!Array.isArray(board?.members) || !Array.isArray(board.memberships)) {
-      console.warn("Error getting board members/memberships", {board});
-      throw new Error("Unable to find the board members/memberships");
-    }
-    me.membership = board.memberships.find(m => m.idMember === me.id);
-    if (!me.membership) {
-      console.warn("Error getting my board membership", {me, board});
-      throw new Error("Unable to find your board membership");
     }
 
     //ADD THE LISTs TO SELECTs
@@ -154,13 +134,6 @@ t.render(() => {
 
     //PRESET THE Input/Select ELEMENTS
     updateElementValues(settings);
-
-    //SETUP THE MEMBERSHIPs
-    const members = window.document.getElementById('members');
-    if (!members) { throw new Error("Unable to find the #members element"); }
-    members.innerHTML = board.members.map(m => {
-      return memberHtml(m, board.memberships.find(x => x.idMember === m.id), m.id === me.id);
-    });
 
     //DONE
     updateSaveBtn();
