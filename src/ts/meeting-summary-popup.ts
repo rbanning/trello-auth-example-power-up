@@ -1,3 +1,4 @@
+import { DateHelper } from "./date-helper";
 import { SettingsService } from "./settings.service"
 import { trello } from "./_common";
 
@@ -7,8 +8,9 @@ export namespace MeetingSummaryPopup {
 
   const showMeetingSummaryFor = (card) => {
     return (t) => {
+      console.log("DEBUG: Showing meeting for", card);
       t.popup({
-        text: 'Meeting Summary',
+        title: 'Meeting Summary',
         url: './meeting-summary.html',
         args: { card },
         height: 200
@@ -25,8 +27,12 @@ export namespace MeetingSummaryPopup {
     
     return trello.Promise.all(actions)
       .then(([settings, cards]) => {
-        cards = Array.isArray(cards) ? cards.filter(c => !c.closed && c.dueComplete) : [];
-        cards.sort((a,b) => b.dateLastActivity.localeCompare(a.dateLastActivity)); //sort by date last activity DESC
+        //ensure we only have cards that are 
+        //    not closed
+        //    have a due date
+        //    the due date is completed
+        cards = Array.isArray(cards) ? cards.filter(c => !c.closed && !!c.due && c.dueComplete) : [];
+        cards.sort((a,b) => b.due.localeCompare(a.due)); //sort by due DESC
 
         const items = [];
         if (cards.length === 0) {
@@ -36,8 +42,9 @@ export namespace MeetingSummaryPopup {
           });
         } else {
           cards.forEach(card => {
+            const d = new Date(card.due);
             items.push({
-              text: card.name,
+              text: `${DateHelper.monthShort(d)} ${d.getFullYear()} - ${card.name}`,
               callback: showMeetingSummaryFor(card)
             });
           });
