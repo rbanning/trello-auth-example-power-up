@@ -23,7 +23,6 @@ export class FetchBaseService {
       .then((resp: Response) => {
         if (resp.ok) {
           const json = resp.json();
-          console.log("DEBUG: - _fetch", {url, method, options, data, resp, result: json});
           return json;
         }
         //else
