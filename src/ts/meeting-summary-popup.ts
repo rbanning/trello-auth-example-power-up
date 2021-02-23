@@ -8,7 +8,6 @@ export namespace MeetingSummaryPopup {
 
   const showMeetingSummaryFor = (card) => {
     return (t) => {
-      console.log("DEBUG: Showing meeting for", card);
       t.popup({
         title: 'Meeting Summary',
         url: './meeting-summary.html',
@@ -44,7 +43,7 @@ export namespace MeetingSummaryPopup {
           cards.forEach(card => {
             const d = new Date(card.due);
             items.push({
-              text: `${DateHelper.monthShort(d)} ${d.getFullYear()} - ${card.name}`,
+              text: `${DateHelper.dateMedium(d)} - ${card.name}`,
               callback: showMeetingSummaryFor(card)
             });
           });

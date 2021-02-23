@@ -16,4 +16,12 @@ export namespace DateHelper {
     //else
     return '';
   }
+
+  export const dateMedium = (d: Date) => {
+    if (d.getMonth) {
+      return `${monthShort(d)}. ${d.getDate().toString().padStart(2, '0')}, ${d.getFullYear()}`;
+    }
+    //else
+    return '';
+  }
 }
