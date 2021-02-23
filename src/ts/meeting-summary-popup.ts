@@ -26,7 +26,7 @@ export namespace MeetingSummaryPopup {
     return trello.Promise.all(actions)
       .then(([settings, cards]) => {
         cards = Array.isArray(cards) ? cards.filter(c => !c.closed && c.dueComplete) : [];
-        cards.sort((a,b) => b.dateLastActivity.localCompare(a.dateLastActivity)); //sort by date last activity DESC
+        cards.sort((a,b) => b.dateLastActivity.localeCompare(a.dateLastActivity)); //sort by date last activity DESC
 
         const items = [];
         if (cards.length === 0) {
