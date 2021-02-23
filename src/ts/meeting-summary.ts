@@ -1,3 +1,4 @@
+import { DateHelper } from "./date-helper";
 import { LoadingService } from "./loading.service";
 import { trello } from "./_common";
 
@@ -35,6 +36,11 @@ t.render(() => {
 
       console.log("Meeting Summary", "todo: need to implement the meeting summary", {card, board, missing});      
 
+      //subtitle
+      const subtitle = window.document.getElementById('subtitle');
+      subtitle.innerHTML = `<span class="date">${DateHelper.dateMedium(new Date(card.due))}</span> <span class="title">${card.name}</span>`;
+
+      //content
       const content = window.document.getElementById('content');
 
       //missing

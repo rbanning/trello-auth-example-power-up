@@ -11,6 +11,25 @@
         height: auto;
       }
 
+      .subtitle {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      .subtitle .date {
+        display: inline-block;
+        padding: 2px 4px;
+        background: green;
+        color: #fff;
+        font-size: 1rem;
+        margin-right: 1em;
+      }
+      .subtitle .title {
+        color: #000;
+      }
+
       section {
         margin: 1em 0;
       }
@@ -30,6 +49,7 @@
       <img src="https://trg-meeting-power-up.netlify.app/meeting-gray.png" alt="icon of a group meeting" class="logo">
       Meeting Summary
     </h1>
+    <div id="subtitle" class="subtitle"></div>
 
     <div class="divider"></div>
     
