@@ -28,11 +28,11 @@ t.render(() => {
     .then((board) => {
       //get the card
       const card = t.arg('card');
-      const missing = board.members.filter(bm => !card.members.any(cm => bm.id === cm.id));
+      const missing = null; //board.members.filter(bm => !card.members.any(cm => bm.id === cm.id));
 
       console.log("Meeting Summary", "todo: need to implement the meeting summary", {card, board, missing});      
 
-      
+
       //DEBUG:  Turn off loading
       window.setTimeout( () => {
         loading.hide();
