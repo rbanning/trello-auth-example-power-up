@@ -28,6 +28,7 @@ export namespace BoardMembership {
   }
 
   export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
+
     return new trello.Promise((resolve, reject) => {
 
       t.board('id', 'members', 'memberships')
@@ -41,6 +42,8 @@ export namespace BoardMembership {
                         .filter(m => m.memberType === target)
                         .map(m => m.idMember);
 
+
+console.log("DEBUG: - resetMembership", {board, affected});
 
         if (affected.length === 0) {
           
