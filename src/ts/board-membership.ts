@@ -65,14 +65,12 @@ export namespace BoardMembership {
                   message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
                   display: 'success'
                 });
-                resolve(results);
               })
               .catch(reason => {
                 t.alert({
                   message: "Error updating members",
                   display: "error"
                 });
-                reject(reason);
               });
           }
         }); //end popup
