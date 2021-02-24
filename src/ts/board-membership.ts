@@ -51,8 +51,14 @@ export namespace BoardMembership {
       } else {
 
         console.log("DEBUG: - resetMembership", {board, affected, t});
-        t.alert({
-          message: "Debugging"
+        t.popup({
+          type: "confirm",
+          title: 'Reset Board Membership',
+          message: "Change?",
+          confirmText: 'Proceed',
+          onConfirm: (t) => {
+            console.log("Done");
+          }
         });
 
         // t.popup({
