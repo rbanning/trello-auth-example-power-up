@@ -26,27 +26,7 @@ export namespace BoardMembership {
     });
     
   }
-  const _dbug = (t: any) => {
-    console.log("DBUG - what is this", {t});
-  }
-
   export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
-    t.board('id', 'members', 'memberships')
-      .then(board => {
-        t.popup({
-          type: "confirm",
-          title: 'Reset Board Membership',
-          message: `Change ${board.name}`,
-          confirmText: 'Proceed',
-          onConfirm: (t) => { console.log("Confirmed"); t.closePopup(); }
-        });    
-      })
-      .catch(reason => {
-        console.warn("OOPs there is a problem", reason);
-      })
-  };
-
-  export const x_resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
 
     t.board('id', 'members', 'memberships')
     .then(board => {
@@ -70,28 +50,6 @@ export namespace BoardMembership {
       } else {
 
         console.log("DEBUG: - resetMembership", {board, affected, t});
-        // t.modal({
-        //   title: 'Testing',
-        //   accentColor: 'red',
-        //   url: './local-test.html',
-        //   fullscreen: false,
-        //   height: 300
-        // });
-        t.popup({
-          type: "confirm",
-          title: 'Reset Board Membership',
-          message: "Change?",
-          confirmText: 'Proceed',
-          onConfirm: () => { console.log("Confirmed"); }
-        });
-
-        // t.popup({
-        //   type: 'confirm',
-        //   title: 'Reset Board Membership',
-        //   message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to '${resetTo}'`,
-        //   confirmText: `Proceed`,
-        //   onConfirm: (t) => {
-        //     t.closePopup();
         //     // _resetMembership(t, board.id, affected, resetTo)
         //     //   .then(results => {
         //     //     console.log("DEBUG: updated members", {board, affected, results});
@@ -106,8 +64,6 @@ export namespace BoardMembership {
         //     //       display: "error"
         //     //     });
         //     //   });
-        //   }
-        // }); //end popup
       }
     });
   

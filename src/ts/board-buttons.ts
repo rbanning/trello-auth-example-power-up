@@ -45,15 +45,25 @@ export namespace BoardButtons {
             }
           ];
 
-          if (settings.monitor_members === 'true' && members.some(m => m.membership?.memberType === 'normal')) {
+          var affected = members.filter(m => m.membership?.memberType === 'normal');
+          if (settings.monitor_members === 'true' && affected.length > 0) {
             result.push(
               {
                 text: "Reset 'normal' Members",
                 icon: null,
                 condition: 'edit',
                 callback: (t) => {
-                  console.log("DEBUG: running BoardMembership.resetMembership");
-                  BoardMembership.resetMembership(t, 'normal', 'observer');
+                  t.popup({
+                    type: "confirm",
+                    title: 'Reset Board Membership',
+                    message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to 'observer'`,
+                    confirmText: 'Proceed',
+                    onConfirm: (tx) => { 
+                      tx.closePopup(); 
+                      console.log("Confirmed"); 
+                      BoardMembership.resetMembership(tx, 'normal', 'observer');
+                    }
+                  });    
                 }
               }
             );
