@@ -60,7 +60,6 @@ export namespace BoardButtons {
                     confirmText: 'Proceed',
                     onConfirm: (tx) => { 
                       tx.closePopup(); 
-                      console.log("Confirmed"); 
                       BoardMembership.resetMembership(tx, 'normal', 'observer');
                     }
                   });    
