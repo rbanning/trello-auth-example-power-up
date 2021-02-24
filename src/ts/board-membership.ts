@@ -31,15 +31,18 @@ export namespace BoardMembership {
   }
 
   export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
-    t.popup({
-      type: "confirm",
-      title: 'Reset Board Membership',
-      message: "Change?",
-      confirmText: 'Proceed',
-      onConfirm: () => { console.log("Confirmed"); }
-    });
+    t.board('id', 'members', 'memberships')
+      .then(board => {
+        t.popup({
+          type: "confirm",
+          title: 'Reset Board Membership',
+          message: `Change ${board.name}`,
+          confirmText: 'Proceed',
+          onConfirm: (t) => { console.log("Confirmed"); t.closePopup(); }
+        });    
+      })
   };
-  
+
   export const x_resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
 
     t.board('id', 'members', 'memberships')
