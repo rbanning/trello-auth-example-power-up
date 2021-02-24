@@ -52,7 +52,7 @@ export namespace BoardMembership {
 
         console.log("DEBUG: - resetMembership", {board, affected, t});
         t.alert({
-          message: "Debugging";
+          message: "Debugging"
         });
 
         // t.popup({
