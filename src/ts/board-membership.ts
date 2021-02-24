@@ -31,6 +31,16 @@ export namespace BoardMembership {
   }
 
   export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
+    t.popup({
+      type: "confirm",
+      title: 'Reset Board Membership',
+      message: "Change?",
+      confirmText: 'Proceed',
+      onConfirm: () => { console.log("Confirmed"); }
+    });
+  };
+  
+  export const x_resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
 
     t.board('id', 'members', 'memberships')
     .then(board => {
@@ -54,20 +64,20 @@ export namespace BoardMembership {
       } else {
 
         console.log("DEBUG: - resetMembership", {board, affected, t});
-        t.modal({
-          title: 'Testing',
-          accentColor: 'red',
-          url: './local-test.html',
-          fullscreen: false,
-          height: 300
-        });
-        // t.popup({
-        //   type: "confirm",
-        //   title: 'Reset Board Membership',
-        //   message: "Change?",
-        //   confirmText: 'Proceed',
-        //   onConfirm: _dbug
+        // t.modal({
+        //   title: 'Testing',
+        //   accentColor: 'red',
+        //   url: './local-test.html',
+        //   fullscreen: false,
+        //   height: 300
         // });
+        t.popup({
+          type: "confirm",
+          title: 'Reset Board Membership',
+          message: "Change?",
+          confirmText: 'Proceed',
+          onConfirm: () => { console.log("Confirmed"); }
+        });
 
         // t.popup({
         //   type: 'confirm',
