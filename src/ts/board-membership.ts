@@ -41,6 +41,9 @@ export namespace BoardMembership {
           onConfirm: (t) => { console.log("Confirmed"); t.closePopup(); }
         });    
       })
+      .catch(reason => {
+        console.warn("OOPs there is a problem", reason);
+      })
   };
 
   export const x_resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {

@@ -53,3 +53,29 @@
 //   fullscreen: false,
 //   height: 300
 // });
+
+// const resetMembership = (t) => {
+//   t.popup({
+//     type: "confirm",
+//     title: 'Reset Board Membership',
+//     message: `Change ${board.name}`,
+//     confirmText: 'Proceed',
+//     onConfirm: (t) => { 
+//       console.log("Confirmed"); 
+//       t.closePopup(); 
+//     }
+//   });      
+// };
+
+// const resetMembership = (t) => {
+//   t.board('id', 'members', 'memberships')
+//     .then(board => {
+//       t.popup({
+//         type: "confirm",
+//         title: 'Reset Board Membership',
+//         message: `Change ${board.name}`,
+//         confirmText: 'Proceed',
+//         onConfirm: (t) => { console.log("Confirmed"); t.closePopup(); }
+//       });    
+//     });
+// };
