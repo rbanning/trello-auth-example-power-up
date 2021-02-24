@@ -8,9 +8,17 @@ import {getBoardMembers, currentUserMembership, currentUserIsAdmin, trello, env}
 
 (window as any).TrelloPowerUp.initialize({
   'board-buttons': (t: any) => {
-    
-    return getBoardMembers(t)
-      .then(members => {
+    const settingsService = new SettingsService();
+
+    return trello.Promise.all([
+        settingsService.get(t),
+        getBoardMembers(t)      
+      ]) 
+      .then((settings, members) => {
+        if (!settings) {
+          console.warn("Unable to retrieve settings", {settings});
+          return [];
+        }
         if (!Array.isArray(members)) {
           console.warn("Unable to retrieve board members", {members});
           return [];
@@ -35,7 +43,7 @@ import {getBoardMembers, currentUserMembership, currentUserIsAdmin, trello, env}
             }
           ];
 
-          if (members.some(m => m.membership?.memberType === 'normal')) {
+          if (settings.monitor_members === 'true' && members.some(m => m.membership?.memberType === 'normal')) {
             result.push(
               {
                 text: "Reset 'normal' Members",
