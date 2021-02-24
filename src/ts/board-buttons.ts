@@ -52,7 +52,8 @@ export namespace BoardButtons {
                 icon: null,
                 condition: 'edit',
                 callback: (t) => {
-                  BoardMembership.resetMembership('normal', 'observer', t)
+                  console.log("DEBUG: running BoardMembership.resetMembership");
+                  BoardMembership.resetMembership(t, 'normal', 'observer')
                     .then(result => {
                       console.log("DEBUG: board button finished", {result});
                     })

@@ -6,9 +6,7 @@ export namespace BoardMembership {
 
   export type MemberType = 'admin' | 'normal' | 'observer';
 
-  export const resetMembership = (target: MemberType, resetTo: MemberType, t: any = null) => {
-    t = t || trello.t();
-
+  export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
     return new trello.Promise((resolve, reject) => {
 
       t.board('id', 'members', 'memberships')
@@ -22,7 +20,8 @@ export namespace BoardMembership {
         const actions = board.memberships
                         .filter(m => m.memberType === target)
                         .map(m => {
-                          return m;
+                          return `service.updateBoardMembership(${board.id}, ${m.idMember}, 'observer')`;
+                          //return m;
                         });
 
         console.log("DEBUG: resetMembership", {board, actions});
