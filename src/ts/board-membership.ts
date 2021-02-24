@@ -29,60 +29,55 @@ export namespace BoardMembership {
 
   export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
 
-    return new trello.Promise((resolve, reject) => {
+    t.board('id', 'members', 'memberships')
+    .then(board => {
+      //VALIDATE
+      if (!Array.isArray(board?.members) || !Array.isArray(board.memberships)) {
+        console.warn("Unable to get board members and/or memberships", {board});
+        return;
+      }
 
-      t.board('id', 'members', 'memberships')
-      .then(board => {
-        //VALIDATE
-        if (!Array.isArray(board?.members) || !Array.isArray(board.memberships)) {
-          reject("Unable to get board members and/or memberships");
-        }
+      const affected = board.memberships
+                      .filter(m => m.memberType === target)
+                      .map(m => m.idMember);
 
-        const affected = board.memberships
-                        .filter(m => m.memberType === target)
-                        .map(m => m.idMember);
+      if (affected.length === 0) {
+        
+        t.alert({
+          message: 'No members need updating',
+          display: 'warning'
+        });
 
+      } else {
 
-console.log("DEBUG: - resetMembership", {board, affected});
-
-        if (affected.length === 0) {
-          
-          t.alert({
-            message: 'No members need updating',
-            display: 'warning'
-          });
-
-        } else {
-
-          t.popup({
-            type: 'confirm',
-            title: 'Reset Board Membership',
-            message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to '${resetTo}'`,
-            confirmText: `Proceed`,
-            onConfirm: (t) => {
-              t.closePopup();
-              _resetMembership(t, board.id, affected, resetTo)
-                .then(results => {
-                  console.log("DEBUG: updated members", {board, affected, results});
-                  t.alert({
-                    message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
-                    display: 'success'
-                  });
-                  resolve(results);
-                })
-                .catch(reason => {
-                  t.alert({
-                    message: "Error updating members",
-                    display: "error"
-                  });
-                  reject(reason);
+        console.log("DEBUG: - resetMembership", {board, affected});
+        t.popup({
+          type: 'confirm',
+          title: 'Reset Board Membership',
+          message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to '${resetTo}'`,
+          confirmText: `Proceed`,
+          onConfirm: (t) => {
+            t.closePopup();
+            _resetMembership(t, board.id, affected, resetTo)
+              .then(results => {
+                console.log("DEBUG: updated members", {board, affected, results});
+                t.alert({
+                  message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
+                  display: 'success'
                 });
-            }
-          }); //end popup
-        }
-      });
-
+                resolve(results);
+              })
+              .catch(reason => {
+                t.alert({
+                  message: "Error updating members",
+                  display: "error"
+                });
+                reject(reason);
+              });
+          }
+        }); //end popup
+      }
     });
-    
+  
   }
 }

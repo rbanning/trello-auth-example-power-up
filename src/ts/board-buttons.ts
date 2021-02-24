@@ -53,13 +53,7 @@ export namespace BoardButtons {
                 condition: 'edit',
                 callback: (t) => {
                   console.log("DEBUG: running BoardMembership.resetMembership");
-                  BoardMembership.resetMembership(t, 'normal', 'observer')
-                    .then(result => {
-                      console.log("DEBUG: board button finished", {result});
-                    })
-                    .catch(reason => {
-                      console.warn("DEBUG: board button failed", {reason});
-                    });
+                  BoardMembership.resetMembership(t, 'normal', 'observer');
                 }
               }
             );
