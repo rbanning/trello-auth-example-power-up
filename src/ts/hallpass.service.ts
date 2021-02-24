@@ -89,12 +89,12 @@ export class HallpassService extends FetchBaseService {
       const patch = { op: 'replace', path: '/membership', value: memberType };
       this.runFetch(url, 'PATCH', patch)
         .then((results: any[]) => {
-          if (Array.isArray(results)) {
-            resolve(results.find(m => m.id === memberId));
+          if (results) {
+            resolve(results);
+          } else {
+            console.warn("Problem updating board membership", {results, boardId, memberId, memberType});
+            reject("Problem updating board membership");
           }
-          //else
-          console.warn("Problem updating board membership", {results, boardId, memberId, memberType});
-          reject("Problem updating board membership");
         })
         .catch((reason) => {
           console.error("Error updating board membership", {reason, boardId, memberId, memberType});

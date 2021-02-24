@@ -48,8 +48,6 @@ export namespace BoardMembership {
         });
 
       } else {
-
-        console.log("DEBUG: - resetMembership", {board, affected, t});
         
         _resetMembership(t, board.id, affected, resetTo)
           .then(results => {
