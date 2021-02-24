@@ -17,22 +17,23 @@ export namespace BoardMembership {
         }
 
         const service = new HallpassService(t);
-        const actions = board.memberships
-                        .filter(m => m.memberType === target)
-                        .map(m => {
-                          return `service.updateBoardMembership(${board.id}, ${m.idMember}, 'observer')`;
-                          //return m;
-                        });
+        const affected = board.memberships
+                        .filter(m => m.memberType === target);
 
-        console.log("DEBUG: resetMembership", {board, actions});
-        service.getBoard(board.id)
-                        .then(result => {
-                          console.log("DEBUG: board information", result);
-                          resolve(null);
-                        })
-                        .catch(reason => {
-                          console.error("DEBUG: board information FAILED", {reason});
-                        });
+        if (affected.length === 0) {
+          resolve([]);  //no action need to take place
+        } else {
+          const actions = affected
+          .map(m => {
+            return service.updateBoardMembership(board.id, m.idMember, 'observer');
+          });
+          trello.Promise.all(actions)
+            .then(resolve)
+            .catch(reason => {
+              console.warn("An error occurred while updating board membership", {board, affected, reason});
+              reject("An error occurred while updating board membership(s)");
+            });
+        }
       });
 
     });
