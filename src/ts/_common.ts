@@ -65,6 +65,7 @@ export const getBoardMembers = (t: any) => {
           isMe: m.id === member.id
         };
         result.isAdmin = result.membership?.memberType === 'admin';
+        return result;
       });
     }
 
