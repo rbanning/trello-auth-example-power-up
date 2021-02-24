@@ -15,6 +15,8 @@ import {getBoardMembers, currentUserMembership, currentUserIsAdmin, trello, env}
         getBoardMembers(t)      
       ]) 
       .then(([settings, members]) => {
+        console.log("DEBUG: board-buttons", {settings, members});
+        
         if (!settings) {
           console.warn("Unable to retrieve settings", {settings});
           return [];
