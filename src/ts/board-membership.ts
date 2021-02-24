@@ -50,30 +50,34 @@ export namespace BoardMembership {
 
       } else {
 
-        console.log("DEBUG: - resetMembership", {board, affected});
-        t.popup({
-          type: 'confirm',
-          title: 'Reset Board Membership',
-          message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to '${resetTo}'`,
-          confirmText: `Proceed`,
-          onConfirm: (t) => {
-            t.closePopup();
-            // _resetMembership(t, board.id, affected, resetTo)
-            //   .then(results => {
-            //     console.log("DEBUG: updated members", {board, affected, results});
-            //     t.alert({
-            //       message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
-            //       display: 'success'
-            //     });
-            //   })
-            //   .catch(reason => {
-            //     t.alert({
-            //       message: "Error updating members",
-            //       display: "error"
-            //     });
-            //   });
-          }
-        }); //end popup
+        console.log("DEBUG: - resetMembership", {board, affected, t});
+        t.alert({
+          message: "Debugging";
+        });
+
+        // t.popup({
+        //   type: 'confirm',
+        //   title: 'Reset Board Membership',
+        //   message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to '${resetTo}'`,
+        //   confirmText: `Proceed`,
+        //   onConfirm: (t) => {
+        //     t.closePopup();
+        //     // _resetMembership(t, board.id, affected, resetTo)
+        //     //   .then(results => {
+        //     //     console.log("DEBUG: updated members", {board, affected, results});
+        //     //     t.alert({
+        //     //       message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
+        //     //       display: 'success'
+        //     //     });
+        //     //   })
+        //     //   .catch(reason => {
+        //     //     t.alert({
+        //     //       message: "Error updating members",
+        //     //       display: "error"
+        //     //     });
+        //     //   });
+        //   }
+        // }); //end popup
       }
     });
   
