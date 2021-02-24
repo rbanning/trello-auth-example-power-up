@@ -58,20 +58,20 @@ export namespace BoardMembership {
           confirmText: `Proceed`,
           onConfirm: (t) => {
             t.closePopup();
-            _resetMembership(t, board.id, affected, resetTo)
-              .then(results => {
-                console.log("DEBUG: updated members", {board, affected, results});
-                t.alert({
-                  message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
-                  display: 'success'
-                });
-              })
-              .catch(reason => {
-                t.alert({
-                  message: "Error updating members",
-                  display: "error"
-                });
-              });
+            // _resetMembership(t, board.id, affected, resetTo)
+            //   .then(results => {
+            //     console.log("DEBUG: updated members", {board, affected, results});
+            //     t.alert({
+            //       message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
+            //       display: 'success'
+            //     });
+            //   })
+            //   .catch(reason => {
+            //     t.alert({
+            //       message: "Error updating members",
+            //       display: "error"
+            //     });
+            //   });
           }
         }); //end popup
       }
