@@ -6,6 +6,27 @@ export namespace BoardMembership {
 
   export type MemberType = 'admin' | 'normal' | 'observer';
 
+  const _resetMembership = (t: any, boardId, memberIds: string[], resetTo: MemberType) => {
+    return new trello.Promise((resolve, reject) => {
+        if (memberIds.length === 0) {
+          resolve([]);  //no action need to take place
+        } else {
+          const service = new HallpassService(t);
+          const actions = memberIds
+            .map(m => {
+              return service.updateBoardMembership(boardId, m, resetTo);
+            });
+          trello.Promise.all(actions)
+            .then(resolve)
+            .catch(reason => {
+              console.warn("An error occurred while updating board membership", {boardId, memberIds, reason});
+              reject("An error occurred while updating board membership(s)");
+            });
+        }
+    });
+    
+  }
+
   export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
     return new trello.Promise((resolve, reject) => {
 
@@ -16,23 +37,45 @@ export namespace BoardMembership {
           reject("Unable to get board members and/or memberships");
         }
 
-        const service = new HallpassService(t);
         const affected = board.memberships
-                        .filter(m => m.memberType === target);
+                        .filter(m => m.memberType === target)
+                        .map(m => m.idMember);
+
 
         if (affected.length === 0) {
-          resolve([]);  //no action need to take place
-        } else {
-          const actions = affected
-          .map(m => {
-            return service.updateBoardMembership(board.id, m.idMember, 'observer');
+          
+          t.alert({
+            message: 'No members need updating',
+            display: 'warning'
           });
-          trello.Promise.all(actions)
-            .then(resolve)
-            .catch(reason => {
-              console.warn("An error occurred while updating board membership", {board, affected, reason});
-              reject("An error occurred while updating board membership(s)");
-            });
+
+        } else {
+
+          t.popup({
+            type: 'confirm',
+            title: 'Reset Board Membership',
+            message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to '${resetTo}'`,
+            confirmText: `Proceed`,
+            onConfirm: (t) => {
+              t.closePopup();
+              _resetMembership(t, board.id, affected, resetTo)
+                .then(results => {
+                  console.log("DEBUG: updated members", {board, affected, results});
+                  t.alert({
+                    message: `Updated ${results?.length} member${results?.length === 0 ? '' : 's'}`,
+                    display: 'success'
+                  });
+                  resolve(results);
+                })
+                .catch(reason => {
+                  t.alert({
+                    message: "Error updating members",
+                    display: "error"
+                  });
+                  reject(reason);
+                });
+            }
+          }); //end popup
         }
       });
 
