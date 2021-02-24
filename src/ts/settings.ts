@@ -131,8 +131,14 @@ t.render(() => {
         option.innerText = item.name;
         select.add(option);
       });
-      select.addEventListener('change', updateSaveBtn);  
     });
+
+    //MONITOR CHANGE on SELECTS
+    window.document.querySelectorAll('select')
+    .forEach(input => {
+      input.addEventListener('change', updateSaveBtn);
+    });
+
 
     //PRESET THE Input/Select ELEMENTS
     updateElementValues(settings);
