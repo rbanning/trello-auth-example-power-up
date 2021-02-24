@@ -14,7 +14,7 @@ import {getBoardMembers, currentUserMembership, currentUserIsAdmin, trello, env}
         settingsService.get(t),
         getBoardMembers(t)      
       ]) 
-      .then((settings, members) => {
+      .then(([settings, members]) => {
         if (!settings) {
           console.warn("Unable to retrieve settings", {settings});
           return [];
