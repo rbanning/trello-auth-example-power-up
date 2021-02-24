@@ -16,7 +16,8 @@ const settingsService = new SettingsService();
 
 //HELPERS
 const close = () => {
-  trello.t().closePopup();
+  trello.t().closeModal();
+  //trello.t().closePopup();
 };
 
 const toggleSave = (enabled: boolean) => {

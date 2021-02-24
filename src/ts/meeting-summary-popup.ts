@@ -8,11 +8,14 @@ export namespace MeetingSummaryPopup {
 
   const showMeetingSummaryFor = (card) => {
     return (t) => {
-      t.popup({
+      //changed from popup to modal
+      t.modal({
         title: 'Meeting Summary',
         url: './meeting-summary.html',
+        fullscreen: false,
+        accentColor: 'yellow',
         args: { card },
-        height: 200
+        height: 300
       });
     };
   };

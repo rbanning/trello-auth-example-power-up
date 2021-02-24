@@ -13,7 +13,8 @@ t.render(() => {
 
   //HELPERS
   const close = () => {
-    trello.t().closePopup();
+    trello.t().closeModal();
+    //trello.t().closePopup();
   };
 
   const memberHtml = (member: any) => {
