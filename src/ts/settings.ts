@@ -15,9 +15,10 @@ loading.show();
 const settingsService = new SettingsService();
 
 //HELPERS
-const close = () => {
-  trello.t().closeModal();
-  //trello.t().closePopup();
+const close = (t?: any) => {
+  t = t?.closeModal ? t : trello.t();
+  t.closeModal();
+  //t.closePopup();
 };
 
 const toggleSave = (enabled: boolean) => {
@@ -62,7 +63,7 @@ const save = () => {
       .then(_ => {
         loading.hide();
         toastr.success(t, "Saved Settings");        
-        t.closePopup();
+        close(t);
       }, (reason) => {
         toastr.error(t, "Error saving settings");
         console.warn("Unable to save settings", {reason});
