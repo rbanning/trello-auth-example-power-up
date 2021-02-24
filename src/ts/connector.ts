@@ -3,16 +3,27 @@ import { MeetingAttendance } from './meeting-attendance';
 import { MeetingSummaryPopup } from './meeting-summary-popup';
 import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
-import {currentUserMembership, currentUserIsAdmin, trello, env} from './_common';
+import {getBoardMembers, currentUserMembership, currentUserIsAdmin, trello, env} from './_common';
 
 
 (window as any).TrelloPowerUp.initialize({
   'board-buttons': (t: any) => {
     
-    return currentUserIsAdmin(t)
-      .then(isAdmin => {
-        if (isAdmin) {
-          return [
+    return getBoardMembers(t)
+      .then(members => {
+        if (!Array.isArray(members)) {
+          console.warn("Unable to retrieve board members", {members});
+          return [];
+        }
+        const me = members.find(m => m.isMe);
+        if (!me) {
+          console.warn("Unable to find me within board members", {members, me});
+          return [];
+        }
+
+        if (me.isAdmin) {
+
+          var result = [
             {
               text: 'View Attendance',
               icon: {
@@ -23,6 +34,21 @@ import {currentUserMembership, currentUserIsAdmin, trello, env} from './_common'
               callback: MeetingSummaryPopup.show 
             }
           ];
+
+          if (members.some(m => m.membership?.memberType === 'normal')) {
+            result.push(
+              {
+                text: "Reset 'normal' Members",
+                icon: null,
+                condition: 'edit',
+                callback: (t) => {
+                  console.log("DEBUG: implement Reset 'normal' Members")
+                }
+              }
+            );
+          }
+
+          return result;
         }
       })
   },

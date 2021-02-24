@@ -50,9 +50,33 @@ export const currentUserIsAdmin = (t: any) => {
     });
 }
 
+export const getBoardMembers = (t: any) => {
+  return trello.Promise.all([
+    t.member('all'),
+    t.board('name', 'members', 'memberships')
+  ]).then((results: any[]) => {
+    const [member, board] = results;
+
+    if (member && board) {
+      return board.members.map(m => {
+        const result = {
+          ...m,
+          membership: board.memberships?.find(s => s.idMember === m.id),
+          isMe: m.id === member.id
+        };
+        result.isAdmin = result.membership?.memberType === 'admin';
+      });
+    }
+
+    //else
+    return null;
+  });
+}
+
 export const isMemberOf = (id: string, members: any | any[]): boolean => {
   if (Array.isArray(members.members)) { members = members.members; }
   if (!id || !Array.isArray(members)) { return null; }
 
   return members.some(m => m.id === id);
 }
+

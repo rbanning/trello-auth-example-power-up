@@ -35,8 +35,6 @@ t.render(() => {
       const card = t.arg('card');
       const missing = board.members.filter(bm => !card.members.some(cm => bm.id === cm.id));
 
-      console.log("Meeting Summary", "todo: need to implement the meeting summary", {card, board, missing});      
-
       //subtitle
       const subtitle = window.document.getElementById('subtitle');
       subtitle.innerHTML = `<span class="date">${DateHelper.dateMedium(new Date(card.due))}</span> <span class="title">${card.name}</span>`;
