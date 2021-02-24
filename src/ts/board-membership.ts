@@ -54,11 +54,12 @@ export namespace BoardMembership {
       } else {
 
         console.log("DEBUG: - resetMembership", {board, affected, t});
-        t.popup({
+        t.modal({
           title: 'Testing',
-          items: [
-            { text: "one", callback: _dbug }
-          ]
+          accentColor: 'red',
+          url: './local-test.html',
+          fullscreen: false,
+          height: 300
         });
         // t.popup({
         //   type: "confirm",
