@@ -62,6 +62,9 @@ h3 {
   margin: 0 0.4em;
 }
 
+.actions {
+  margin: 0.4em 0 2em 0;
+}
 
 .loading {
   position: relative;
