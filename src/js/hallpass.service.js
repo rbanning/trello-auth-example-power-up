@@ -14,7 +14,7 @@ export class HallpassService extends FetchBaseService {
                 reject("Unauthorized!");
             }
             const actions = [
-                this.settings.get(t),
+                this.settingsService.get(t),
                 t.member('id', 'fullName', 'username'),
                 t.board('id', 'name', 'members', 'memberships'),
                 t.card('id', 'name', 'members')
@@ -49,11 +49,35 @@ export class HallpassService extends FetchBaseService {
                 reject("Unauthorized!");
             }
             const actions = [
-                this.settings.get(t),
+                this.settingsService.get(t),
                 t.member('id', 'fullName', 'username'),
                 t.board('id', 'name', 'members', 'memberships'),
                 t.card('id', 'name', 'members')
             ];
+            trello.Promise.all(actions)
+                .then((results) => {
+                const [settings, member, board, card] = results;
+                if (isMemberOf(member.id, board.members)) {
+                    const url = this.buildUrl(settings, 'cards', card.id, 'members', member.id);
+                    this.fetchUsingSettingsAndMember(url, 'DELETE', settings, member)
+                        .then((result) => {
+                        resolve(result);
+                    })
+                        .catch(error => {
+                        console.error("Error removing member from current card", error);
+                        reject(error);
+                    });
+                }
+                else {
+                    reject("Sorry - you are not a member of this board");
+                }
+            });
+        });
+    }
+    /// - Change membership on a board
+    updateBoardMembership(id, memberType) {
+        return new trello.Promise((resolve, reject) => {
+            const actions = [];
             trello.Promise.all(actions)
                 .then((results) => {
                 const [settings, member, board, card] = results;

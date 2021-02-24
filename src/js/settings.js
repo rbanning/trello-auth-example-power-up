@@ -11,8 +11,10 @@ const loading = new LoadingService();
 loading.show();
 const settingsService = new SettingsService();
 //HELPERS
-const close = () => {
-    trello.t().closePopup();
+const close = (t) => {
+    t = (t === null || t === void 0 ? void 0 : t.closeModal) ? t : trello.t();
+    t.closeModal();
+    //t.closePopup();
 };
 const toggleSave = (enabled) => {
     saveBtn.disabled = !enabled;
@@ -51,7 +53,7 @@ const save = () => {
             .then(_ => {
             loading.hide();
             toastr.success(t, "Saved Settings");
-            t.closePopup();
+            close(t);
         }, (reason) => {
             toastr.error(t, "Error saving settings");
             console.warn("Unable to save settings", { reason });
@@ -84,22 +86,23 @@ window.document.querySelectorAll('input')
 t.render(() => {
     return trello.Promise.all([
         settingsService.get(t),
-        t.lists('id', 'name')
-        //add others as needed
+        t.lists('id', 'name'),
     ])
         .then((results) => {
-        const [settings, lists] = results;
+        const [settings, lists, board, me] = results;
+        //VALIDATION
+        if (!Array.isArray(lists)) {
+            console.warn("Error getting board lists", { lists });
+            throw new Error("Unable to find the board lists");
+        }
         //ADD THE LISTs TO SELECTs
         const selects = [
+            window.document.getElementById('pending_list_id'),
             window.document.getElementById('active_list_id'),
             window.document.getElementById('done_list_id')
         ];
         if (selects.some(el => !el)) {
             throw new Error("Unable to find one or more of the list select dropdown");
-        }
-        if (!Array.isArray(lists)) {
-            console.warn("Error getting board lists", { lists });
-            throw new Error("Unable to find the board lists");
         }
         selects.forEach(select => {
             lists.forEach((item) => {
@@ -108,8 +111,13 @@ t.render(() => {
                 option.innerText = item.name;
                 select.add(option);
             });
-            select.addEventListener('change', updateSaveBtn);
         });
+        //MONITOR CHANGE on SELECTS
+        window.document.querySelectorAll('select')
+            .forEach(input => {
+            input.addEventListener('change', updateSaveBtn);
+        });
+        //PRESET THE Input/Select ELEMENTS
         updateElementValues(settings);
         //DONE
         updateSaveBtn();

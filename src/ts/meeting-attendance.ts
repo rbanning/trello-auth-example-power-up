@@ -16,7 +16,7 @@ export namespace MeetingAttendance {
   };
   const _addMeToCard = (t) => {
     t.closePopup();
-    const service = new HallpassService();
+    const service = new HallpassService(t);
     return service.addMeToCurrentCard(t);
   };
 
@@ -33,7 +33,7 @@ export namespace MeetingAttendance {
   };
   const _removeMeFromCard = (t) => {
     t.closePopup();
-    const service = new HallpassService();
+    const service = new HallpassService(t);
     return service.removeMeFromCurrentCard(t);
   };
 

@@ -4,8 +4,8 @@ import { isMemberOf, trello } from "./_common";
 
 export class HallpassService extends FetchBaseService {
 
-  constructor() {
-    super();
+  constructor(t: any) {
+    super(t);
   }  
 
  
@@ -18,7 +18,6 @@ export class HallpassService extends FetchBaseService {
       if (!t.isMemberSignedIn()) { reject("Unauthorized!"); }
 
       const actions = [
-        this.settings.get(t),
         t.member('id','fullName','username'),
         t.board('id','name','members','memberships'),
         t.card('id','name','members')
@@ -26,19 +25,19 @@ export class HallpassService extends FetchBaseService {
 
       trello.Promise.all(actions)
         .then((results: any[]) => {
-          const [settings, member, board, card] = results;
+          const [member, board, card] = results;
           if (isMemberOf(member.id, board.members)) {
 
-
-            const url = this.buildUrl(settings, 'cards', card.id, 'members', member.id);
-            this.fetchUsingSettingsAndMember(url, 'PUT', settings, member)
+            const url = ['cards', card.id, 'members', member.id];
+            this.runFetch(url, 'PUT')
               .then((result: any[]) => {
                 resolve(result);
               })
               .catch(error => {
                 console.error("Error adding member to current card", error);
                 reject(error);
-              });  
+              }); 
+
           } else {
             reject("Sorry - you are not a member of this board");
           }
@@ -55,7 +54,6 @@ export class HallpassService extends FetchBaseService {
       if (!t.isMemberSignedIn()) { reject("Unauthorized!"); }
 
       const actions = [
-        this.settings.get(t),
         t.member('id','fullName','username'),
         t.board('id','name','members','memberships'),
         t.card('id','name','members')
@@ -63,11 +61,11 @@ export class HallpassService extends FetchBaseService {
 
       trello.Promise.all(actions)
         .then((results: any[]) => {
-          const [settings, member, board, card] = results;
+          const [member, board, card] = results;
           if (isMemberOf(member.id, board.members)) {
 
-            const url = this.buildUrl(settings, 'cards', card.id, 'members', member.id);
-            this.fetchUsingSettingsAndMember(url, 'DELETE', settings, member)
+            const url = ['cards', card.id, 'members', member.id];
+            this.runFetch(url, 'DELETE')
               .then((result: any[]) => {
                 resolve(result);
               })
@@ -84,4 +82,33 @@ export class HallpassService extends FetchBaseService {
   }
 
   
+  /// - Change membership on a board
+  updateBoardMembership(boardId: string, memberId: string, memberType: string) {
+    return new trello.Promise((resolve, reject) => {
+      const url = ['boards', boardId, 'members', memberId];
+      const patch = { op: 'replace', path: '/membership', value: memberType };
+      this.runFetch(url, 'PATCH', patch)
+        .then((results: any[]) => {
+          if (Array.isArray(results)) {
+            resolve(results.find(m => m.id === memberId));
+          }
+          //else
+          console.warn("Problem updating board membership", {results, boardId, memberId, memberType});
+          reject("Problem updating board membership");
+        })
+        .catch((reason) => {
+          console.error("Error updating board membership", {reason, boardId, memberId, memberType});
+          reject(reason);
+        });
+    });
+  }
+
+
+
+  /// - Get Board (this is really just for testing)
+  getBoard(boardId: string) {
+    const url = ['boards', boardId];
+    return this.runFetch(url, 'GET')
+  }
+
 }

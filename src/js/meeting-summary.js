@@ -7,7 +7,8 @@ loading.show();
 t.render(() => {
     //HELPERS
     const close = () => {
-        trello.t().closePopup();
+        trello.t().closeModal();
+        //trello.t().closePopup();
     };
     const memberHtml = (member) => {
         return `<div class="member" title="${member.username}"><img src="${member.avatar}" alt="avatar"/> <span>${member.fullName}</span></div>`;
@@ -23,7 +24,6 @@ t.render(() => {
         //get the card
         const card = t.arg('card');
         const missing = board.members.filter(bm => !card.members.some(cm => bm.id === cm.id));
-        console.log("Meeting Summary", "todo: need to implement the meeting summary", { card, board, missing });
         //subtitle
         const subtitle = window.document.getElementById('subtitle');
         subtitle.innerHTML = `<span class="date">${DateHelper.dateMedium(new Date(card.due))}</span> <span class="title">${card.name}</span>`;
@@ -32,11 +32,11 @@ t.render(() => {
         //missing
         const secMissing = window.document.createElement('section');
         secMissing.innerHTML = '<h3>Missing</h3>'
-            + (missing.length === 0 ? '<p><strong>None</strong></p>' : `<ul><li>${missing.map(memberHtml).join('</li><li>')}</li></ul>`);
+            + (missing.length === 0 ? '<p><strong>None</strong></p>' : `${missing.map(memberHtml).join(' ')}`);
         //attended
         const secAttended = window.document.createElement('section');
         secAttended.innerHTML = '<h3>Attended</h3>'
-            + (card.members.length === 0 ? '<p><strong>None</strong></p>' : `<ul><li>${card.members.map(memberHtml).join('</li><li>')}</li></ul>`);
+            + (card.members.length === 0 ? '<p><strong>None</strong></p>' : `${card.members.map(memberHtml).join(' ')}`);
         content.append(secMissing);
         content.append(secAttended);
     })

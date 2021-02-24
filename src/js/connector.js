@@ -3,13 +3,31 @@ import { MeetingAttendance } from './meeting-attendance';
 import { MeetingSummaryPopup } from './meeting-summary-popup';
 import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
-import { currentUserMembership, currentUserIsAdmin, trello, env } from './_common';
+import { getBoardMembers, currentUserMembership, currentUserIsAdmin, trello, env } from './_common';
 window.TrelloPowerUp.initialize({
     'board-buttons': (t) => {
-        return currentUserIsAdmin(t)
-            .then(isAdmin => {
-            if (isAdmin) {
-                return [
+        const settingsService = new SettingsService();
+        return trello.Promise.all([
+            settingsService.get(t),
+            getBoardMembers(t)
+        ])
+            .then(([settings, members]) => {
+            console.log("DEBUG: board-buttons", { settings, members });
+            if (!settings) {
+                console.warn("Unable to retrieve settings", { settings });
+                return [];
+            }
+            if (!Array.isArray(members)) {
+                console.warn("Unable to retrieve board members", { members });
+                return [];
+            }
+            const me = members.find(m => m.isMe);
+            if (!me) {
+                console.warn("Unable to find me within board members", { members, me });
+                return [];
+            }
+            if (me.isAdmin) {
+                var result = [
                     {
                         text: 'View Attendance',
                         icon: {
@@ -20,6 +38,17 @@ window.TrelloPowerUp.initialize({
                         callback: MeetingSummaryPopup.show
                     }
                 ];
+                if (settings.monitor_members === 'true' && members.some(m => { var _a; return ((_a = m.membership) === null || _a === void 0 ? void 0 : _a.memberType) === 'normal'; })) {
+                    result.push({
+                        text: "Reset 'normal' Members",
+                        icon: null,
+                        condition: 'edit',
+                        callback: (t) => {
+                            console.log("DEBUG: implement Reset 'normal' Members");
+                        }
+                    });
+                }
+                return result;
             }
         });
     },
@@ -32,9 +61,11 @@ function meetingSettings(t) {
     return currentUserIsAdmin(t)
         .then((isAdmin) => {
         if (isAdmin) {
-            return t.popup({
+            return t.modal({
                 title: 'Settings',
                 url: './settings.html',
+                fullscreen: false,
+                accentColor: 'yellow',
                 height: 300
             });
         }

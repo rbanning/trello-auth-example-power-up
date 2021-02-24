@@ -2,9 +2,28 @@ import { DynamicIdentity } from "./dynamic-identity";
 import { SettingsService } from "./settings.service";
 import { trello } from "./_common";
 export class FetchBaseService {
-    constructor() {
-        this.settings = new SettingsService();
+    constructor(t = null) {
+        this.settingsService = new SettingsService();
+        if (t) {
+            const actions = [
+                this.settingsService.get(t),
+                t.member('id', 'username', 'fullName')
+            ];
+            this._config = trello.Promise.all(actions)
+                .then(([settings, member]) => {
+                this.settings = settings;
+                this.member = member;
+                return { settings, member };
+            });
+        }
     }
+    getSettingsAndMember() {
+        return this._config
+            .then(result => {
+            return result;
+        });
+    }
+    //#region >> FETCH HELPERS <<
     _fetch(url, method, headers, data) {
         method = !method ? 'GET' : method.toLocaleUpperCase();
         const options = {
@@ -50,9 +69,11 @@ export class FetchBaseService {
         }
         return url;
     }
+    //#endregion
+    //#region >> DYNAMIC IDENTITY <<
     getHeaders(t) {
         const actions = [
-            this.settings.get(t),
+            this.settingsService.get(t),
             t.member('id', 'username', 'fullName')
         ];
         return trello.Promise.all(actions)
