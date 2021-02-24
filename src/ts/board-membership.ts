@@ -26,6 +26,9 @@ export namespace BoardMembership {
     });
     
   }
+  const _dbug = (t: any) => {
+    console.log("DBUG - what is this", {t});
+  }
 
   export const resetMembership = (t: any, target: MemberType, resetTo: MemberType) => {
 
@@ -52,14 +55,18 @@ export namespace BoardMembership {
 
         console.log("DEBUG: - resetMembership", {board, affected, t});
         t.popup({
-          type: "confirm",
-          title: 'Reset Board Membership',
-          message: "Change?",
-          confirmText: 'Proceed',
-          onConfirm: (tr) => {
-            console.log("Done", tr);
-          }
+          title: 'Testing',
+          items: [
+            { text: "one", callback: _dbug }
+          ]
         });
+        // t.popup({
+        //   type: "confirm",
+        //   title: 'Reset Board Membership',
+        //   message: "Change?",
+        //   confirmText: 'Proceed',
+        //   onConfirm: _dbug
+        // });
 
         // t.popup({
         //   type: 'confirm',
