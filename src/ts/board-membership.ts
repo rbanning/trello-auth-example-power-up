@@ -56,8 +56,8 @@ export namespace BoardMembership {
           title: 'Reset Board Membership',
           message: "Change?",
           confirmText: 'Proceed',
-          onConfirm: (t) => {
-            console.log("Done");
+          onConfirm: (tr) => {
+            console.log("Done", tr);
           }
         });
 
