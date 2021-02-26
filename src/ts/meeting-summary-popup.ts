@@ -10,7 +10,7 @@ export namespace MeetingSummaryPopup {
     return (t) => {
       //changed from popup to modal
       t.modal({
-        title: 'Meeting Summary',
+        title: 'Pro Member Summary',
         url: './meeting-summary.html',
         fullscreen: false,
         accentColor: 'yellow',
@@ -39,7 +39,7 @@ export namespace MeetingSummaryPopup {
         const items = [];
         if (cards.length === 0) {
           items.push({
-            text: 'No meeting cards found',
+            text: 'No pro-cards found',
             callback: closePopup
           });
         } else {
@@ -53,7 +53,7 @@ export namespace MeetingSummaryPopup {
         }
 
         return t.popup({
-          title: 'Meeting Summary',
+          title: 'Select a Pro-Card',
           items
         });
       });

@@ -49,11 +49,12 @@ t.render(() => {
 
       //attended
       const secAttended = window.document.createElement('section');
-      secAttended.innerHTML = '<h3>Attended</h3>'
+      secAttended.innerHTML = '<h3>Pro-Members</h3>'
         + (card.members.length === 0 ? '<p><strong>None</strong></p>' : `${card.members.map(memberHtml).join(' ')}`);
       
-      content.append(secMissing);
-      content.append(secAttended);     
+
+        content.append(secAttended);     
+        content.append(secMissing);
     })
     .then(() => {
       loading.hide();
