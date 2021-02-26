@@ -1,5 +1,6 @@
 import { BoardMembership } from "./board-membership";
 import { MeetingSummaryPopup } from "./meeting-summary-popup";
+import { MeetingUpdate } from "./meeting-update";
 import { SettingsService } from "./settings.service";
 import { trello, getBoardMembers, env } from "./_common";
 
@@ -44,11 +45,31 @@ export namespace BoardButtons {
                 tx.popup({
                   type: 'confirm',
                   title: 'Update the Active List',
-                  message: 'Move "due" cards to the Active List',
+                  message: 'Move "due" cards to the Active List and clear out old active cards.',
                   confirmText: 'UPDATE',
                   onConfirm: (tt) => {
-                    console.log("Update the active list");
                     tt.closePopup();
+                    MeetingUpdate.updateBoardMeetingCards(tt)
+                      .then(results => {
+                        if (results?.length > 0) {
+                          tt.alert({
+                            message: `Updated ${results.length} card${results.length === 0 ? '' : 's'}`,
+                            display: 'success'
+                          });
+                        } else {
+                          tt.alert({
+                            message: 'No cards needed updating!',
+                            display: 'info'
+                          });
+                        }
+                      })
+                      .catch(reason => {
+                        console.warn("Unable to update cards", reason);
+                        tt.alert({
+                          message: "There was a problem trying to update the cards",
+                          display: 'warning'
+                        });
+                      });
                   }
                 });
               }
