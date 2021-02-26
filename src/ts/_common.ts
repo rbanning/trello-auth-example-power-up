@@ -18,8 +18,10 @@ export const env = {
 
   SETTINGS_KEY: 'hallpass_meeting_settings',
   logo: {
-    white: 'https://trg-meeting-power-up.netlify.app/meeting-white.png',
-    black: 'https://trg-meeting-power-up.netlify.app/meeting-black.png'
+    color: 'https://trg-meeting-power-up.netlify.app/pro-meeting-color.png',
+    gray: 'https://trg-meeting-power-up.netlify.app/pro-meeting-gray.png',
+    white: 'https://trg-meeting-power-up.netlify.app/pro-meeting-white.png',
+    black: 'https://trg-meeting-power-up.netlify.app/pro-meeting-black.png'
   }
 };
 
