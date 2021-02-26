@@ -34,11 +34,11 @@ export namespace BoardButtons {
 
           const items = [
             {
-              text: 'View ✅✔Pro Members',
+              text: 'View ✅Pro Members',
               callback: MeetingSummaryPopup.show
             },
             {
-              text: 'Update the Active List',
+              text: 'Update the ✔ Active List',
               callback: (tx) => {
                 tx.closePopup();
                 tx.popup({
