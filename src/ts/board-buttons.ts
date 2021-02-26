@@ -27,7 +27,7 @@ export namespace BoardButtons {
             console.warn("Unable to find me within board members", {members, me});
             return null;
           }        
-          if(!me.isAmin) {
+          if(!me.isAdmin) {
             console.warn("Only admins are allowed to use this feature", {members, me});
             return null;
           }
