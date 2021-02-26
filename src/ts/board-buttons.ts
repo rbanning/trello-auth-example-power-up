@@ -5,6 +5,85 @@ import { trello, getBoardMembers, env } from "./_common";
 
 export namespace BoardButtons {
 
+  const showBoardAdminMenu = (t) => {
+    const settingsService = new SettingsService();
+
+    return trello.Promise.all([
+        settingsService.get(t),
+        getBoardMembers(t)      
+      ])
+      .then(([settings, members]) => {
+          //VALIDATION
+          if (!settings) {
+            console.warn("Unable to retrieve settings", {settings});
+            return null;
+          }
+          if (!Array.isArray(members)) {
+            console.warn("Unable to retrieve board members", {members});
+            return null;
+          }
+          const me = members.find(m => m.isMe);
+          if (!me) {
+            console.warn("Unable to find me within board members", {members, me});
+            return null;
+          }        
+          if(!me.isAmin) {
+            console.warn("Only admins are allowed to use this feature", {members, me});
+            return null;
+          }
+
+          const items = [
+            {
+              text: 'View ✅✔Pro Members',
+              callback: MeetingSummaryPopup.show
+            },
+            {
+              text: 'Update the Active List',
+              callback: (tx) => {
+                tx.closePopup();
+                tx.popup({
+                  type: 'confirm',
+                  title: 'Update the Active List',
+                  message: 'Move "due" cards to the Active List',
+                  confirmText: 'UPDATE',
+                  onConfirm: (tt) => {
+                    console.log("Update the active list");
+                    tt.closePopup();
+                  }
+                });
+              }
+            }
+          ];
+          var affected = members.filter(m => m.membership?.memberType === 'normal');
+          if (settings.monitor_members === 'true' && affected.length > 0) {
+            items.push(
+              {
+                text: "Reset 'normal' Members",
+                callback: (t) => {
+                  t.closePopup();
+                  t.popup({
+                    type: "confirm",
+                    title: 'Reset Board Membership',
+                    message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to 'observer'`,
+                    confirmText: 'Proceed',
+                    onConfirm: (tx) => { 
+                      tx.closePopup(); 
+                      BoardMembership.resetMembership(tx, 'normal', 'observer');
+                    }
+                  });    
+                }
+              }
+            );
+          }
+
+          t.popup({
+            title: 'Pro Board',
+            items
+          });
+      })      
+  }
+
+
   export const build = (t: any) => {
     const settingsService = new SettingsService();
 
@@ -35,41 +114,25 @@ export namespace BoardButtons {
 
           var result = [
             {
-              text: 'View Attendance',
+              text: 'Pro Board',
               icon: {
                 dark: env.logo.white,
                 light: env.logo.black
               },
               condition: 'edit',
-              callback: MeetingSummaryPopup.show 
+              callback: showBoardAdminMenu 
             }
           ];
 
-          var affected = members.filter(m => m.membership?.memberType === 'normal');
-          if (settings.monitor_members === 'true' && affected.length > 0) {
-            result.push(
-              {
-                text: "Reset 'normal' Members",
-                icon: null,
-                condition: 'edit',
-                callback: (t) => {
-                  t.popup({
-                    type: "confirm",
-                    title: 'Reset Board Membership',
-                    message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to 'observer'`,
-                    confirmText: 'Proceed',
-                    onConfirm: (tx) => { 
-                      tx.closePopup(); 
-                      BoardMembership.resetMembership(tx, 'normal', 'observer');
-                    }
-                  });    
-                }
-              }
-            );
-          }
-
           return result;
         }
-      })
+
+        //else
+        return null;
+      });
   };
+
+
+  
+
 }
