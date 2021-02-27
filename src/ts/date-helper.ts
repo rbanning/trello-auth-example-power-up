@@ -1,6 +1,8 @@
 export namespace DateHelper {
 
   export const isExpired = (d: Date | string): boolean => {
+    if (!d) { return false; }
+
     d = typeof(d) === 'string' ? new Date(d) : d;
     if (typeof(d.valueOf) !== 'function' || isNaN(d.valueOf())) {
       return null;  //invalid date
