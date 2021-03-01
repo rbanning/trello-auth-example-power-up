@@ -4,9 +4,6 @@ export namespace ListActions {
     if (text) {
       message = message || 'Added the text to the clipboard';
       try {
-        if (navigator.clipboard) {
-          throw new Error("Browser does not support clipboard");
-        }
         navigator.clipboard.writeText(text)
           .then(() => {
             t.closePopup();
