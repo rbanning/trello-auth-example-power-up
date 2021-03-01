@@ -17,24 +17,6 @@ t.render(() => {
   };
 
   const copyToClipboard = (element: any) => {
-
-    // console.log("copyToClipboard - 0");
-    // element.contentEditable = true;
-    // console.log("copyToClipboard - 1");
-    // element.focus();
-    // console.log("copyToClipboard - 2");
-    // const range = document.createRange();
-    // console.log("copyToClipboard - 3");
-    // range.selectNodeContents(element);
-    // console.log("copyToClipboard - 4");
-    // const sel = window.getSelection();
-    // console.log("copyToClipboard - 5");
-    // sel.removeAllRanges();
-    // console.log("copyToClipboard - 6");
-    // sel.addRange(range);
-
-    // console.log("DEBUG copyToClipboard", {element, range, sel});
-
     //reset
     var sel = getSelection();
     if (sel) { sel.empty(); }
@@ -74,13 +56,12 @@ t.render(() => {
     const ref = document.getElementById(el?.attributes['ref']?.value);
     const t = trello.t();
 
-    console.log("DEBUG: clipAndClose", {el, ref});
 
     if (ref) {
       const label = ref.querySelector(".label")?.innerHTML || 'card name';
       const text = ref.querySelector(".value");
       const message = `Added ${label} to the clipboard`;
-      console.log("DEBUG: clipAndClose - working", {label, text, message});
+
       try {
         copyToClipboard(text);
         close();
@@ -108,7 +89,6 @@ t.render(() => {
 
   //GET THE ARGS PASSED TO THE PAGE
   const data = t.arg('data');
-  console.log("DEBUG: found the args", {data});
 
   //SUBTITLE
   document.getElementById('title').innerHTML = data.title;

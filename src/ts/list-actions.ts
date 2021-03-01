@@ -1,32 +1,8 @@
 export namespace ListActions {
 
-  const clipAndClose = (t, text, message) => {
-    if (text) {
-      message = message || 'Added the text to the clipboard';
-      try {
-        navigator.clipboard.writeText(text)
-          .then(() => {
-            t.closePopup();
-            t.alert({
-              message              
-            });            
-          });
-      } catch (error) {
-        console.warn("Unable to add text to the clipboard", error);
-        t.alert({
-          message: 'Error trying to add text to the clipboard',
-          display: 'error'
-        });
-      }
-    } else {
-      t.closePopup();
-    }
-  }
-
   const listDetails = (t) => {
     return t.list('all')
       .then(list => {
-        console.log("DEBUG: list ", list);
         const data = {
           title: 'List Details',
           content: [
