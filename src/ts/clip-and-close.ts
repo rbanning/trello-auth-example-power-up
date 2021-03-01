@@ -46,7 +46,7 @@ t.render(() => {
 
 
   const clipAndClose = (el: HTMLElement) => {
-    const ref = document.getElementById(el?.attributes['ref']);
+    const ref = document.getElementById(el?.attributes['ref']?.value);
     const t = trello.t();
 
     console.log("DEBUG: clipAndClose", {el, ref});
