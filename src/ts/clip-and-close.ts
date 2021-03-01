@@ -17,12 +17,15 @@ t.render(() => {
   };
 
   const copyToClipboard = (element) => {
+
     element.contentEditable = true;
     element.focus();
     document.execCommand('selectAll');
-    document.execCommand('copy');
-    element.contentEditable = false;
-    getSelection().empty(); //clear
+
+    //*** CANNOT RUN COPY DUE TO PERMISSION ERROR ***/
+    // document.execCommand('copy');
+    // element.contentEditable = false;
+    // getSelection().empty(); //clear
   }
 
   const itemToHtml = (ref: string, label: string, text: string | string[]) => {
@@ -35,7 +38,7 @@ t.render(() => {
     //else
     return `<div class="item" id="${ref}">`
       + `<button class="copy" ref="${ref}" title="copy to clipboard" data-label="${label || ''}">` 
-      + `<img src="./add-to-clipboard.png" alt="icon of clipboard"/>`
+      + `<img src="./clip-and-close.png" alt="icon of dot"/>`
       + `</button>`
       + '<span class="area">'
       + (!!label ? `<span class="label">${label} </span>` : '')
