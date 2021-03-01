@@ -24,13 +24,15 @@
       }
 
       .copy {
-        border: solid 2px rgba(0,0,0, 0.1);
+        margin-right: 0.5em;
+        padding: 2px 0 0 5px;
+        border: solid 2px rgba(0,0,0, 0.1);        
       }
-      .copy, .copy:active {
+      .copy, .copy:focus {
         outline: none;
       }
-      .copy:active {
-        animation: clicked 1s linear;
+      .copy:focus {
+        animation: clicked 3s linear;
       }
 
       h3, .label { font-weight: bold; text-transform: uppercase; }
@@ -57,7 +59,7 @@
 
 <body id="page">
     <div class="loading"><span class="bar"></span></div>
-    <div class="wrapper">
+    <div class="wrapper" id="wrapper">
       <h1 id="title">List Summary</h1>
   
       <div class="divider"></div>
