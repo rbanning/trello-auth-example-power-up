@@ -35,13 +35,19 @@ t.render(() => {
 
     // console.log("DEBUG copyToClipboard", {element, range, sel});
 
-    //*** CANNOT RUN COPY DUE TO PERMISSION ERROR ***/
+    //reset
+    var sel = getSelection();
+    if (sel) { sel.empty(); }
+
+    //highlight
     element.contentEditable = true;
     element.focus();
     document.execCommand('selectAll');
     document.execCommand('copy');
-    // element.contentEditable = false;
-    // getSelection().empty(); //clear
+    return window.setTimeout(() => {
+      element.contentEditable = false;
+      //getSelection().empty(); //clear
+    }, 1000);
   }
 
   const itemToHtml = (ref: string, label: string, text: string | string[]) => {
