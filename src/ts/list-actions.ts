@@ -32,7 +32,7 @@ export namespace ListActions {
           content: [
             { label: 'list id', text: list.id },
             { label: 'list name', text: list.name },
-            { label: 'card name(s)', text: list.cards.map(c => `<a href="${c.url}">${c.name}</a>`) }
+            { label: 'card name(s)', text: list.cards.map(c => `<a href="${c.url}" target="_blank">${c.name}</a>`) }
           ]
         };
         return t.popup({

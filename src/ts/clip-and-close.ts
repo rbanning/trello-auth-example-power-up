@@ -16,7 +16,7 @@ t.render(() => {
     //trello.t().closePopup();
   };
 
-  const copyToClipboard = (element) => {
+  const copyToClipboard = (element: any) => {
 
     console.log("copyToClipboard - 0");
     element.contentEditable = true;
@@ -36,6 +36,9 @@ t.render(() => {
     console.log("DEBUG copyToClipboard", {element, range, sel});
 
     //*** CANNOT RUN COPY DUE TO PERMISSION ERROR ***/
+    // element.contentEditable = true;
+    // element.focus();
+    // document.execCommand('selectAll');
     // document.execCommand('copy');
     // element.contentEditable = false;
     // getSelection().empty(); //clear
@@ -69,17 +72,15 @@ t.render(() => {
 
     if (ref) {
       const label = ref.querySelector(".label")?.innerHTML || 'card name';
-      const text = ref.querySelector(".value")?.innerHTML;
+      const text = ref.querySelector(".value");
       const message = `Added ${label} to the clipboard`;
       console.log("DEBUG: clipAndClose - working", {label, text, message});
       try {
-        navigator.clipboard.writeText(text)
-          .then(() => {
-            close();
-            t.alert({
-              message              
-            });            
-          });
+        copyToClipboard(text);
+        close();
+        t.alert({
+          message              
+        });            
       } catch (error) {
         console.warn("Unable to add text to the clipboard", {error, label, text, message});
         t.alert({
