@@ -34,9 +34,11 @@ t.render(() => {
     }
     //else
     return '<div class="item">'
-      + (!!label ? `<label>${label} </label>` : '')
-      + `<span class="value" id="${ref}">${text}</span>`
       + `<button class="copy" ref="${ref}" ><img src="./add-to-clipboard.png" alt="icon of clipboard"/></button>`
+      + '<span class="area">'
+      + (!!label ? `<span class="label">${label} </span>` : '')
+      + `<span class="value" id="${ref}">${text}</span>`
+      + '</span>'
       + '</div>';
   }
 
@@ -74,28 +76,31 @@ t.render(() => {
   });
 
   //GET THE ARGS PASSED TO THE PAGE
+  const all = t.arg();
   const data = t.arg('data');
-      console.log("DEBUG: found the args", {data});
+  console.log("DEBUG: found the args", {all, data});
 
-      //SUBTITLE
-      document.getElementById('subtitle').innerHTML = data.title;
+  //SUBTITLE
+  document.getElementById('title').innerHTML = data.title;
 
-      //content
-      const content = document.getElementById('content');
-      content.innerHTML = 
-        '<section style="margin: 1em 0">'
-        + data.content.map((c, index) => {
-            return itemToHtml(`ref-${index}`, c.label, c.text);
-          }).join('')
-        + '</section>';
+  //content
+  const content = document.getElementById('content');
+  content.innerHTML = 
+    '<section>'
+    + data.content.map((c, index) => {
+        return itemToHtml(`ref-${index}`, c.label, c.text);
+      }).join('')
+    + '</section>';
 
-      //clip
-      content.querySelectorAll('.copy').forEach(item => {
-        item.addEventListener('click', clipAndClose);
-      });
+  //clip
+  content.querySelectorAll('.copy').forEach(item => {
+    item.addEventListener('click', (e) => {
+      clipAndClose(item);
+    });
+  });
 
 
-      loading.hide();
-      return t.sizeTo('#page');
+  loading.hide();
+  return t.sizeTo('#page');
 
 });
