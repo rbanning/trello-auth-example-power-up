@@ -26,29 +26,20 @@ export namespace ListActions {
   const listDetails = (t) => {
     return t.list('all')
       .then(list => {
+        console.log("DEBUG: list ", list);
+        const args = {
+          title: 'List Details',
+          content: [
+            { label: 'list id', text: list.id },
+            { label: 'list name', text: list.name },
+            { label: 'card name(s)', text: list.cards.map(c => c.name) }
+          ]
+        };
         return t.popup({
           title: 'List Details',
-          items: [
-            {
-              text: `ID: ${list.id}`,
-              callback: (x) => {
-                clipAndClose(x, list.id, 'Put list id into the clipboard');
-              }
-            },
-            {
-              text: `Name: ${list.name}`,
-              callback: (x) => {
-                clipAndClose(x, list.id, 'Put list name into the clipboard');
-              }
-            },
-            {
-              text: `Cards: ${list.cards?.length || 'n/a'}`,
-              callback: (x) => {
-                const cards = list.cards.map(c => c.name).join('/n');
-                clipAndClose(x, list.id, 'Put card names in the list into the clipboard');
-              }
-            }
-          ]
+          url: './clip-and-close.html',
+          args,
+          height: 200
         });
       });
   }
