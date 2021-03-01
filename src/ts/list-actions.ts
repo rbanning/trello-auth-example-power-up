@@ -27,7 +27,7 @@ export namespace ListActions {
     return t.list('all')
       .then(list => {
         console.log("DEBUG: list ", list);
-        const args = {
+        const content = {
           title: 'List Details',
           content: [
             { label: 'list id', text: list.id },
@@ -38,7 +38,7 @@ export namespace ListActions {
         return t.popup({
           title: 'List Details',
           url: './clip-and-close.html',
-          args,
+          args: { content },
           height: 200
         });
       });

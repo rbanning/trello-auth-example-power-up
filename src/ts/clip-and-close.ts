@@ -74,26 +74,28 @@ t.render(() => {
   });
 
   //GET THE ARGS PASSED TO THE PAGE
-  t.arg()
-    .then(arg => {
-      console.log("DEBUG: found the args", {arg});
+  const data = t.arg('data');
+      console.log("DEBUG: found the args", {data});
 
       //SUBTITLE
-      document.getElementById('subtitle').innerHTML = "Subtitle will go here";
+      document.getElementById('subtitle').innerHTML = data.title;
 
       //content
-      const content = document.getElementById('document');
-
+      const content = document.getElementById('content');
+      content.innerHTML = 
+        '<section style="margin: 1em 0">'
+        + data.content.map((c, index) => {
+            return itemToHtml(`ref-${index}`, c.label, c.text);
+          }).join('')
+        + '</section>';
 
       //clip
       content.querySelectorAll('.copy').forEach(item => {
         item.addEventListener('click', clipAndClose);
-      })
+      });
 
-    })
-    .then(() => {
+
       loading.hide();
       return t.sizeTo('#page');
-    });
 
 });
