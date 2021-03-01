@@ -38,7 +38,7 @@ t.render(() => {
     //else
     return `<div class="item" id="${ref}">`
       + `<button class="copy" ref="${ref}" title="copy to clipboard" data-label="${label || ''}">` 
-      + `<img src="./clip-and-close-item.png" alt="icon of dot"/>`
+      + `<img src="./clip-and-close.png" alt="icon of dot"/>`
       + `</button>`
       + '<span class="area">'
       + (!!label ? `<span class="label">${label} </span>` : '')
