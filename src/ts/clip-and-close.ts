@@ -12,8 +12,8 @@ t.render(() => {
 
   //HELPERS
   const close = () => {
-    trello.t().closeModal();
-    //trello.t().closePopup();
+    //trello.t().closeModal();
+    trello.t().closePopup();
   };
 
   const copyToClipboard = (element: any) => {
@@ -50,10 +50,9 @@ t.render(() => {
   }
 
 
-  const clipAndClose = (el: HTMLElement) => {
+  const clipAndGo = (el: HTMLElement) => {
     const ref = document.getElementById(el?.attributes['ref']?.value);
     const t = trello.t();
-
 
     if (ref) {
       const label = ref.querySelector(".label")?.innerHTML || 'item';
@@ -62,7 +61,6 @@ t.render(() => {
 
       try {
         copyToClipboard(text);
-        close();
         t.alert({
           message              
         });            
@@ -73,42 +71,53 @@ t.render(() => {
           display: 'error'
         });
       }
-    } else {
-      close();
     }
   }
 
+  const setupPage = (): Promise<any> => {
+    return new trello.Promise((resolve, reject) => {
 
-  //SETUP CLOSE BUTTON
-  window.document.querySelectorAll('.close')
-  .forEach(btn => {
-    btn.addEventListener('click', close);
-  });
+      //SETUP CLOSE BUTTON
+      window.document.querySelectorAll('.close')
+      .forEach(btn => {
+        btn.addEventListener('click', close);
+      });
 
-  //GET THE ARGS PASSED TO THE PAGE
-  const data = t.arg('data');
+      //GET THE ARGS PASSED TO THE PAGE
+      const data = t.arg('data');
+      if (!data) { reject("Could not get the data!"); }
 
-  //SUBTITLE
-  document.getElementById('title').innerHTML = data.title;
+      //SUBTITLE
+      document.getElementById('title').innerHTML = data.title;
+      
+      //content
+      const content = document.getElementById('content');
+      if (!content) { reject("Could not find the content element"); }
+      content.innerHTML = 
+        '<section>'
+        + data.content.map((c, index) => {
+            return itemToHtml(`ref-${index}`, c.label, c.text, c.group);
+          }).join('')
+        + '</section>';
 
-  //content
-  const content = document.getElementById('content');
-  content.innerHTML = 
-    '<section>'
-    + data.content.map((c, index) => {
-        return itemToHtml(`ref-${index}`, c.label, c.text, c.group);
-      }).join('')
-    + '</section>';
+      //setup clipAndGo actions
+      content.querySelectorAll('.copy').forEach(item => {
+        item.addEventListener('click', (e) => {
+          clipAndGo(item as HTMLElement);
+        });
+      });
 
-  //clip
-  content.querySelectorAll('.copy').forEach(item => {
-    item.addEventListener('click', (e) => {
-      clipAndClose(item as HTMLElement);
+      resolve(true);
     });
+  } //end setupPage
+
+
+  t.render(() => {
+    setupPage()
+      .then(() => {
+        loading.hide();
+        return t.sizeTo('#wrapper');      
+      });
   });
-
-
-  loading.hide();
-  return t.sizeTo('#wrapper');
 
 });
