@@ -18,16 +18,23 @@ t.render(() => {
 
   const copyToClipboard = (element) => {
 
+    console.log("copyToClipboard - 0");
     element.contentEditable = true;
+    console.log("copyToClipboard - 1");
     element.focus();
+    console.log("copyToClipboard - 2");
     const range = document.createRange();
+    console.log("copyToClipboard - 3");
     range.selectNodeContents(element);
+    console.log("copyToClipboard - 4");
     const sel = window.getSelection();
+    console.log("copyToClipboard - 5");
     sel.removeAllRanges();
+    console.log("copyToClipboard - 6");
     sel.addRange(range);
 
     console.log("DEBUG copyToClipboard", {element, range, sel});
-    
+
     //*** CANNOT RUN COPY DUE TO PERMISSION ERROR ***/
     // document.execCommand('copy');
     // element.contentEditable = false;
