@@ -112,12 +112,10 @@ t.render(() => {
   } //end setupPage
 
 
-  t.render(() => {
-    return setupPage()
-      .then(() => {
-        loading.hide();
-        return t.sizeTo('#wrapper');      
-      });
-  });
+  setupPage()
+    .then(() => {
+      loading.hide();
+      return t.sizeTo('#wrapper');      
+    });;
 
 });
