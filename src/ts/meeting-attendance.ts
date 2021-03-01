@@ -7,7 +7,7 @@ export namespace MeetingAttendance {
   export const addMeToCard = (t) => {
     t.popup({
       'type': 'confirm',
-      title: 'Meeting Attendance',
+      title: 'Pro Card',
       message: 'Have you read or watched all of the content associated with this card?',
       confirmText: 'Yes',
       onConfirm: _addMeToCard,
@@ -23,7 +23,7 @@ export namespace MeetingAttendance {
   export const removeMeFromCard = (t) => {
     t.popup({
       'type': 'confirm',
-      title: 'Meeting Attendance',
+      title: 'Pro Card',
       message: 'You are marked as having read this card. Would you like to be removed?',
       confirmText: 'Remove Me',
       confirmStyle: 'danger',
@@ -58,8 +58,8 @@ export namespace MeetingAttendance {
         else if (isMemberCard) {
           return [
             {
-              title: 'Attendance',
-              text: '👍 I Attended!',
+              title: 'Pro Card',
+              text: '👍 I am a Pro!',
               color: 'green',
               callback: removeMeFromCard
             }          
@@ -68,8 +68,8 @@ export namespace MeetingAttendance {
         } else {
           return [
             {
-              title: 'Attendance',
-              text: '⚪ Add Me to Attendance',
+              title: 'Pro Card',
+              text: '⚪ Add Me as a Pro',
               color: 'orange',
               callback: addMeToCard
             }          

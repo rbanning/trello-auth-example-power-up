@@ -2,6 +2,13 @@ import { FetchBaseService } from "./fetch.base-service";
 import { ISettings, SettingsService } from "./settings.service";
 import { isMemberOf, trello } from "./_common";
 
+
+export interface IPatchDto {
+  op: string;
+  path: string;
+  value: string | number | boolean
+}
+
 export class HallpassService extends FetchBaseService {
 
   constructor(t: any) {
