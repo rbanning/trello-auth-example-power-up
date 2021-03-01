@@ -113,7 +113,7 @@ t.render(() => {
 
 
   t.render(() => {
-    setupPage()
+    return setupPage()
       .then(() => {
         loading.hide();
         return t.sizeTo('#wrapper');      
