@@ -32,13 +32,11 @@ t.render(() => {
     }, 1000);
   }
 
-  const itemToHtml = (ref: string, label: string, text: string | string[]) => {
-    if (Array.isArray(text)) { 
-      return `<h3 class="label">${label}</h3>`
-        + '<div class="list">'
-        + text.map(item => itemToHtml(ref, null, item)).join('')
-        + '</div>'
+  const itemToHtml = (ref: string, label: string, text: string, group: string) => {
+    if (!text) { 
+      return !!group ? `<h3 class="label">${group}</h3>` : '';
     }
+
     //else
     return `<div class="item" id="${ref}">`
       + `<button class="copy" ref="${ref}" title="copy to clipboard" data-label="${label || ''}">` 
@@ -58,7 +56,7 @@ t.render(() => {
 
 
     if (ref) {
-      const label = ref.querySelector(".label")?.innerHTML || 'card name';
+      const label = ref.querySelector(".label")?.innerHTML || 'item';
       const text = ref.querySelector(".value");
       const message = `Added ${label} to the clipboard`;
 
@@ -98,7 +96,7 @@ t.render(() => {
   content.innerHTML = 
     '<section>'
     + data.content.map((c, index) => {
-        return itemToHtml(`ref-${index}`, c.label, c.text);
+        return itemToHtml(`ref-${index}`, c.label, c.text, c.group);
       }).join('')
     + '</section>';
 
