@@ -16,19 +16,41 @@
       .item {
         display: flex;
         align-items: center;
-      }
-      .item button {
-        border: solid 1px rgba(0,0,0, 0.1);
-        margin-right: 0.5em;;
+        margin: 0.3em 0;
       }
       .item .area {
         display: flex;
         flex-direction: column;
       }
-      .label { font-weight: bold; }
+
+      .copy {
+        border: solid 2px rgba(0,0,0, 0.1);
+      }
+      .copy, .copy:active {
+        outline: none;
+      }
+      .copy:active {
+        animation: clicked 1s linear;
+      }
+
+      h3, .label { font-weight: bold; text-transform: uppercase; }
+
 
       section {
         margin: 1em 0;
+      }
+
+
+      @keyframes clicked {
+        0% {
+          border-color: transparent;
+        }
+        30% {
+          border-color:rgba(0,0,0);
+        }
+        100% {
+          border-color: rgba(0,0,0, 0.1);
+        }
       }
     </style>
 </head>

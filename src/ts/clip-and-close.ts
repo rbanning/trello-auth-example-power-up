@@ -33,39 +33,47 @@ t.render(() => {
         + '</div>'
     }
     //else
-    return '<div class="item">'
-      + `<button class="copy" ref="${ref}" ><img src="./add-to-clipboard.png" alt="icon of clipboard"/></button>`
+    return `<div class="item" id="${ref}">`
+      + `<button class="copy" ref="${ref}" title="copy to clipboard" data-label="${label || ''}">` 
+      + `<img src="./add-to-clipboard.png" alt="icon of clipboard"/>`
+      + `</button>`
       + '<span class="area">'
       + (!!label ? `<span class="label">${label} </span>` : '')
-      + `<span class="value" id="${ref}">${text}</span>`
+      + `<span class="value">${text}</span>`
       + '</span>'
       + '</div>';
   }
 
 
-  const clipAndClose = (e) => {
-    console.log("clipAndClose", e);
-    
-    // if (text) {
-    //   message = message || 'Added the text to the clipboard';
-    //   try {
-    //     navigator.clipboard.writeText(text)
-    //       .then(() => {
-    //         t.closePopup();
-    //         t.alert({
-    //           message              
-    //         });            
-    //       });
-    //   } catch (error) {
-    //     console.warn("Unable to add text to the clipboard", error);
-    //     t.alert({
-    //       message: 'Error trying to add text to the clipboard',
-    //       display: 'error'
-    //     });
-    //   }
-    // } else {
-    //   t.closePopup();
-    // }
+  const clipAndClose = (el: HTMLElement) => {
+    const ref = document.getElementById(el?.attributes['ref']);
+    const t = trello.t();
+
+    console.log("DEBUG: clipAndClose", {el, ref});
+
+    if (ref) {
+      const label = ref.querySelector(".label")?.innerHTML || 'card name';
+      const text = ref.querySelector(".value")?.innerHTML;
+      const message = `Added ${label} to the clipboard`;
+      console.log("DEBUG: clipAndClose - working", {label, text, message});
+      try {
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            close();
+            t.alert({
+              message              
+            });            
+          });
+      } catch (error) {
+        console.warn("Unable to add text to the clipboard", {error, label, text, message});
+        t.alert({
+          message: 'Error trying to add text to the clipboard',
+          display: 'error'
+        });
+      }
+    } else {
+      close();
+    }
   }
 
 
@@ -76,9 +84,8 @@ t.render(() => {
   });
 
   //GET THE ARGS PASSED TO THE PAGE
-  const all = t.arg();
   const data = t.arg('data');
-  console.log("DEBUG: found the args", {all, data});
+  console.log("DEBUG: found the args", {data});
 
   //SUBTITLE
   document.getElementById('title').innerHTML = data.title;
@@ -95,12 +102,12 @@ t.render(() => {
   //clip
   content.querySelectorAll('.copy').forEach(item => {
     item.addEventListener('click', (e) => {
-      clipAndClose(item);
+      clipAndClose(item as HTMLElement);
     });
   });
 
 
   loading.hide();
-  return t.sizeTo('#page');
+  return t.sizeTo('#wrapper');
 
 });
