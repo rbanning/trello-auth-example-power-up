@@ -20,8 +20,14 @@ t.render(() => {
 
     element.contentEditable = true;
     element.focus();
-    document.execCommand('selectAll');
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
 
+    console.log("DEBUG copyToClipboard", {element, range, sel});
+    
     //*** CANNOT RUN COPY DUE TO PERMISSION ERROR ***/
     // document.execCommand('copy');
     // element.contentEditable = false;
