@@ -95,8 +95,6 @@ const getFormData = () => {
         data[input.id] = input.value;
       }
     });
-
-  console.log("DEBUG: pro-board-setup - getFormData", data);
   return data;
 }
 
@@ -112,15 +110,15 @@ const updateSaveBtn = () => {
 }
 
 const save = () => {
-  const data = {
-    ...proBoardData,
-    ...getFormData()
-  };
+  let data: any = getFormData();
   const isValid = validateForm(data);
   if (isValid) {
     loading.show();
+    data = {
+      ...proBoardData,
+      ...data
+    };
 
-    //todo: save the data
     console.log("DEBUG: saving the data", {data, proBoardData});
     hallpassService.saveProBoard(data.boardId, data)
       .then(result => {
@@ -129,9 +127,12 @@ const save = () => {
         close(t);
       })
       .catch(reason => {
+        loading.hide();
         console.warn("Error saving the pro board configuration", {reason, data});
         toastr.error(t, "Error saving Pro Board Configuration");
       });
+  } else {
+    console.warn("Looks like the form is not valid", data);
   }
 }
 
