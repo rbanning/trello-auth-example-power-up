@@ -119,9 +119,19 @@ const save = () => {
   const isValid = validateForm(data);
   if (isValid) {
     loading.show();
-    
+
     //todo: save the data
     console.log("DEBUG: saving the data", {data, proBoardData});
+    hallpassService.saveProBoard(data.boardId, data)
+      .then(result => {
+        console.log("DEBUG: success saving pro board config", {data, result});
+        toastr.success(t, `Saved changes to '${result?.shortName}`);
+        close(t);
+      })
+      .catch(reason => {
+        console.warn("Error saving the pro board configuration", {reason, data});
+        toastr.error(t, "Error saving Pro Board Configuration");
+      });
   }
 }
 
