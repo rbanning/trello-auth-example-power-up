@@ -100,8 +100,8 @@ const getFormData = () => {
   return data;
 }
 
-const validateForm = () => {
-  const data = getFormData();
+const validateForm = (data: any = null) => {
+  data = data || getFormData();
   return Object.keys(data).every(key => {
     return !!data[key];
   });
@@ -112,11 +112,14 @@ const updateSaveBtn = () => {
 }
 
 const save = () => {
-  const data = getFormData();
-  const isValid = validateForm();
+  const data = {
+    ...proBoardData,
+    ...getFormData()
+  };
+  const isValid = validateForm(data);
   if (isValid) {
     loading.show();
-
+    
     //todo: save the data
     console.log("DEBUG: saving the data", {data, proBoardData});
   }

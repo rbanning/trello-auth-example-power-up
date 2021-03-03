@@ -82,7 +82,7 @@ export namespace BoardButtons {
                   title: 'Pro Board Configuration',
                   fullscreen: false,
                   url: './pro-board-setup.html',
-                  height: 400
+                  height: 500
                 });
               }
             }
