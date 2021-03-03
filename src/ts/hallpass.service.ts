@@ -133,7 +133,7 @@ export class HallpassService extends FetchBaseService {
     if (!data) { throw new Error("HallpassServices.saveProBoard - missing data"); }
 
     //check to see if we need to create or update
-    if (data.pro_meeting_id) {
+    if (data.id) {
       return this._updateProBoard(boardId, data);
     } else {
       return this._createProBoard(data);
