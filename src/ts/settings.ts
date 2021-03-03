@@ -30,7 +30,10 @@ const getFormData = () => {
   window.document.querySelectorAll('input')
     .forEach(input => {
       if (input?.id) {
-        data[input.id] = input.value;
+        //special case for non-required empty value
+        if (input.value || input.required) {
+          data[input.id] = input.value;
+        }
       }
     });  
   window.document.querySelectorAll('select')
@@ -40,6 +43,7 @@ const getFormData = () => {
       }
     });
 
+  console.log("DEBUG: settings - getFormData", data);
   return data;
 }
 

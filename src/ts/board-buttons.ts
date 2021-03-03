@@ -73,6 +73,18 @@ export namespace BoardButtons {
                   }
                 });
               }
+            },
+            {
+              text: 'Configure Pro Board on Server',
+              callback: (t) => {
+                t.closePopup();
+                t.modal({
+                  title: 'Pro Board Configuration',
+                  fullscreen: false,
+                  url: './pro-board-setup.html',
+                  height: 400
+                });
+              }
             }
           ];
           var affected = members.filter(m => m.membership?.memberType === 'normal');

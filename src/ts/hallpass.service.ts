@@ -1,4 +1,5 @@
 import { FetchBaseService } from "./fetch.base-service";
+import { IProBoard } from "./pro-board.interface";
 import { ISettings, SettingsService } from "./settings.service";
 import { isMemberOf, trello } from "./_common";
 
@@ -110,6 +111,74 @@ export class HallpassService extends FetchBaseService {
     });
   }
 
+
+  /// - Get Pro-Board Settings
+  getProBoard(boardId: string, checkFirst: boolean = false) {
+    const url = ['pro-meetings', 'settings', boardId];
+    if (checkFirst) {
+      url.push("exists");
+      return this.runFetch(url, 'GET')
+        .then(exists => {
+          return exists === true ? this.getProBoard(boardId) : null;
+        })
+    }
+    //else
+    return this.runFetch(url, 'GET');
+  }
+
+  /// - Save Pro-Board Settings
+  saveProBoard(boardId: string, data: any) {
+    //validate
+    if (!boardId) { throw new Error("HallpassServices.saveProBoard - missing boardId"); }
+    if (!data) { throw new Error("HallpassServices.saveProBoard - missing data"); }
+
+    //check to see if we need to create or update
+    if (data.pro_meeting_id) {
+      return this._updateProBoard(boardId, data);
+    } else {
+      return this._createProBoard(data);
+    }
+  }
+
+  protected _createProBoard(data: any) {
+    return new trello.Promise((resolve, reject) => {
+      const url = ['pro-meetings', 'settings'];
+      this.runFetch(url, 'POST', data)
+        .then((results: any[]) => {
+          if (results) {
+            resolve(results);
+          } else {
+            console.warn("Problem creating pro board", {results, data});
+            reject("Problem creating pro board");
+          }
+        })
+        .catch((reason) => {
+          console.error("Error creating pro board", {reason, data});
+          reject(reason);
+        });
+    });
+
+  }
+
+  protected _updateProBoard(boardId: string, data: any) {
+    return new trello.Promise((resolve, reject) => {
+      const url = ['pro-meetings', 'settings', boardId];
+      this.runFetch(url, 'PUT', data)
+        .then((results: any[]) => {
+          if (results) {
+            resolve(results);
+          } else {
+            console.warn("Problem updating pro board", {results, data});
+            reject("Problem updating pro board");
+          }
+        })
+        .catch((reason) => {
+          console.error("Error updating pro board", {reason, data});
+          reject(reason);
+        });
+    });
+
+  }
 
 
   /// - Get Board (this is really just for testing)

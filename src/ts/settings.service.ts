@@ -1,9 +1,10 @@
 import { DynamicIdentity } from "./dynamic-identity";
 import { env } from "./_common";
 
-export const setting_fields = ['pending_list_id', 'active_list_id', 'done_list_id', 'monitor_members', 'scope', 'scope_code', 'scope_secret', 'base_url'];
+export const setting_fields = ['pro_meeting_id', 'pending_list_id', 'active_list_id', 'done_list_id', 'monitor_members', 'scope', 'scope_code', 'scope_secret', 'base_url'];
 
 export interface ISettings {
+  pro_meeting_id?: string;
   pending_list_id?: string;
   active_list_id?: string;
   done_list_id?: string;
@@ -24,7 +25,7 @@ export class SettingsService {
 
   constructor() {
     this._cache = this.mergeSettings(env);
-  }
+  }  
 
   get(t: any) {
     return t.get('board', this.VISIBILITY, env.SETTINGS_KEY, {})
