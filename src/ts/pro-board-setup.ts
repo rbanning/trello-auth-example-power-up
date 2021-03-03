@@ -17,11 +17,14 @@ loading.show();
 const settingsService = new SettingsService();
 const hallpassService = new HallpassService(t);
 
-let proBoardData: IProBoard = {
-  ...emptyProBoard,
-  //default data
-  icon: 'basket-outline',
-  order: 0
+const config: { settings: ISettings, proBoardData: IProBoard } = {
+  settings: null,
+  proBoardData: {
+    ...emptyProBoard,
+    //default data
+    icon: 'basket-outline',
+    order: 0
+  }
 };
 
 
@@ -37,13 +40,15 @@ const initialize = () => {
       console.warn("Unable to retrieve board and/or settings", {board, settings});
       throw new Error("Unable to initialize page");
     }
-    proBoardData.boardId = board.id;
-    proBoardData.pendingListId = settings.pending_list_id;
-    proBoardData.activeListId = settings.active_list_id;
-    proBoardData.doneListId = settings.done_list_id;
+    config.settings = settings;
+
+    config.proBoardData.boardId = board.id;
+    config.proBoardData.pendingListId = settings.pending_list_id;
+    config.proBoardData.activeListId = settings.active_list_id;
+    config.proBoardData.doneListId = settings.done_list_id;
     //the following are defaults for the board
-    proBoardData.name = board.name;
-    proBoardData.shortName = board.name.split(' ').map(words => words.substr(0,1)).join('');  //initials
+    config.proBoardData.name = board.name;
+    config.proBoardData.shortName = board.name.split(' ').map(words => words.substr(0,1)).join('');  //initials
 
     return hallpassService.getProBoard(board.id, true)
       .then((result: IProBoard) => {
@@ -62,8 +67,8 @@ const initialize = () => {
 }
 
 const setProBoardData = (field: string, value: string | number) => {
-  if (field in proBoardData && (typeof(value) === 'string' || typeof(value) === 'number')) {
-    proBoardData[field] = value;
+  if (field in config.proBoardData && (typeof(value) === 'string' || typeof(value) === 'number')) {
+    config.proBoardData[field] = value;
   }
 }
 
@@ -115,15 +120,18 @@ const save = () => {
   if (isValid) {
     loading.show();
     data = {
-      ...proBoardData,
+      ...config.proBoardData,
       ...data
     };
 
-    console.log("DEBUG: saving the data", {data, proBoardData});
+    console.log("DEBUG: saving the data", {data, config});
     hallpassService.saveProBoard(data.boardId, data)
       .then(result => {
+        //save pro_meeting_id
+        config.settings.pro_meeting_id = result?.id;
+//todo: save settings
         console.log("DEBUG: success saving pro board config", {data, result});
-        toastr.success(t, `Saved changes to '${result?.shortName}`);
+        toastr.success(t, `Saved changes to '${result?.shortName}`);        
         close(t);
       })
       .catch(reason => {
@@ -137,7 +145,7 @@ const save = () => {
 }
 
 const updateElementValues = (data: IProBoard) => {
-  data = data || proBoardData;
+  data = data || config.proBoardData;
 
   Object.keys(emptyProBoard).forEach(key => {
     const el = (window.document.getElementById(key) as HTMLInputElement);
@@ -170,7 +178,7 @@ t.render(() => {
   .then((results: any) => {
 
     //PRESET THE Input/Select ELEMENTS
-    updateElementValues(proBoardData);
+    updateElementValues(config.proBoardData);
 
     //DONE
     updateSaveBtn();
