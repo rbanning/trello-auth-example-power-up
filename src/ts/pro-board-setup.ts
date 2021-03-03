@@ -129,7 +129,9 @@ const save = () => {
       .then(result => {
         //save pro_meeting_id
         config.settings.pro_meeting_id = result?.id;
-//todo: save settings
+        settingsService.save(t, config.settings);
+
+        //DONE
         console.log("DEBUG: success saving pro board config", {data, result});
         toastr.success(t, `Saved changes to '${result?.shortName}`);        
         close(t);
