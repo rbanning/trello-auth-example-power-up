@@ -124,7 +124,6 @@ const save = () => {
       ...data
     };
 
-    console.log("DEBUG: saving the data", {data, config});
     hallpassService.saveProBoard(data.boardId, data)
       .then(result => {
         //save pro_meeting_id
@@ -133,7 +132,7 @@ const save = () => {
 
         //DONE
         console.log("DEBUG: success saving pro board config", {data, result});
-        toastr.success(t, `Saved changes to '${result?.shortName}`);        
+        toastr.success(t, `Saved changes to '${result?.shortName}'`);        
         close(t);
       })
       .catch(reason => {

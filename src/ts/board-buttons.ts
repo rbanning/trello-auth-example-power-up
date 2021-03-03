@@ -1,7 +1,7 @@
 import { BoardMembership } from "./board-membership";
 import { MeetingSummaryPopup } from "./meeting-summary-popup";
 import { MeetingUpdate } from "./meeting-update";
-import { SettingsService } from "./settings.service";
+import { ISettings, SettingsService } from "./settings.service";
 import { trello, getBoardMembers, env } from "./_common";
 
 export namespace BoardButtons {
@@ -13,7 +13,7 @@ export namespace BoardButtons {
         settingsService.get(t),
         getBoardMembers(t)      
       ])
-      .then(([settings, members]) => {
+      .then(([settings, members]: [ISettings, any]) => {
           //VALIDATION
           if (!settings) {
             console.warn("Unable to retrieve settings", {settings});
@@ -73,20 +73,26 @@ export namespace BoardButtons {
                   }
                 });
               }
-            },
-            {
-              text: 'Configure Pro Board on Server',
-              callback: (t) => {
-                t.closePopup();
-                t.modal({
-                  title: 'Pro Board Configuration',
-                  fullscreen: false,
-                  url: './pro-board-setup.html',
-                  height: 500
-                });
-              }
             }
           ];
+          //If settings is valid, then we can include 'Configure Pro Board...'
+          if (settings.pending_list_id && settings.active_list_id && settings.done_list_id) {
+            items.push(
+              {
+                text: 'Configure Pro Board on Server',
+                callback: (t) => {
+                  t.closePopup();
+                  t.modal({
+                    title: 'Pro Board Configuration',
+                    fullscreen: false,
+                    url: './pro-board-setup.html',
+                    height: 500
+                  });
+                }
+              }  
+            );
+          }
+          //Are there any 'normal' members on the board?
           var affected = members.filter(m => m.membership?.memberType === 'normal');
           if (settings.monitor_members === 'true' && affected.length > 0) {
             items.push(
