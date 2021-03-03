@@ -28,7 +28,7 @@ let proBoardData: IProBoard = {
 //INITIALIZER
 const initialize = () => {
 
-  return trello.Promise.All([
+  return trello.Promise.all([
     t.board('id','name'),
     settingsService.get(t),    
   ])
