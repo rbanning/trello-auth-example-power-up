@@ -58,6 +58,16 @@ h3 {
   height: auto;
   border-radius: 50%;
 }
+.member .initials {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgb(68, 76, 92);
+  color: #ffffff;
+}
 .member span {
   margin: 0 0.4em;
 }

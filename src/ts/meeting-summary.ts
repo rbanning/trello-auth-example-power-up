@@ -1,5 +1,6 @@
 import { DateHelper } from "./date-helper";
 import { LoadingService } from "./loading.service";
+import { MemberComponent } from "./member.component";
 import { trello } from "./_common";
 
 const t = trello.t();
@@ -18,7 +19,8 @@ t.render(() => {
   };
 
   const memberHtml = (member: any) => {
-    return `<div class="member" title="${member.username}"><img src="${member.avatar}" alt="avatar"/> <span>${member.fullName}</span></div>`;
+    const el = MemberComponent.build(member);
+    return el?.innerHTML;
   };
 
   //SETUP CLOSE BUTTON
