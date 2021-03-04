@@ -20,7 +20,7 @@ t.render(() => {
 
   const memberHtml = (member: any) => {
     const el = MemberComponent.build(member);
-    return el?.innerHTML;
+    return el?.outerHTML;
   };
 
   //SETUP CLOSE BUTTON
