@@ -16,7 +16,9 @@ export const env = {
   platform: '%%PLATFORM%%',
   version: '%%VERSION%%',
 
-  SETTINGS_KEY: 'hallpass_meeting_settings',
+  SETTINGS_KEY: 'hallpass_structured_data',
+
+  //todo: change the icons
   logo: {
     color: 'https://trg-meeting-power-up.netlify.app/pro-meeting-color.png',
     gray: 'https://trg-meeting-power-up.netlify.app/pro-meeting-gray.png',

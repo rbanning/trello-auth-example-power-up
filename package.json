@@ -1,9 +1,9 @@
 {
-  "name": "trg-trello-meeting-power-up",
+  "name": "trello-structured-data-power-up",
   "version": "0.1.0",
-  "description": "TRG Meeting Manager Trello Power Up",
+  "description": "Trello Power Up that allows extra data on a Card",
   "main": "index.js",
-  "repository": "https://github.com/rbanning/trg-trello-meeting-power-up.git",
+  "repository": "https://github.com/rbanning/trello-structured-data-power-up.git",
   "author": "rbanning <rob@myhallpass.com>",
   "license": "MIT",
   "private": true,

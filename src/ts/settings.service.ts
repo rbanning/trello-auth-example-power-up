@@ -1,14 +1,10 @@
 import { DynamicIdentity } from "./dynamic-identity";
 import { env } from "./_common";
 
-export const setting_fields = ['pro_meeting_id', 'pending_list_id', 'active_list_id', 'done_list_id', 'monitor_members', 'scope', 'scope_code', 'scope_secret', 'base_url'];
+export const setting_fields = ['config_id', 'scope', 'scope_code', 'scope_secret', 'base_url'];
 
 export interface ISettings {
-  pro_meeting_id?: string;
-  pending_list_id?: string;
-  active_list_id?: string;
-  done_list_id?: string;
-  monitor_members?: string;
+  config_id?: string;
   scope?: string;
   scope_code?: string;
   scope_secret?: string;
