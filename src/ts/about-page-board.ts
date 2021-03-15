@@ -51,7 +51,7 @@ t.render(() => {
       //meta
       const meta = window.document.createElement('section');
       meta.innerHTML = '<h3>Meta Information</h3>'
-        + `<div><strong>ID:</strong> ${board.id}</div>`
+        + `<div><strong>Id:</strong> ${board.id}</div>`
         + `<div><strong>Short Id:</strong> <a href="https://trello.com/b/${board.shortLink}">${board.shortLink}</a></div>`
         + `<div><strong>Url:</strong> <a href="${board.url}">${board.url}</a></div>`
         + `<div><strong>Last Activity:</strong> ${dateHtml(board.dateLastActivity)}</div>`;

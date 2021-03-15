@@ -14,4 +14,16 @@ export namespace AboutPage {
     
   };
 
+  export const showAboutList = (t) => {
+
+    t.modal({
+      url: './about-page-list.html',
+      fullscreen: false,
+      title: 'About List',
+      accentColor: env.accentColor,
+      height: 500
+    });
+    
+  };
+
 }
