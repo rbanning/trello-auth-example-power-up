@@ -28,8 +28,6 @@ export const env = {
   }
 };
 
-console.log("DEBUG: env settings", env);
-
 export const currentUserMembership = (t: any) => {
   return trello.Promise.all([
     t.member('all'),

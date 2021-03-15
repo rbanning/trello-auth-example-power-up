@@ -1,3 +1,4 @@
+import { AboutPage } from "./about-page";
 import { BoardMembership } from "./board-membership";
 import { MeetingSummaryPopup } from "./meeting-summary-popup";
 import { MeetingUpdate } from "./meeting-update";
@@ -36,7 +37,7 @@ export namespace BoardButtons {
           const items = [
             {
               text: 'About this Board',
-              callback: MeetingSummaryPopup.show
+              callback: AboutPage.showAboutBoard
             }
           ];
 
