@@ -4,7 +4,7 @@ export interface ITrelloEnvironment {
 }
 export const trello: ITrelloEnvironment = {
   Promise: (window as any).TrelloPowerUp.Promise,
-  t:  () => { return (window as any).TrelloPowerUp.iframe(); }
+  t:  () => (window as any).TrelloPowerUp.iframe()
 };
 
 export const env = {
@@ -16,14 +16,13 @@ export const env = {
   platform: '%%PLATFORM%%',
   version: '%%VERSION%%',
 
-  SETTINGS_KEY: 'hallpass_structured_data',
+  SETTINGS_KEY: '%%KEY%%',
 
-  //todo: change the icons
   logo: {
-    color: 'https://trg-meeting-power-up.netlify.app/pro-meeting-color.png',
-    gray: 'https://trg-meeting-power-up.netlify.app/pro-meeting-gray.png',
-    white: 'https://trg-meeting-power-up.netlify.app/pro-meeting-white.png',
-    black: 'https://trg-meeting-power-up.netlify.app/pro-meeting-black.png'
+    color: '%%APP_URL%%/icon-color.png',
+    gray: '%%APP_URL%%/icon-gray.png',
+    white: '%%APP_URL%%/icon-white.png',
+    black: '%%APP_URL%%/icon-black.png'
   }
 };
 
@@ -35,7 +34,7 @@ export const currentUserMembership = (t: any) => {
     const [member, board] = results;
 
     if (member && board) {
-      const membership = board.memberships?.find(m => m.idMember == member.id);
+      const membership = board.memberships?.find(m => m.idMember === member.id);
       return {
         ...member,
         memberType: membership?.memberType
@@ -44,15 +43,15 @@ export const currentUserMembership = (t: any) => {
 
     //else
     return member;
-  })
-}
+  });
+};
 
 export const currentUserIsAdmin = (t: any) => {
   return currentUserMembership(t)
     .then((member: any) => {
       return member?.memberType === 'admin';
     });
-}
+};
 
 export const getBoardMembers = (t: any) => {
   return trello.Promise.all([
@@ -76,12 +75,12 @@ export const getBoardMembers = (t: any) => {
     //else
     return null;
   });
-}
+};
 
 export const isMemberOf = (id: string, members: any | any[]): boolean => {
   if (Array.isArray(members.members)) { members = members.members; }
   if (!id || !Array.isArray(members)) { return null; }
 
   return members.some(m => m.id === id);
-}
+};
 
