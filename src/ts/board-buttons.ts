@@ -1,7 +1,4 @@
 import { AboutPage } from "./about-page";
-import { BoardMembership } from "./board-membership";
-import { MeetingSummaryPopup } from "./meeting-summary-popup";
-import { MeetingUpdate } from "./meeting-update";
 import { ISettings, SettingsService } from "./settings.service";
 import { trello, getBoardMembers, env } from "./_common";
 

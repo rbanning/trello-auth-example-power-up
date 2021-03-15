@@ -26,4 +26,16 @@ export namespace AboutPage {
     
   };
 
+  export const showAboutCard = (t) => {
+
+    t.modal({
+      url: './about-page-card.html',
+      fullscreen: false,
+      title: 'About Card',
+      accentColor: env.accentColor,
+      height: 500
+    });
+    
+  };
+
 }

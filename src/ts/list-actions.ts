@@ -11,5 +11,6 @@ export namespace ListActions {
     }
     //else
     return [];
-  }
+  };
+
 }

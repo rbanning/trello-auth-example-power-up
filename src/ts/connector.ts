@@ -1,7 +1,7 @@
 import { BoardButtons } from './board-buttons';
+import { CardDetailBadge } from './card-detail-badge';
 import { DynamicIdentity } from './dynamic-identity';
 import { ListActions } from './list-actions';
-import { MeetingAttendance } from './meeting-attendance';
 import { SettingsService } from './settings.service';
 import { toastr } from './toastr.service';
 import { currentUserMembership, currentUserIsAdmin, trello} from './_common';
@@ -11,7 +11,7 @@ import { currentUserMembership, currentUserIsAdmin, trello} from './_common';
 
 (window as any).TrelloPowerUp.initialize({
   'board-buttons': BoardButtons.build,
-  //'card-detail-badges': MeetingAttendance.cardDetailBadges,
+  'card-detail-badges': CardDetailBadge.build,
   'list-actions': ListActions.build,
   //'show-settings': meetingSettings
 });
