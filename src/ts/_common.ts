@@ -18,6 +18,8 @@ export const env = {
 
   SETTINGS_KEY: '%%KEY%%',
 
+  accentColor: '#fcba03',
+
   logo: {
     color: '%%APP_URL%%/icon-color.png',
     gray: '%%APP_URL%%/icon-gray.png',

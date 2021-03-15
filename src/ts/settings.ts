@@ -15,15 +15,15 @@ loading.show();
 const settingsService = new SettingsService();
 
 //HELPERS
-const close = (t?: any) => {
-  t = t?.closeModal ? t : trello.t();
-  t.closeModal();
+const close = (tt?: any) => {
+  tt = tt?.closeModal ? tt : trello.t();
+  tt.closeModal();
   //t.closePopup();
 };
 
 const toggleSave = (enabled: boolean) => {
   saveBtn.disabled = !enabled;
-}
+};
 
 const getFormData = () => {
   const data = {};
@@ -45,18 +45,18 @@ const getFormData = () => {
 
   console.log("DEBUG: settings - getFormData", data);
   return data;
-}
+};
 
 const validateForm = () => {
   const data = getFormData();
   return Object.keys(data).every(key => {
     return !!data[key];
   });
-}
+};
 
 const updateSaveBtn = () => {
   toggleSave(validateForm());
-}
+};
 
 const save = () => {
   const data = getFormData();
@@ -74,7 +74,7 @@ const save = () => {
         loading.hide();
       });
   }
-}
+};
 
 const updateElementValues = (settings: ISettings) => {
   settings = settings || {};
@@ -86,7 +86,7 @@ const updateElementValues = (settings: ISettings) => {
     }
   });
 
-}
+};
 
 //SETUP CLOSE BUTTON(S)
 window.document.querySelectorAll('.close')
@@ -108,7 +108,7 @@ window.document.querySelectorAll('input')
 t.render(() => {
   return trello.Promise.all([
     settingsService.get(t),
-    t.lists('id','name'),
+    t.lists('id', 'name'),
     //add others as needed
   ])
   .then((results: any[]) => {

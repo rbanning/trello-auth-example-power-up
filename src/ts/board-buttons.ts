@@ -28,99 +28,24 @@ export namespace BoardButtons {
             console.warn("Unable to find me within board members", {members, me});
             return null;
           }        
-          if(!me.isAdmin) {
+          if (!me.isAdmin) {
             console.warn("Only admins are allowed to use this feature", {members, me});
             return null;
           }
 
           const items = [
             {
-              text: 'View ✅Pro Members',
+              text: 'About this Board',
               callback: MeetingSummaryPopup.show
-            },
-            {
-              text: 'Update the ✔ Active List',
-              callback: (tx) => {
-                tx.closePopup();
-                tx.popup({
-                  type: 'confirm',
-                  title: 'Update the Active List',
-                  message: 'Move "due" cards to the Active List and clear out old active cards.',
-                  confirmText: 'UPDATE',
-                  onConfirm: (tt) => {
-                    tt.closePopup();
-                    MeetingUpdate.updateBoardMeetingCards(tt)
-                      .then(results => {
-                        if (results?.length > 0) {
-                          tt.alert({
-                            message: `Updated ${results.length} card${results.length === 0 ? '' : 's'}`,
-                            display: 'success'
-                          });
-                        } else {
-                          tt.alert({
-                            message: 'No cards needed updating!',
-                            display: 'info'
-                          });
-                        }
-                      })
-                      .catch(reason => {
-                        console.warn("Unable to update cards", reason);
-                        tt.alert({
-                          message: "There was a problem trying to update the cards",
-                          display: 'warning'
-                        });
-                      });
-                  }
-                });
-              }
             }
           ];
-          //If settings is valid, then we can include 'Configure Pro Board...'
-          if (settings.pending_list_id && settings.active_list_id && settings.done_list_id) {
-            items.push(
-              {
-                text: 'Configure Pro Board on Server',
-                callback: (t) => {
-                  t.closePopup();
-                  t.modal({
-                    title: 'Pro Board Configuration',
-                    fullscreen: false,
-                    url: './pro-board-setup.html',
-                    height: 500
-                  });
-                }
-              }  
-            );
-          }
-          //Are there any 'normal' members on the board?
-          var affected = members.filter(m => m.membership?.memberType === 'normal');
-          if (settings.monitor_members === 'true' && affected.length > 0) {
-            items.push(
-              {
-                text: "Reset 'normal' Members",
-                callback: (t) => {
-                  t.closePopup();
-                  t.popup({
-                    type: "confirm",
-                    title: 'Reset Board Membership',
-                    message: `Change ${affected.length} member${affected.length === 0 ? '' : 's'} to 'observer'`,
-                    confirmText: 'Proceed',
-                    onConfirm: (tx) => { 
-                      tx.closePopup(); 
-                      BoardMembership.resetMembership(tx, 'normal', 'observer');
-                    }
-                  });    
-                }
-              }
-            );
-          }
 
           t.popup({
-            title: 'Pro Board',
+            title: env.name,
             items
           });
-      })      
-  }
+      });      
+  };
 
 
   export const build = (t: any) => {
@@ -151,9 +76,9 @@ export namespace BoardButtons {
         //ONLY ADMINS GET BUTTONS
         if (me.isAdmin) {
 
-          var result = [
+          const result = [
             {
-              text: 'Pro Board',
+              text: env.name,
               icon: {
                 dark: env.logo.white,
                 light: env.logo.black
@@ -170,8 +95,5 @@ export namespace BoardButtons {
         return null;
       });
   };
-
-
-  
 
 }

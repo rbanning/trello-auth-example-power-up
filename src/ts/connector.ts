@@ -11,9 +11,9 @@ import { currentUserMembership, currentUserIsAdmin, trello} from './_common';
 
 (window as any).TrelloPowerUp.initialize({
   'board-buttons': BoardButtons.build,
-  'card-detail-badges': MeetingAttendance.cardDetailBadges,
-  'list-actions': ListActions.build,
-  'show-settings': meetingSettings
+  //'card-detail-badges': MeetingAttendance.cardDetailBadges,
+  //'list-actions': ListActions.build,
+  //'show-settings': meetingSettings
 });
 
 

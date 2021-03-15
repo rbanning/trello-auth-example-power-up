@@ -32,7 +32,7 @@ const config: { settings: ISettings, proBoardData: IProBoard } = {
 const initialize = () => {
 
   return trello.Promise.all([
-    t.board('id','name'),
+    t.board('id', 'name'),
     settingsService.get(t),    
   ])
   .then(([board, settings]: [any, ISettings]) => {
@@ -43,12 +43,12 @@ const initialize = () => {
     config.settings = settings;
 
     config.proBoardData.boardId = board.id;
-    config.proBoardData.pendingListId = settings.pending_list_id;
-    config.proBoardData.activeListId = settings.active_list_id;
-    config.proBoardData.doneListId = settings.done_list_id;
+    // config.proBoardData.pendingListId = settings.pending_list_id;
+    // config.proBoardData.activeListId = settings.active_list_id;
+    // config.proBoardData.doneListId = settings.done_list_id;
     //the following are defaults for the board
     config.proBoardData.name = board.name;
-    config.proBoardData.shortName = board.name.split(' ').map(words => words.substr(0,1)).join('');  //initials
+    config.proBoardData.shortName = board.name.split(' ').map(words => words.substr(0, 1)).join('');  //initials
 
     return hallpassService.getProBoard(board.id, true)
       .then((result: IProBoard) => {
@@ -64,24 +64,24 @@ const initialize = () => {
         return {board, settings, exists: !!result};
       });
   });
-}
+};
 
 const setProBoardData = (field: string, value: string | number) => {
   if (field in config.proBoardData && (typeof(value) === 'string' || typeof(value) === 'number')) {
     config.proBoardData[field] = value;
   }
-}
+};
 
 //HELPERS
-const close = (t?: any) => {
-  t = t?.closeModal ? t : trello.t();
-  t.closeModal();
+const close = (tt?: any) => {
+  tt = tt?.closeModal ? tt : trello.t();
+  tt.closeModal();
   //t.closePopup();
 };
 
 const toggleSave = (enabled: boolean) => {
   saveBtn.disabled = !enabled;
-}
+};
 
 const getFormData = () => {
   const data = {};
@@ -101,18 +101,18 @@ const getFormData = () => {
       }
     });
   return data;
-}
+};
 
 const validateForm = (data: any = null) => {
   data = data || getFormData();
   return Object.keys(data).every(key => {
     return !!data[key];
   });
-}
+};
 
 const updateSaveBtn = () => {
   toggleSave(validateForm());
-}
+};
 
 const save = () => {
   let data: any = getFormData();
@@ -127,7 +127,7 @@ const save = () => {
     hallpassService.saveProBoard(data.boardId, data)
       .then(result => {
         //save pro_meeting_id
-        config.settings.pro_meeting_id = result?.id;
+        //config.settings.pro_meeting_id = result?.id;
         settingsService.save(t, config.settings);
 
         //DONE
@@ -143,7 +143,7 @@ const save = () => {
   } else {
     console.warn("Looks like the form is not valid", data);
   }
-}
+};
 
 const updateElementValues = (data: IProBoard) => {
   data = data || config.proBoardData;
@@ -155,7 +155,7 @@ const updateElementValues = (data: IProBoard) => {
     }
   });
 
-}
+};
 
 //SETUP CLOSE BUTTON(S)
 window.document.querySelectorAll('.close')
