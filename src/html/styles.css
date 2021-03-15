@@ -5,6 +5,24 @@ body {
   margin: 0; padding: 0;
 }
 
+footer.primary {
+  width: 100%;
+  max-width: 400px;
+  margin: 3em auto;
+  padding: 1em 0;
+  border-top: solid 1px rgba(0,0,0, 0.2);
+  font-size: 0.7em;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+footer.primary > * {
+  display: inline-block;
+  margin-right: 1em;
+}
+
 h1 { 
   margin: 0 0 0.5em 0;
   padding: 0;
