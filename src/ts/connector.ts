@@ -1,4 +1,5 @@
 import { BoardButtons } from './board-buttons';
+import { CardBackSection } from './card-back-section';
 import { CardDetailBadge } from './card-detail-badge';
 import { DynamicIdentity } from './dynamic-identity';
 import { ListActions } from './list-actions';
@@ -12,6 +13,7 @@ import { currentUserMembership, currentUserIsAdmin, trello} from './_common';
 (window as any).TrelloPowerUp.initialize({
   'board-buttons': BoardButtons.build,
   'card-detail-badges': CardDetailBadge.build,
+  'card-back-section': CardBackSection.build,
   'list-actions': ListActions.build,
   //'show-settings': meetingSettings
 });
