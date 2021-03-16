@@ -4,6 +4,7 @@ export namespace CustomFields {
     name: string;
     type: 'list' | 'text' | 'date' | 'number';
     value: string | number | boolean;
+    raw?: any;
   }
 
   const parseValue = (value: any): any => {
@@ -17,7 +18,7 @@ export namespace CustomFields {
         result = `${value}`.toLowerCase() === 'true';
       }
       else if ('date' in value || 'text' in value) {
-        result = value.date;
+        result = value.date || value.text;  //treat dates as strings
       }
       else {
         console.warn("Unable to parse custom field value", {value});
@@ -45,7 +46,8 @@ export namespace CustomFields {
           id: def.id,
           name: def.name,
           type: def.type,
-          value
+          value,
+          raw: item
         };
       });
     }
