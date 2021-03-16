@@ -23,7 +23,7 @@ export namespace CardBadge {
       t.card('id', 'name', 'shortLink', 'customFieldItems')
     ];
     return trello.Promise.all(actions)
-      .then((board, card) => {
+      .then(([board, card]) => {
         const customFields = CustomFields.build(board.customFields, card.customFieldItems);
         console.log("DEBUG: card badge", {board, card, customFields});
         return [
