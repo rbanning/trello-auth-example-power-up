@@ -3,14 +3,14 @@ import { env, trello } from "./_common";
 
 export namespace CardBadge {
 
-  const processTestCard = (card: any) => {
-    const st: string = "";
-    if (card?.name.toLowerCase().indexOf('test') >= 0) {
+  const processTestCard = (card: any, customFields: CustomFields.ICustomFields[]) => {
+    if (customFields?.length > 0) {
+      const existing = customFields.filter(m => m.raw).length;
       return {
-        text: `Testing ${card.shortLink}`,
+        text: `${card.shortLink} ${existing}/${customFields.length}`,
         icon: env.logo.white,
-        color: 'orange'
-      };
+        color: existing === customFields.length ? 'green' : 'orange'
+      };  
     }
     //else
     return null;
@@ -25,9 +25,8 @@ export namespace CardBadge {
     return trello.Promise.all(actions)
       .then(([board, card]) => {
         const customFields = CustomFields.build(board.customFields, card.customFieldItems);
-        console.log("DEBUG: card badge", card?.name, {board, card, customFields});
         return [
-          processTestCard(card)
+          processTestCard(card, customFields)
         ].filter(Boolean);
       });
   };
