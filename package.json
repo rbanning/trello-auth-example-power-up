@@ -1,9 +1,9 @@
 {
-  "name": "trello-structured-data-power-up",
+  "name": "trello-base-power-up",
   "version": "1.0.0",
-  "description": "Trello Power Up that allows extra data on a Card",
+  "description": "Basic Trello Power Up to be used as starting point for other power ups",
   "main": "index.js",
-  "repository": "https://github.com/rbanning/trello-structured-data-power-up.git",
+  "repository": "https://github.com/rbanning/trello-base-power-up.git",
   "author": "rbanning <rob@myhallpass.com>",
   "license": "MIT",
   "private": true,
