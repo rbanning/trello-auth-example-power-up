@@ -6,8 +6,8 @@ export namespace CardBadge {
     const st: string = "";
     if (card?.name.toLowerCase().indexOf('test') >= 0) {
       return {
-        text: `Testing ${card.shortLink || card.idShort}`,
-        icon: env.logo.gray,
+        text: `Testing ${card.shortLink}`,
+        icon: env.logo.white,
         color: 'orange'
       };
     }
@@ -17,7 +17,7 @@ export namespace CardBadge {
 
 
   export const build = (t, opts) => {
-    return t.card('id', 'name', 'shortLink', 'idShort')
+    return t.card('id', 'name', 'shortLink', 'customFieldItems')
       .then(card => {
         console.log("DEBUG: card badge", {card, opts});
         return [
