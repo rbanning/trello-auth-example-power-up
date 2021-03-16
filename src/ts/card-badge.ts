@@ -1,4 +1,5 @@
-import { env } from "./_common";
+import { CustomFields } from "./custom-fields";
+import { env, trello } from "./_common";
 
 export namespace CardBadge {
 
@@ -17,9 +18,14 @@ export namespace CardBadge {
 
 
   export const build = (t, opts) => {
-    return t.card('id', 'name', 'shortLink', 'customFieldItems')
-      .then(card => {
-        console.log("DEBUG: card badge", {card, opts});
+    const actions = [
+      t.board('customFields'),
+      t.card('id', 'name', 'shortLink', 'customFieldItems')
+    ];
+    return trello.Promise.all(actions)
+      .then((board, card) => {
+        const customFields = CustomFields.build(board.customFields, card.customFieldItems);
+        console.log("DEBUG: card badge", {board, card, customFields});
         return [
           processTestCard(card)
         ].filter(Boolean);
