@@ -3,7 +3,8 @@ const output = document.getElementById("output");
 const log = (message: string, extras?: any) => {
   console.log(message, extras);
   output.innerHTML = message;  
-}
+};
+
 log("initializing tests...", { output });
 
 
@@ -27,24 +28,24 @@ const createPromise = (): Promise<string> => {
   });
 };
 
-const getResult = (p: Promise<string>, start: string) => {
-  return p.then((result) => {
+const getResult = (pp: Promise<string>, start: string) => {
+  return pp.then((result) => {
     log("got result", { start, result });
     return result;
   });
 };
 
-const runTest = (p: Promise<string>, name: string) => {
-  return getResult(p, getTime()).then((result) => {
+const runTest = (pp: Promise<string>, name: string) => {
+  return getResult(pp, getTime()).then((result) => {
     log(`${name} is done`, result);
   });
 };
-const runTests = (p: Promise<string>, index: number, count: number) => {
+const runTests = (pp: Promise<string>, index: number, count: number) => {
   if (index < count) {
     setTimeout(() => {
       index++;
-      runTest(p, `#${index}`);
-      runTests(p, index, count);
+      runTest(pp, `#${index}`);
+      runTests(pp, index, count);
     }, 1000);
   }
 };
@@ -59,7 +60,7 @@ document.getElementById('run').addEventListener('click', () => {
       .then((result) => {
         if (even) { reject(`Button Count is ${buttonClickCount}`); }
         else { resolve(`The start time was ${result}`); }
-      })
+      });
   })
   .then((message: string) => {
     log(message);
