@@ -2,7 +2,7 @@ export namespace CustomFields {
   export interface ICustomFields {
     id: string;
     name: string;
-    type: 'list' | 'text' | 'date' | 'number';
+    type: 'list' | 'text' | 'date' | 'number' | 'checkbox';
     value: string | number | boolean;
     raw?: any;
   }
