@@ -108,41 +108,17 @@ window.document.querySelectorAll('input')
 t.render(() => {
   return trello.Promise.all([
     settingsService.get(t),
-    t.lists('id', 'name'),
+    t.lists('id', 'name'),    //only included as an example
     //add others as needed
   ])
   .then((results: any[]) => {
-    const [settings, lists, board, me] = results;
+    const [settings, lists] = results;
 
     //VALIDATION
     if (!Array.isArray(lists)) {
       console.warn("Error getting board lists", {lists});
       throw new Error("Unable to find the board lists");
     }
-
-    //ADD THE LISTs TO SELECTs
-    const selects: HTMLSelectElement[] = [
-      (window.document.getElementById('pending_list_id') as HTMLSelectElement),
-      (window.document.getElementById('active_list_id') as HTMLSelectElement),
-      (window.document.getElementById('done_list_id') as HTMLSelectElement)
-    ];    
-    if (selects.some(el => !el)) { throw new Error("Unable to find one or more of the list select dropdown"); }
-
-    selects.forEach(select => {
-      lists.forEach((item: any) => {
-        const option = window.document.createElement('option');
-        option.value = item.id;
-        option.innerText = item.name;
-        select.add(option);
-      });
-    });
-
-    //MONITOR CHANGE on SELECTS
-    window.document.querySelectorAll('select')
-    .forEach(input => {
-      input.addEventListener('change', updateSaveBtn);
-    });
-
 
     //PRESET THE Input/Select ELEMENTS
     updateElementValues(settings);

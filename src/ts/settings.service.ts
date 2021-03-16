@@ -11,6 +11,15 @@ export interface ISettings {
   base_url?: string;
 }
 
+
+export const card_setting_fields = ['simple_data_id'];
+export interface ICardSettings {
+  simple_data_id?: string;
+}
+export const defaultCardSettings: ICardSettings = {
+  simple_data_id: null
+};
+
 export class SettingsService {
   private readonly VISIBILITY = 'shared';
 
@@ -30,6 +39,13 @@ export class SettingsService {
           this._cache = this.mergeSettings(this._cache, result);
         }
         return this.cache;
+      });
+  }
+
+  getCardSettings(t: any): ICardSettings {
+    return t.get('card', this.VISIBILITY, env.SETTINGS_KEY, {})
+      .then((result: any) => {
+        return this.mergeCardSettings(defaultCardSettings, result);
       });
   }
 
@@ -67,6 +83,22 @@ export class SettingsService {
             ret[key] = param[key];
           }
         });
+      });
+    }
+    return ret;
+  }
+
+  protected mergeCardSettings(...params: ICardSettings[]): ICardSettings {
+    const ret = {};
+    if (Array.isArray(params)) {
+      params.forEach(param => {
+        if (param) {
+          card_setting_fields.forEach(key => {
+            if (param[key] !== undefined) {
+              ret[key] = param[key];
+            }
+          });  
+        }
       });
     }
     return ret;

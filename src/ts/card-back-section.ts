@@ -17,7 +17,7 @@ export namespace CardBackSection {
           icon: env.logo.color,
           content: {
             type: 'iframe',
-            url: t.signUrl('./card-back-section-test.md'),
+            url: t.signUrl('./card-back-section.html'),
             height: 300,
             action: {
               text: 'Card Detail',
