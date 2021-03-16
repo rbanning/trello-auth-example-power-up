@@ -43,7 +43,6 @@ const getFormData = () => {
       }
     });
 
-  console.log("DEBUG: settings - getFormData", data);
   return data;
 };
 

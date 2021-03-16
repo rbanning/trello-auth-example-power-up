@@ -25,7 +25,7 @@ export namespace CardBadge {
     return trello.Promise.all(actions)
       .then(([board, card]) => {
         const customFields = CustomFields.build(board.customFields, card.customFieldItems);
-        console.log("DEBUG: card badge", {board, card, customFields});
+        console.log("DEBUG: card badge", card?.name, {board, card, customFields});
         return [
           processTestCard(card)
         ].filter(Boolean);

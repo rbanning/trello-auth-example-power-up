@@ -20,7 +20,7 @@ export namespace CardBackSection {
             url: t.signUrl('./card-back-section.html'),
             height: 300,
             action: {
-              text: 'Card Detail',
+              text: 'Back Card Detail',
               callback: AboutPage.showAboutCard
             }
           }
