@@ -11,17 +11,6 @@ t.render(() => {
 
 
 
-  //HELPERS
-  const close = () => {
-    trello.t().closeModal();
-    //trello.t().closePopup();
-  };
-
-  //SETUP CLOSE BUTTON
-  window.document.querySelectorAll('.close')
-    .forEach(btn => {
-      btn.addEventListener('click', close);
-    });
 
   const hallpassService = new HallpassService(t);
 
