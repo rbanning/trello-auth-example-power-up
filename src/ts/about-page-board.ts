@@ -45,6 +45,9 @@ t.render(() => {
   ];
   trello.Promise.all(actions)
     .then(([board, lists]: [any, any[]] ) => {
+      
+      console.log("Actions results", {board, lists});
+
       //subtitle
       const subtitle = window.document.getElementById('subtitle');
       subtitle.innerHTML = board.name;
@@ -59,9 +62,9 @@ t.render(() => {
 
       //lists
       const listSection = window.document.createElement('section');
-      listSection.innerHTML = '<h3>Lists<h3>'
-        + (!lists || lists.length === 0) ? '<p><strong>None</strong><p>'
-        : `<ul><li>${lists.map(listHtml).join('</li><li>')}</li></ul>`;
+      listSection.innerHTML = '<h3>Lists</h3>'
+        + ((!lists || lists.length === 0) ? '<p><strong>None</strong><p>'
+        : `<ul><li>${lists.map(listHtml).join('</li><li>')}</li></ul>`);
 
       //meta
       const meta = window.document.createElement('section');
