@@ -24,7 +24,7 @@ t.render(() => {
 
   const listHtml = (list: any) => {
     if (!list) { return null; }
-    return `${list.name} <code>${list.id}</code>`;
+    return `${list.name} <code style="margin: 0 1em;">(id: ${list.id})</code>`;
   };
 
   const dateHtml = (d: string) => {

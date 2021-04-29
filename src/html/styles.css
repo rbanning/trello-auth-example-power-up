@@ -38,6 +38,14 @@ h3 {
 
 .small { font-size: 0.8em; }
 
+.code {
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: smaller;  
+  padding: 0 0.3em;
+  background-color: lightgrey;
+}
+
 .button {
   display: inline-block;
   padding: 0.5em 1em;
