@@ -1,2 +1,2 @@
-# trg-trello-meeting-power-up
-Client: TRG - Trello Power Up to manage meetings
+# trello-base-power-up
+Client: Hallpass - used as a starting point for other power-ups
