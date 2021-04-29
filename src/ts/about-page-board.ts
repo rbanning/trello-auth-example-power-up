@@ -27,6 +27,11 @@ t.render(() => {
     return `${list.name} <code style="margin: 0 1em;">(id: ${list.id})</code>`;
   };
 
+  const customFieldHtml = (cf: any) => {
+    if (!cf) { return null; }
+    return `${cf.name} <code style="margin: 0 1em;">(type: ${cf.type}, id: ${cf.id})</code>`;
+  }
+
   const dateHtml = (d: string) => {
     return `<span class="date">${!!d ? DateHelper.dateMedium(new Date(d)) : 'none'}</span>`;
   };
@@ -40,7 +45,7 @@ t.render(() => {
   
   //GET ALL OF THE INFORMATION
   const actions = [
-    t.board('id', 'name', 'shortLink', 'url', 'dateLastActivity', 'members', 'memberships'), //all about the board
+    t.board('id', 'name', 'shortLink', 'url', 'dateLastActivity', 'members', 'memberships', 'customFields'), //all about the board
     t.lists('id', 'name')
   ];
   trello.Promise.all(actions)
@@ -65,6 +70,12 @@ t.render(() => {
       listSection.innerHTML = '<h3>Lists</h3>'
         + ((!lists || lists.length === 0) ? '<p><strong>None</strong><p>'
         : `<ul><li>${lists.map(listHtml).join('</li><li>')}</li></ul>`);
+
+      //custom fields
+      const cfSection = window.document.createElement('section');
+      listSection.innerHTML = '<h3>Custom Fields</h3>'
+        + ((!board.customFields || board.customFields.length === 0) ? '<p><strong>None</strong><p>'
+        : `<ul><li>${board.customFields.map(customFieldHtml).join('</li><li>')}</li></ul>`);
 
       //meta
       const meta = window.document.createElement('section');
