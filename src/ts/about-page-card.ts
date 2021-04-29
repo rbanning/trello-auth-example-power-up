@@ -24,7 +24,7 @@ t.render(() => {
 
   const customFieldHtml = (cf: any) => {
     if (!cf) { return null; }
-    const value = cf.value?.text | cf.value?.date | cf.value?.number | cf.value?.checkbox | cf.idValue;
+    const value = cf.value?.text || cf.value?.date || cf.value?.number || cf.value?.checkbox || cf.idValue;
     return `${value} <code style="margin: 0 1em;">(field: ${cf.idCustomField})</code>`;
   }
 
