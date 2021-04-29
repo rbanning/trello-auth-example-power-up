@@ -72,6 +72,7 @@ t.render(() => {
         + `<div><strong>Last Activity:</strong> ${dateHtml(board.dateLastActivity)}</div>`;
 
       content.append(members);
+      content.append(listSection);
       content.append(meta);
     })
     .then(() => {
