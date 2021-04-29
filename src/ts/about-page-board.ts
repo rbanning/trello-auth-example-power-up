@@ -51,7 +51,7 @@ t.render(() => {
   trello.Promise.all(actions)
     .then(([board, lists]: [any, any[]] ) => {
       
-      console.log("Actions results", {board, lists});
+      console.log("DEBUG: Actions results", {board, lists});
 
       //subtitle
       const subtitle = window.document.getElementById('subtitle');
@@ -73,7 +73,7 @@ t.render(() => {
 
       //custom fields
       const cfSection = window.document.createElement('section');
-      listSection.innerHTML = '<h3>Custom Fields</h3>'
+      cfSection.innerHTML = '<h3>Custom Fields</h3>'
         + ((!board.customFields || board.customFields.length === 0) ? '<p><strong>None</strong><p>'
         : `<ul><li>${board.customFields.map(customFieldHtml).join('</li><li>')}</li></ul>`);
 
@@ -87,6 +87,7 @@ t.render(() => {
 
       content.append(members);
       content.append(listSection);
+      content.append(cfSection);
       content.append(meta);
     })
     .then(() => {

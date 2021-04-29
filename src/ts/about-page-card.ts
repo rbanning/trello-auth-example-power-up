@@ -21,6 +21,12 @@ t.render(() => {
     const el = MemberComponent.build(member);
     return el?.outerHTML;
   };
+
+  const customFieldHtml = (cf: any) => {
+    if (!cf) { return null; }
+    return `${cf.name} <code style="margin: 0 1em;">(type: ${cf.type}, id: ${cf.id})</code>`;
+  }
+
   
   const dateHtml = (d: string) => {    
     return `<span class="date">${!!d ? DateHelper.dateMedium(new Date(d)) : 'none'}</span>`;
@@ -40,7 +46,7 @@ t.render(() => {
 
   
   //GET ALL OF THE INFORMATION
-  t.card('id', 'name', 'due', 'dueComplete', 'members', 'labels', 'attachments', 'url', 'shortLink', 'dateLastActivity')
+  t.card('id', 'name', 'due', 'dueComplete', 'members', 'labels', 'attachments', 'url', 'shortLink', 'dateLastActivity', 'customFieldItems')
     .then((card: any) => {
       //subtitle
       const subtitle = window.document.getElementById('subtitle');
@@ -62,6 +68,13 @@ t.render(() => {
       const members = window.document.createElement('section');
       members.innerHTML = '<h3>Members</h3>'
         + (card.members.length === 0 ? '<p><strong>None</strong></p>' : `${card.members.map(memberHtml).join(' ')}`);
+
+      //custom fields
+      const cfSection = window.document.createElement('section');
+      cfSection.innerHTML = '<h3>Custom Fields</h3>'
+        + ((!card.customFieldItems || card.customFieldItems.length === 0) ? '<p><strong>None</strong><p>'
+        : `<ul><li>${card.customFieldItems.map(customFieldHtml).join('</li><li>')}</li></ul>`);
+
 
       //meta
       const meta = window.document.createElement('section');
