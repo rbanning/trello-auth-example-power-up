@@ -22,6 +22,11 @@ t.render(() => {
     return el?.outerHTML;
   };
 
+  const listHtml = (list: any) => {
+    if (!list) { return null; }
+    return `${list.name} <code>${list.id}</code>`;
+  };
+
   const dateHtml = (d: string) => {
     return `<span class="date">${!!d ? DateHelper.dateMedium(new Date(d)) : 'none'}</span>`;
   };
@@ -34,8 +39,12 @@ t.render(() => {
 
   
   //GET ALL OF THE INFORMATION
-  t.board('id', 'name', 'shortLink', 'url', 'dateLastActivity', 'members', 'memberships')
-    .then((board: any) => {
+  const actions = [
+    t.board('id', 'name', 'shortLink', 'url', 'dateLastActivity', 'members', 'memberships'), //all about the board
+    t.lists('id', 'name')
+  ];
+  trello.Promise.all(actions)
+    .then(([board, lists]: [any, any[]] ) => {
       //subtitle
       const subtitle = window.document.getElementById('subtitle');
       subtitle.innerHTML = board.name;
@@ -47,6 +56,12 @@ t.render(() => {
       const members = window.document.createElement('section');
       members.innerHTML = '<h3>Members</h3>'
         + (board.members.length === 0 ? '<p><strong>None</strong></p>' : `${board.members.map(memberHtml).join(' ')}`);
+
+      //lists
+      const listSection = window.document.createElement('section');
+      listSection.innerHTML = '<h3>Lists<h3>'
+        + (!lists || lists.length === 0) ? '<p><strong>None</strong><p>'
+        : `<ul><li>${lists.map(listHtml).join('</li><li>')}</li></ul>`;
 
       //meta
       const meta = window.document.createElement('section');
