@@ -24,9 +24,9 @@ t.render(() => {
 
   const customFieldHtml = (cf: any) => {
     if (!cf) { return null; }
-    const value = cf.value?.text || cf.value?.date || cf.value?.number || cf.value?.checkbox || cf.idValue;
-    return `${value} <code style="margin: 0 1em;">(field: ${cf.idCustomField})</code>`;
-  }
+    const value = cf.value?.text || cf.value?.date || cf.value?.number || cf.value?.checked || `opt id: ${cf.idValue}`;
+    return `<span class="dark">${value}</span> <br/><code style="margin: 0 1em;">(field: ${cf.idCustomField})</code>`;
+  };
 
   
   const dateHtml = (d: string) => {    

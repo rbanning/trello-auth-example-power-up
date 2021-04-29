@@ -30,7 +30,7 @@ t.render(() => {
   const customFieldHtml = (cf: any) => {
     if (!cf) { return null; }
     const cfOptions = (opt: any) => `- ${opt.value?.text} <code>${opt.id}</code>`;
-    return `${cf.name} <code style="margin: 0 1em;">(type: ${cf.type}, id: ${cf.id})</code>`
+    return `<span class="dark">${cf.name}</span> <br/><code style="margin: 0 1em;">(type: ${cf.type}, id: ${cf.id})</code>`
       + (cf.option ? cf.options.map(cfOptions) : '');
   }
 

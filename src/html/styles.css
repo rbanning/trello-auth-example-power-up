@@ -37,8 +37,9 @@ h3 {
 }
 
 .small { font-size: 0.8em; }
+.dark, .black { color: #000000; }
 
-.code {
+code, .code {
   display: inline-block;
   font-family: 'Courier New', Courier, monospace;
   font-size: smaller;  
