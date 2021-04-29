@@ -24,7 +24,8 @@ t.render(() => {
 
   const customFieldHtml = (cf: any) => {
     if (!cf) { return null; }
-    return `${cf.name} <code style="margin: 0 1em;">(type: ${cf.type}, id: ${cf.id})</code>`;
+    const value = cf.value?.text | cf.value?.date | cf.value?.number | cf.value?.checkbox | cf.idValue;
+    return `${value} <code style="margin: 0 1em;">(field: ${cf.idCustomField})</code>`;
   }
 
   
@@ -86,6 +87,7 @@ t.render(() => {
 
       content.append(details);
       content.append(members);
+      content.append(cfSection);
       content.append(meta);
     })
     .then(() => {
