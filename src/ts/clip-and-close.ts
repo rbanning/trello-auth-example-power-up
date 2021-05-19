@@ -18,7 +18,7 @@ t.render(() => {
 
   const copyToClipboard = (element: any) => {
     //reset
-    var sel = getSelection();
+    const sel = getSelection();
     if (sel) { sel.empty(); }
 
     //highlight
@@ -30,7 +30,7 @@ t.render(() => {
       element.contentEditable = false;
       //getSelection().empty(); //clear
     }, 1000);
-  }
+  };
 
   const itemToHtml = (ref: string, label: string, text: string, group: string) => {
     if (!text) { 
@@ -47,12 +47,13 @@ t.render(() => {
       + `<span class="value">${text}</span>`
       + '</span>'
       + '</div>';
-  }
+  };
 
 
   const clipAndGo = (el: HTMLElement) => {
+    // tslint:disable-next-line: no-string-literal
     const ref = document.getElementById(el?.attributes['ref']?.value);
-    const t = trello.t();
+    const tt = trello.t();
 
     if (ref) {
       const label = ref.querySelector(".label")?.innerHTML || 'item';
@@ -61,18 +62,18 @@ t.render(() => {
 
       try {
         copyToClipboard(text);
-        t.alert({
+        tt.alert({
           message              
         });            
       } catch (error) {
         console.warn("Unable to add text to the clipboard", {error, label, text, message});
-        t.alert({
+        tt.alert({
           message: 'Error trying to add text to the clipboard',
           display: 'error'
         });
       }
     }
-  }
+  };
 
   const setupPage = (): Promise<any> => {
     return new trello.Promise((resolve, reject) => {
@@ -109,13 +110,13 @@ t.render(() => {
 
       resolve(true);
     });
-  } //end setupPage
+  }; //end setupPage
 
 
   setupPage()
     .then(() => {
       loading.hide();
       return t.sizeTo('#wrapper');      
-    });;
+    });
 
 });

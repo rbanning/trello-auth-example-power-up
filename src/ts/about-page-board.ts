@@ -32,7 +32,7 @@ t.render(() => {
     const cfOptions = (opt: any) => `- ${opt.value?.text} <code>${opt.id}</code>`;
     return `<span class="dark">${cf.name}</span> <br/><code style="margin: 0 1em;">(type: ${cf.type}, id: ${cf.id})</code>`
       + (cf.option ? cf.options.map(cfOptions) : '');
-  }
+  };
 
   const dateHtml = (d: string) => {
     return `<span class="date">${!!d ? DateHelper.dateMedium(new Date(d)) : 'none'}</span>`;

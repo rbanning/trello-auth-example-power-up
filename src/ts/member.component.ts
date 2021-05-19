@@ -6,17 +6,18 @@ export namespace MemberComponent {
     el.className = "initials";
     el.innerText = initials;
     return el;
-  }
+  };
+
   export const avatar = (member: any): HTMLElement => {
     if (!member) { return null; }
     if (!member.avatar) { return avatarInitials(member.initials); }
 
-    var img = new Image();
+    const img = new Image();
     img.className = "avatar";
     img.alt = `avatar for ${member.initials}`;
     img.src = member.avatar;
     return img;
-  }
+  };
 
 
   export const build  = (member: any): HTMLElement => {
@@ -24,6 +25,7 @@ export namespace MemberComponent {
   
     const div = window.document.createElement('div');  
     div.className = "member";
+    // tslint:disable-next-line: no-string-literal
     div.attributes['title'] = member.username;
     
     //avatar
@@ -36,7 +38,8 @@ export namespace MemberComponent {
     div.append(span);
       
     return div;
-  }
+  };
+
 }
 
 

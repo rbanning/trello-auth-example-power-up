@@ -33,7 +33,7 @@ export class FetchBaseService {
     return this._config
       .then(result => {
         return result;
-      })
+      });
   }
 
   //#region >> FETCH HELPERS <<
@@ -48,7 +48,7 @@ export class FetchBaseService {
           method,
           headers
         };
-            if (data) {
+        if (data) {
           headers.append('Content-Type', 'application/json');
           options.body = JSON.stringify(data);
         }
@@ -70,7 +70,7 @@ export class FetchBaseService {
 
   protected buildUrl(settingsOrBaseUrl: ISettings | string, ...params: string[]): string {
     let url = typeof(settingsOrBaseUrl) === 'string' ? settingsOrBaseUrl : settingsOrBaseUrl.base_url;
-    if (!url.endsWith(this.URL_DELIM)) { url += this.URL_DELIM }
+    if (!url.endsWith(this.URL_DELIM)) { url += this.URL_DELIM; }
     if (Array.isArray(params)) {
       url += params.join(this.URL_DELIM);
     }

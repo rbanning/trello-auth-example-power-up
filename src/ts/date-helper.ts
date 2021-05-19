@@ -9,10 +9,10 @@ export namespace DateHelper {
     }
 
     return d < new Date();
-  }
+  };
 
 
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   export const monthLong = (d: Date) => {
     if (d.getMonth) {
@@ -20,14 +20,15 @@ export namespace DateHelper {
     } 
     //else
     return '';
-  }
+  };
+
   export const monthShort = (d: Date) => {
     if (d.getMonth) {
       return months[d.getMonth()].substring(0, 3);
     } 
     //else
     return '';
-  }
+  };
 
   export const dateMedium = (d: Date) => {
     if (d.getMonth) {
@@ -35,5 +36,6 @@ export namespace DateHelper {
     }
     //else
     return '';
-  }
+  };
+
 }

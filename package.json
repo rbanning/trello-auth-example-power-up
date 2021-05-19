@@ -9,7 +9,8 @@
   "private": true,
   "scripts": {
     "build": "tsc && parcel build src/html/*.html",
-    "lint": "eslint -c .eslintrc.js --ext .ts ./src"
+    "lint": "tslint -p ./",
+    "lintES": "eslint -c .eslintrc.js --ext .ts ./src"
   },
   "dependencies": {
     "parcel-bundler": "^1.12.4",

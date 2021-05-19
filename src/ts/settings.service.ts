@@ -71,7 +71,7 @@ export class SettingsService {
           code: settings.scope_code,
           secret: settings.scope_secret
         } as DynamicIdentity.IDynamicIdentityScope;
-      })
+      });
   }
 
   protected mergeSettings(...params: ISettings[]): ISettings {

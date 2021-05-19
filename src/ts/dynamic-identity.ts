@@ -4,9 +4,9 @@ export namespace DynamicIdentity {
   const HEADER_KEYS = {
     "scope-id": "X-Hallpass-Scope",
     "scope-code": "X-Hallpass-Scope-Code",
-    "challenge": "X-Hallpass-DynamicIdentity-Challenge",
-    "code": "X-Hallpass-DynamicIdentity-Code",
-    "user": "X-Hallpass-DynamicIdentity-User",
+    challenge: "X-Hallpass-DynamicIdentity-Challenge",
+    code: "X-Hallpass-DynamicIdentity-Code",
+    user: "X-Hallpass-DynamicIdentity-User",
   };
 
   const headerKeys = () => {
@@ -45,7 +45,7 @@ export namespace DynamicIdentity {
   const _CHARS: string[] = "abcdefghijklmnopqrstuvwxyz1234567890".split('');
   let CHARS: string[] = null;
 
-  const getRandomCharsFrom = (values: string | string[], count: number):string => {
+  const getRandomCharsFrom = (values: string | string[], count: number): string => {
     //convert values to array
     if (typeof(values) === 'string') { values = values.split(''); }
 
@@ -54,14 +54,14 @@ export namespace DynamicIdentity {
       ret += values[Math.floor(Math.random() * values.length)];
     }
     return ret;
-  }
+  };
 
-  const getRandomChars = (count: number):string => {
+  const getRandomChars = (count: number): string => {
     //initialize
     if (!CHARS) { CHARS = randomizeArray(_CHARS, 3); }
 
     return getRandomCharsFrom(CHARS, count);
-  }
+  };
   
   //#endregion
 
@@ -75,14 +75,14 @@ export namespace DynamicIdentity {
     }
     //else
     return null;
-  }
+  };
 
   export const isValidScope = (scope: IDynamicIdentityScope): boolean => {
     return !!scope && 
         scope.id?.length > 30 &&
         scope.code?.length >= 3 &&
         scope.secret?.length >= 5;
-  }
+  };
 
   export const buildChallenge = (scope: IDynamicIdentityScope, user: string): string => {
     if (!isValidScope(scope)) {
@@ -90,13 +90,13 @@ export namespace DynamicIdentity {
       return null;
     }
 
-    const sections: string[] = ['','',''];
+    const sections: string[] = ['', '', ''];
     const date = new Date();
     const d = {
       year: date.getUTCFullYear(),
       month: date.getUTCMonth() + 1,
       day: date.getUTCDate(),
-      dow: ['sun','mon','tue','wed','thu','fri','sat'][date.getUTCDay()]
+      dow: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][date.getUTCDay()]
     };
 
     let parts: string[] = null;
@@ -133,7 +133,7 @@ export namespace DynamicIdentity {
     sections[2] = parts.join('');
 
     return sections.join('-').toLowerCase();
-  }
+  };
 
   export const buildCode = (scope: IDynamicIdentityScope, user: string, challenge: string): string => {
     if (!isValidScope(scope)) {
@@ -161,7 +161,7 @@ export namespace DynamicIdentity {
            scope.id[user.length % length] +             //4
            scope.id[sections[2].length % length] +      //5
            scope.id[challenge.charCodeAt(0) % length];  //6
-  }
+  };
 
   
   export const getHeaders = (scope: IDynamicIdentityScope, user: string): Headers => {
@@ -179,6 +179,6 @@ export namespace DynamicIdentity {
     headers.append(HEADER_KEYS.user, user);
 
     return headers;
-  }
+  };
   
 }
