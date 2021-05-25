@@ -18,11 +18,11 @@ export namespace CardBackSection {
           content: {
             type: 'iframe',
             url: t.signUrl('./card-back-section.html'),
-            height: 300,
-            action: {
-              text: 'Back Card Detail',
-              callback: AboutPage.showAboutCard
-            }
+            height: 300
+          },
+          action: {
+            text: 'Back Card Detail',
+            callback: AboutPage.showAboutCard
           }
         };
       });
