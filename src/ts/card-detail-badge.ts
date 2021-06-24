@@ -18,19 +18,19 @@ export namespace CardDetailBadge {
   };
 
   const whatsYourName = (t) => {
-    t.member('id', 'fullName', 'email')
+    t.member('id', 'fullName', 'username')
       .then((member) => {
         console.log("DEBUG: member information", {member});
-        t.popup({
-          type: 'confirm',
-          title: 'What is your name?',
-          message: `Is your name: ${member.fullName}?`,
-          confirmText: 'Yes, it is',
-          confirmStyle: 'primary',
-          onConfirm: (tt) => { console.log("YES"); tt.closePopup(); },
-          cancelText: 'No, it is not',
-          onCancel: (tt) => { console.log("NO"); tt.closePopup(); }
-        });
+        // t.popup({
+        //   type: 'confirm',
+        //   title: 'What is your name?',
+        //   message: `Is your name: ${member.fullName}?`,
+        //   confirmText: 'Yes, it is',
+        //   confirmStyle: 'primary',
+        //   onConfirm: (tt) => { console.log("YES"); tt.closePopup(); },
+        //   cancelText: 'No, it is not',
+        //   onCancel: (tt) => { console.log("NO"); tt.closePopup(); }
+        // });
       });
   };
 
