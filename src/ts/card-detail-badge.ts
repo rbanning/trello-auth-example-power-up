@@ -18,7 +18,7 @@ export namespace CardDetailBadge {
   };
 
   const whatsYourName = (t) => {
-    t.member('id', 'fullName', 'username', 'email')
+    t.member()
       .then((member) => {
         console.log("DEBUG: member information", {member});
         // t.popup({
