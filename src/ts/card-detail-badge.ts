@@ -21,7 +21,8 @@ export namespace CardDetailBadge {
     t.member('id', 'fullName', 'username')
       .then((member) => {
         console.log("DEBUG: member information", {member});
-        t.popup({
+        const tt = trello.t();
+        tt.popup({
           type: 'confirm',
           title: 'What is your name?',
           message: `Is your name: ${member.fullName}?`,
