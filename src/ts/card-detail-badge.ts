@@ -72,7 +72,7 @@ export namespace CardDetailBadge {
             title: 'Test',
             text: 'Popup Test 2',
             color: 'lime',
-            callback: doYouLoveMe
+            callback: whatsYourName
           }
         ];
 
