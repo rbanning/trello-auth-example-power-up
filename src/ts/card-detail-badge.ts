@@ -11,11 +11,30 @@ export namespace CardDetailBadge {
       message: 'So, what do you think?',
       confirmText: 'Love You',
       confirmStyle: 'primary',
-      onConfirm: (tt) => { tt.closePopup(); },
+      onConfirm: (tt) => { console.log("LOVE"); tt.closePopup(); },
       cancelText: 'NOT',
-      onCancel: (tt) => { console.log("NOT"); }
+      onCancel: (tt) => { console.log("NOT"); tt.closePopup(); }
     });
   };
+
+  const whatsYourName = (t) => {
+    t.member('id', 'fullName', 'email')
+      .then((member) => {
+        console.log("DEBUG: member information", {member});
+        t.popup({
+          type: 'confirm',
+          title: 'What is your name?',
+          message: `Is your name: ${member.fullName}?`,
+          confirmText: 'Yes, it is',
+          confirmStyle: 'primary',
+          onConfirm: (tt) => { console.log("YES"); tt.closePopup(); },
+          cancelText: 'No, it is not',
+          onCancel: (tt) => { console.log("NO"); tt.closePopup(); }
+        });
+      });
+  };
+
+
 
   export const build = (t: any) => {
     const settingsService = new SettingsService();
@@ -44,8 +63,14 @@ export namespace CardDetailBadge {
             callback: AboutPage.showAboutCard 
           },
           {
-            title: 'Text',
-            text: 'Popup Test',
+            title: 'Test',
+            text: 'Popup Test 1',
+            color: 'lime',
+            callback: doYouLoveMe
+          },
+          {
+            title: 'Test',
+            text: 'Popup Test 2',
             color: 'lime',
             callback: doYouLoveMe
           }
