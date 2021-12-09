@@ -22,13 +22,19 @@ export class TimeService {
   public fetchCurrentTime(lat: number, long: number) {
     return this.config
       .then((config: ISettings) => {
+        if (!this.validateConfig(config)) {
+          console.error("power-up needs to be configured");
+          return null;
+        }
+
+
         //note new url
-        const url = this.buildUrl(config, "Time", "current", "coordinate")
+        const url = this.buildUrl(config, "api", "world-time", "coordinates")
           + `?latitude=${lat}&longitude=${long}`;
 
         const options: any = { 
           method: "GET",
-          headers: this.getHeaders()
+          headers: this.getHeaders(config)
         };
 
         return fetch(url, options)
@@ -57,11 +63,16 @@ export class TimeService {
   //#endregion
 
 
-  //#region >> BASIC HEADER <<
+  //#region >> BASICS <<
 
-  protected getHeaders() {
+  protected validateConfig(config: ISettings) {
+    return !!config.scope && !!config.base_url;
+  }
+
+  protected getHeaders(config: ISettings) {
     const headers = new Headers();
     headers.append("Accept", "application/json");
+    headers.append("x-hallpass-api", config.scope);
     return headers;
   }
 
