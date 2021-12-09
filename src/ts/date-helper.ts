@@ -38,4 +38,13 @@ export namespace DateHelper {
     return '';
   };
 
+  export const time = (d: Date) => {
+    return d.toTimeString();
+  }
+
+  export const dayOfWeek = (d: Date, short: boolean = false) => {
+    const dow = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const day = dow[d.getDay() % dow.length];
+    return short ? day.substr(0, 3) : day;
+  }
 }

@@ -1,19 +1,53 @@
+import { TimeService } from "./time.server";
 import { env, trello } from "./_common";
-
+import { DateHelper } from './date-helper';
 export namespace CardBadge {
 
   const processLocationCard = (card: any) => {
     if (card?.coordinates) {
       console.log("BADGE", {name: card.name, card});
-      let count:number = null;
+      let start:number = null;
+      let timestamp:number = null;
+      let time:Date = null;
+
       return {
         dynamic: () => {
-          console.log("BADGE", {name: card.name, count});
-          count = (count == null) ? 1000 : (count + 1);
+          if (time == null) {
+            const service = new TimeService();
+            const {latitude, longitude} = card.coordinates;
+            return service.fetchCurrentTime(latitude, longitude)
+              .then((result) => {
+                start = new Date().getTime();
+                timestamp = Date.parse(result.currentLocalTime);
+                console.log("CURRENT TIME", {name: card.name, start, timestamp, result});
+                
+                if (isNaN(timestamp)) {
+                  return {
+                    text: `invalid result`,
+                    icon: env.logo.white,
+                    color: 'red',
+                    refresh: 30
+                  };
+                }
+                //else
+                time = new Date(timestamp);
+                
+                return {
+                  text: `${DateHelper.dayOfWeek(time)}: ${DateHelper.time(time)}`,
+                  icon: env.logo.white,
+                  color: 'sky',
+                  refresh: 30
+                };
+              });
+          }
+          //else 
+          const delta = (new Date().getTime()) - start;
+          console.log("BADGE", {name: card.name, start, time, timestamp, delta});
+
           return {
-              text: `${count}: ${card.locationName}`,
+              text: `${delta}`,
               icon: env.logo.white,
-              color: 'sky',
+              color: 'lime',
               refresh: 30
           };
         }
