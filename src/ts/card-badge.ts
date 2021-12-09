@@ -13,10 +13,10 @@ export namespace CardBadge {
           return {
               text: `${count}: ${card.locationName}`,
               icon: env.logo.white,
-              color: 'sky'
-          }
-        },
-        refresh: 30
+              color: 'sky',
+              refresh: 30
+          };
+        }
       };
     }
     //else
