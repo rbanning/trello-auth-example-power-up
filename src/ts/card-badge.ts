@@ -18,7 +18,7 @@ export namespace CardBadge {
             return service.fetchCurrentTime(latitude, longitude)
               .then((result) => {
                 start = new Date().getTime();
-                timestamp = Date.parse(result.currentLocalTime);
+                timestamp = Date.parse(result.dateTime);
                 console.log("CURRENT TIME", {name: card.name, start, timestamp, result});
                 
                 if (isNaN(timestamp)) {

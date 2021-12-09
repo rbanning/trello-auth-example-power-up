@@ -22,7 +22,8 @@ export class TimeService {
   public fetchCurrentTime(lat: number, long: number) {
     return this.config
       .then((config: ISettings) => {
-        const url = this.buildUrl(config, "TimeZone", "coordinate")
+        //note new url
+        const url = this.buildUrl(config, "Time", "current", "coordinate")
           + `?latitude=${lat}&longitude=${long}`;
 
         const options: any = { 
