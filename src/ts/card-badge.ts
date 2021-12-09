@@ -17,6 +17,10 @@ export namespace CardBadge {
             const {latitude, longitude} = card.coordinates;
             return service.fetchCurrentTime(latitude, longitude)
               .then((result) => {
+                //check for error
+                if (!result) { return null; }
+
+
                 start = new Date().getTime();
                 timestamp = Date.parse(result.dateTime);
                 console.log("CURRENT TIME", {name: card.name, start, timestamp, result});

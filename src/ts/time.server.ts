@@ -29,7 +29,7 @@ export class TimeService {
 
 
         //note new url
-        const url = this.buildUrl(config, "world-time", "coordinates")
+        const url = this.buildUrl(config, "world-time", "coordinate")
           + `?latitude=${lat}&longitude=${long}`;
 
         const options: any = { 
