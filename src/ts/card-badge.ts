@@ -3,7 +3,7 @@ import { env, trello } from "./_common";
 import { DateHelper } from './date-helper';
 export namespace CardBadge {
 
-  const processLocationCard = (card: any) => {
+  const processLocationCard = (t: any, card: any) => {
     if (card?.coordinates) {
       console.log("BADGE", {name: card.name, card});
       let start:number = null;
@@ -13,7 +13,7 @@ export namespace CardBadge {
       return {
         dynamic: () => {
           if (time == null) {
-            const service = new TimeService();
+            const service = new TimeService(t);
             const {latitude, longitude} = card.coordinates;
             return service.fetchCurrentTime(latitude, longitude)
               .then((result) => {
@@ -65,7 +65,7 @@ export namespace CardBadge {
     return trello.Promise.all(actions)
       .then(([card]) => {
         return [
-          processLocationCard(card)
+          processLocationCard(t, card)
         ].filter(Boolean);
       });
   };
