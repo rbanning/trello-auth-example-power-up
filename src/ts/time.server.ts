@@ -29,7 +29,7 @@ export class TimeService {
 
 
         //note new url
-        const url = this.buildUrl(config, "api", "world-time", "coordinates")
+        const url = this.buildUrl(config, "world-time", "coordinates")
           + `?latitude=${lat}&longitude=${long}`;
 
         const options: any = { 
@@ -66,7 +66,7 @@ export class TimeService {
   //#region >> BASICS <<
 
   protected validateConfig(config: ISettings) {
-    return !!config.scope && !!config.base_url;
+    return !!config.scope && !!config.base_url && config.scope.split("-").length === 5;
   }
 
   protected getHeaders(config: ISettings) {
