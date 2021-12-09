@@ -1,12 +1,12 @@
-import { CustomFields } from "./custom-fields";
 import { env, trello } from "./_common";
 
 export namespace CardBadge {
 
   const processLocationCard = (card: any) => {
     if (card?.coordinates) {
+      console.log("BADGE", {name: card.name, card});
       return {
-        text: `loc: ${card.coordinates}`,
+        text: `${card.locationName}`,
         icon: env.logo.white,
         color: 'sky'
       };  
