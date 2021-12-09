@@ -1,7 +1,7 @@
 {
-  "name": "trello-base-power-up",
+  "name": "trello-current-time-power-up",
   "version": "1.0.0",
-  "description": "Basic Trello Power Up to be used as starting point for other power ups",
+  "description": "Trello Power Up that shows the current time for a card's location",
   "main": "index.js",
   "repository": "https://github.com/rbanning/trello-base-power-up.git",
   "author": "rbanning <rob@myhallpass.com>",

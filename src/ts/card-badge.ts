@@ -3,13 +3,12 @@ import { env, trello } from "./_common";
 
 export namespace CardBadge {
 
-  const processTestCard = (card: any, customFields: CustomFields.ICustomFields[]) => {
-    if (customFields?.length > 0) {
-      const existing = customFields.filter(m => m.raw).length;
+  const processLocationCard = (card: any) => {
+    if (card?.coordinates) {
       return {
-        text: `${card.shortLink} ${existing}/${customFields.length}`,
+        text: `loc: ${card.coordinates}`,
         icon: env.logo.white,
-        color: existing === customFields.length ? 'green' : 'orange'
+        color: 'sky'
       };  
     }
     //else
@@ -19,14 +18,12 @@ export namespace CardBadge {
 
   export const build = (t, opts) => {
     const actions = [
-      t.board('customFields'),
-      t.card('id', 'name', 'shortLink', 'customFieldItems')
+      t.card('id', 'name', 'shortLink', 'coordinates', 'address', 'locationName')
     ];
     return trello.Promise.all(actions)
-      .then(([board, card]) => {
-        const customFields = CustomFields.build(board.customFields, card.customFieldItems);
+      .then(([card]) => {
         return [
-          processTestCard(card, customFields)
+          processLocationCard(card)
         ].filter(Boolean);
       });
   };
