@@ -40,7 +40,7 @@ export class TimeService {
         .then((storage: ITimeModel) => {
           console.log("Card and Storage", {card, storage});
 
-          if (typeof(storage.isValid) === 'function' && storage.isValid()) {
+          if (typeof(storage?.isValid) === 'function' && storage.isValid()) {
             return storage;
           }
           //else (need to get the current time)
