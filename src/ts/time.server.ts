@@ -22,6 +22,8 @@ export class TimeService {
     this.storage = new StorageService();
   }
 
+  //#region >> Current Time based on location <<
+
   public getCardLocationTime(t: any = null) {
     t = t ?? this.t;
     const actions = [
@@ -30,6 +32,7 @@ export class TimeService {
     ];
     return trello.Promise.all(actions)
       .then(([card, storage]: [any, ITimeModel]) => {
+        console.log("Card and Storage", {card, storage});
         if (card?.coordinates) {
           const {latitude, longitude} = card.coordinates;
           return this.fetchCurrentTimeFromApi(latitude, longitude);
@@ -39,34 +42,8 @@ export class TimeService {
       });
   }
 
-  //#region >> Current Time based on location <<
-  public getCurrentTime(latitude: number, longitude: number): Promise<ITimeModel> {
-    const actions = [
-      this.storage.get<ITimeModel>(this.t, 'card', this.STORAGE_KEY),
-      this.fetchCurrentTimeFromApi(latitude, longitude)
-    ];
 
-    return trello.Promise.all(actions)
-      .then(([storage, timeModel]: [ITimeModel, ITimeModel]) => {
-        console.log("ACTIONS COMPLETE", {storage, timeModel});
-        return timeModel;
-      });
-
-    // return new trello.Promise((resolve, reject) => {
-    //   this.storage.get<ITimeModel>(this.t, 'card', this.STORAGE_KEY)
-    //     .then(result => {
-    //       if (result?.coordinate?.latitude === latitude && result?.coordinate?.longitude === longitude) {
-    //         resolve(result);
-    //       } else {
-    //         this.fetchCurrentTimeFromApi(latitude, longitude)
-    //           .then(model => {
-    //             resolve(model);
-    //           });
-    //       }  
-    //     });
-    // });
-  }
-
+  
   public fetchCurrentTimeFromApi(latitude: number, longitude: number): Promise<ITimeModel> {
     return this.config
       .then((config: ISettings) => {

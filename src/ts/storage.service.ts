@@ -12,19 +12,27 @@ export class StorageService {
   constructor(public visibility: StorageVisibility = 'shared') {}
 
   get<T>(t: any, scope: StorageScope, key: string, defaultValue: T = null): Promise<T> {
-    return new trello.Promise((resolve, reject) => {
-      resolve(defaultValue);
-    });
-
-    // return t.get(scope, this.visibility, key)
-    //   .then((data: any) => {
-    //     console.log("Storage", {scope, key, data});
-    //     return defaultValue;  //todo: this is just for testing.
-    //   });
+    return t.get(scope, this.visibility, key)
+      .then((data: any) => {
+        console.log("Storage", {scope, key, data});
+        if ("_v" in data) {
+          if (!data.exp || data.exp > Date.now()) {
+            return data._v;
+          }
+        }
+        //else
+        return defaultValue;
+      });
   }
 
-  set(t: any, scope: StorageScope, key: string, value: any): Promise<any> {
-    return null;
-    //return t.set(scope, this.visibility, key, value);
+  set(t: any, scope: StorageScope, key: string, value: any, expiresIn: number = 0 /* minutes */): Promise<any> {
+    //wrap the value in IStorageItem
+    const item: IStorageItem = {
+      _v: value
+    }
+    if (expiresIn !== 0) {
+      item.exp = Date.now() + (expiresIn * 60 * 1000) //convert to milliseconds
+    }
+    return t.set(scope, this.visibility, key, item);
   }
 }
