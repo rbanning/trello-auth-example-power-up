@@ -4,9 +4,9 @@ import { ITimeModel, TimeModel } from "./time.model";
 import { trello } from "./_common";
 
 
-
+export const STORAGE_KEY = "time";
 export class TimeService {
-  protected readonly STORAGE_KEY = "time";
+  public readonly STORAGE_KEY = STORAGE_KEY;
   protected readonly URL_DELIM = '/';
     
   //cache the settings information needed to create requests
@@ -59,35 +59,39 @@ export class TimeService {
           return null;
         }
 
-
-        //note new url
-        const url = this.buildUrl(config, "world-time", "coordinate")
+        return new trello.Promise((resolve, reject) => {
+          //note new url
+          const url = this.buildUrl(config, "world-time", "coordinate")
           + `?latitude=${latitude}&longitude=${longitude}`;
 
-        const options: any = { 
+          const options: any = { 
           method: "GET",
           headers: this.getHeaders(config)
-        };
+          };
 
-        return fetch(url, options)
-        .then((resp: Response) => {
-          if (resp.ok) {
-            const json = resp.json();
-            return json;
-          }
-          //else
-          console.warn(`HTTP ERROR - ${resp.status} (${resp.statusText})`, resp);
-          throw new Error("Unable to complete request");
-        })
-        .then((resp: any) => {
-          var model = new TimeModel({
-            ...resp,
-            coordinate: { latitude, longitude}
-          });
-          console.log("BACK FROM API", {resp, model});
-          this.storage.set(this.t, 'card', this.STORAGE_KEY, model);
-          return model;
+          fetch(url, options)
+            .then((resp: Response) => {
+              if (resp.ok) {
+                const json = resp.json();
+                return json;
+              }
+              //else
+              console.warn(`HTTP ERROR - ${resp.status} (${resp.statusText})`, resp);
+              throw new Error("Unable to complete request");
+            })
+            .then((resp: any) => {
+              var model = new TimeModel({
+                ...resp,
+                coordinate: { latitude, longitude}
+              });
+              console.log("BACK FROM API", {resp, model});
+              this.storage.set(this.t, 'card', this.STORAGE_KEY, model);
+              resolve(model);
+            })
+            .catch(reject);
         });
+
+        
       });
   }  
 

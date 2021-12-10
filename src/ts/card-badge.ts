@@ -1,6 +1,7 @@
-import { TimeService } from "./time.server";
+import { STORAGE_KEY, TimeService } from "./time.server";
 import { env, trello } from "./_common";
 import { ITimeModel } from "./time.model";
+import { StorageService } from "./storage.service";
 export namespace CardBadge {
 
   const processLocationCard = (t: any, card: any) => {
@@ -66,15 +67,27 @@ export namespace CardBadge {
     return null;
   };
 
+  const debugLocationCard = (t: any, card: any) => {
+    return new trello.Promise((resolve, reject) => {
+      return {
+        text: `time`,
+        icon: env.logo.white,
+        color: 'sky',
+      };
+    });
+  }
 
   export const build = (t, opts) => {
+    const storage = new StorageService();
     const actions = [
-      t.card('id', 'name', 'shortLink', 'coordinates', 'address', 'locationName')
+      t.card('id', 'name', 'shortLink', 'coordinates', 'address', 'locationName'),
+      t.get('card', storage.visibility, STORAGE_KEY)
     ];
     return trello.Promise.all(actions)
-      .then(([card]) => {
+      .then(([card, storage]) => {
+        console.log("PROMISES FINISHED", {card, storage});
         return [
-          processLocationCard(t, card)
+          debugLocationCard(t, card)
         ].filter(Boolean);
       });
   };
