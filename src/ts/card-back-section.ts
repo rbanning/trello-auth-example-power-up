@@ -11,7 +11,7 @@ export namespace CardBackSection {
         //only return a value if the card has coordinates
         return card?.coordinates ? {
           title: `Current Time`,
-          icon: env.logo.color,
+          icon: env.logo.gray,
           content: {
             type: 'iframe',
             url: t.signUrl('./card-back-section.html'),

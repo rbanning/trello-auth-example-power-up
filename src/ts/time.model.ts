@@ -6,26 +6,30 @@ export interface ICoordinate {
 }
 
 export interface ITimeModel {
-  label: string;
   coordinates: ICoordinate;
   timezone: string;
   
+  //the time keepers
+  _start: number;
+  _initial: number;
+
   readonly raw: any;
 
   readonly dayOfTheWeek: string;
   readonly time: string;
   readonly value: Date;
-  
+  readonly valid: boolean;
+
   setInitialTime(d: Date);
   isValid(): boolean;
 }
 
 export class TimeModel implements ITimeModel {
-  private _start: number;   //timestamp used to update the value of the model
-  private _initial: number; //the initial value of the time model in milliseconds
+  //these need to be public so they are serialized
+  public _start: number;   //timestamp used to update the value of the model
+  public _initial: number; //the initial value of the time model in milliseconds
   readonly raw: any;
 
-  label: string;
   coordinates: ICoordinate;
   timezone: string;
 
@@ -48,10 +52,13 @@ export class TimeModel implements ITimeModel {
     return null;
   }
 
+  get valid() {
+    return this.isValid();
+  }
+
   constructor(obj: any = null) {
     this.raw = obj;
     if (obj) {
-      this.label = obj.label ?? obj.name;
       this.coordinates = obj.coordinates ?? { latitude: obj.latitude, longitude: obj.longitude };
       this.timezone = obj.timezone ?? obj.timeZone;
 
