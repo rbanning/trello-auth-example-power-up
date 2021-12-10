@@ -30,11 +30,11 @@ export class TimeService {
 
   //#region >> Current Time based on location <<
 
-  public getCardLocationTime(t: any = null) {
-    t = t ?? this.t;
+  public getCardLocationTime(card: any): Promise<ITimeModel> {
+    if (!card?.coordinates) { return trello.Promise.resolve(null); }
+
     const actions = [
-      t.card('id', 'name', 'shortLink', 'coordinates', 'address', 'locationName'),
-      this.storage.get<ITimeModel>(t, 'card', this.STORAGE_KEY)
+      this.storage.get<ITimeModel>(this.t, card.id, this.STORAGE_KEY)
     ];
     return new trello.Promise((resolve, reject) => {
       let timeModel: ITimeModel = null;
@@ -55,7 +55,7 @@ export class TimeService {
         })
         .then((model: ITimeModel) => {
           timeModel = model;
-          return this.storage.set(t, cardId, this.STORAGE_KEY, model, this.CACHE_FOR);
+          return this.storage.set(this.t, cardId, this.STORAGE_KEY, model, this.CACHE_FOR);
         })
         .then(_ => {
           resolve(timeModel);

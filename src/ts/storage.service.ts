@@ -11,7 +11,7 @@ export class StorageService {
 
   constructor(public visibility: StorageVisibility = 'shared') {}
 
-  get<T>(t: any, scope: StorageScope, key: string, defaultValue: T = null): Promise<T> {
+  get<T>(t: any, scope: StorageScope | string, key: string, defaultValue: T = null): Promise<T> {
     return t.get(scope, this.visibility, key)
       .then((data: any) => {
         console.log("Storage", {scope, key, data});
