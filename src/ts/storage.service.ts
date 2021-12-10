@@ -33,6 +33,7 @@ export class StorageService {
     if (expiresIn !== 0) {
       item.exp = Date.now() + (expiresIn * 60 * 1000) //convert to milliseconds
     }
+    console.log("About to set storage item", {value, item});
     return t.set(scope, this.visibility, key, item);
   }
 }
