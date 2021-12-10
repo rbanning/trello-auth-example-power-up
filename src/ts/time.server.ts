@@ -1,26 +1,41 @@
 import { ISettings, SettingsService } from "./settings.service";
+import { StorageService } from "./storage.service";
 import { ITimeModel, TimeModel } from "./time.model";
 import { trello } from "./_common";
 
 
 
 export class TimeService {
+  protected readonly STORAGE_KEY = "time";
   protected readonly URL_DELIM = '/';
     
   //cache the settings information needed to create requests
   private _config: Promise<ISettings>;
   public get config() { return this._config; }
 
-  constructor(t: any = null) { 
+  private storage: StorageService;
+
+  constructor(private t: any = null) { 
     const settingsService = new SettingsService();
     t = t || trello.t();    
     this._config = settingsService.get(t);
+    this.storage = new StorageService();
   }
 
 
   //#region >> Current Time based on location <<
+  public getCurrentTime(latitude: number, longitude: number): Promise<ITimeModel> {
+    return this.storage.get<ITimeModel>(this.t, 'card', this.STORAGE_KEY)
+      .then(result => {
+        if (result?.coordinate?.latitude === latitude && result?.coordinate?.longitude === longitude) {
+          return result;
+        } else {
+          return this.fetchCurrentTimeFromApi(latitude, longitude);
+        }        
+      });
+  }
 
-  public fetchCurrentTime(latitude: number, longitude: number): Promise<ITimeModel> {
+  public fetchCurrentTimeFromApi(latitude: number, longitude: number): Promise<ITimeModel> {
     return this.config
       .then((config: ISettings) => {
         if (!this.validateConfig(config)) {
@@ -49,10 +64,12 @@ export class TimeService {
           throw new Error("Unable to complete request");
         })
         .then((resp: any) => {
-          return new TimeModel({
+          var model = new TimeModel({
             ...resp,
             coordinate: { latitude, longitude}
           });
+          this.storage.set(this.t, 'card', this.STORAGE_KEY, model);
+          return model;
         });
       });
   }  

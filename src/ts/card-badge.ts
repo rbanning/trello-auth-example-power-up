@@ -14,7 +14,7 @@ export namespace CardBadge {
           if (timeModel == null) {
             const service = new TimeService(t);
             const {latitude, longitude} = card.coordinates;
-            return service.fetchCurrentTime(latitude, longitude)
+            return service.fetchCurrentTimeFromApi(latitude, longitude)
               .then((result: ITimeModel) => {
                 //check for error
                 if (!result) { return null; }
