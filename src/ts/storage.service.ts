@@ -36,7 +36,8 @@ export class StorageService {
     console.log("About to set storage item", {key, value, item});
     return new trello.Promise((resolve, reject) => {
       resolve(item);
-
+      //todo: enable actually saving to the storage
+      
       // t.set(scope, this.visibility, key, item)
       //   .then(_ => {
       //     console.log("Done setting storage item", {key, _});

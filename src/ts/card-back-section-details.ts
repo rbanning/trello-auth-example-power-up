@@ -24,6 +24,7 @@ const showError = (message: string) => {
   if (content) {
     content.innerHTML = `<p class="error"><strong>Oops - </strong><br/>${message}</p>`
   }
+  loading.hide();
 }
 
 t.render(() => {
@@ -39,6 +40,7 @@ t.render(() => {
     })
     .then((model: ITimeModel) => {
       if (!model) {
+        console.warn("Problem getting the current time", {card, model});
         showError("Could not located the current time");
         return null;
       }

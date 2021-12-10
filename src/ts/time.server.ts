@@ -33,29 +33,24 @@ export class TimeService {
   public getCardLocationTime(card: any): Promise<ITimeModel> {
     if (!card?.coordinates) { return trello.Promise.resolve(null); }
 
-    const actions = [
-      this.storage.get<ITimeModel>(this.t, card.id, this.STORAGE_KEY)
-    ];
     return new trello.Promise((resolve, reject) => {
       let timeModel: ITimeModel = null;
-      let cardId: string = null;
 
-      trello.Promise.all(actions)
-        .then(([card, storage]: [any, ITimeModel]) => {
+      this.storage.get<ITimeModel>(this.t, card.id, this.STORAGE_KEY)
+        .then((storage: ITimeModel) => {
           console.log("Card and Storage", {card, storage});
-          cardId = card.id;
 
-          if (card?.coordinates) {
-            const {latitude, longitude} = card.coordinates;
-            return this.fetchCurrentTimeFromApi(latitude, longitude)
-              
+          if (typeof(storage.isValid) === 'function' && storage.isValid()) {
+            return storage;
           }
-          //else
-          return trello.Promise.resolve(null);
+          //else (need to get the current time)
+          const {latitude, longitude} = card.coordinates;
+          return this.fetchCurrentTimeFromApi(latitude, longitude);
         })
         .then((model: ITimeModel) => {
           timeModel = model;
-          return this.storage.set(this.t, cardId, this.STORAGE_KEY, model, this.CACHE_FOR);
+          console.log("DONE GETTING TIME", {card, model});
+          return this.storage.set(this.t, card.id, this.STORAGE_KEY, model, this.CACHE_FOR);
         })
         .then(_ => {
           resolve(timeModel);
