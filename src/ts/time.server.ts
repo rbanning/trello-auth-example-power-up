@@ -88,8 +88,11 @@ export class TimeService {
                 coordinate: { latitude, longitude}
               });
               console.log("BACK FROM API", {resp, model});
-              this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR);
-              resolve(model);
+              this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR)
+                .then(_ => {
+                  console.log("Done setting storage", {_});
+                  resolve(model);
+                });
             })
             .catch(reject);
         });
