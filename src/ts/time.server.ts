@@ -25,14 +25,19 @@ export class TimeService {
 
   //#region >> Current Time based on location <<
   public getCurrentTime(latitude: number, longitude: number): Promise<ITimeModel> {
-    return this.storage.get<ITimeModel>(this.t, 'card', this.STORAGE_KEY)
-      .then(result => {
-        if (result?.coordinate?.latitude === latitude && result?.coordinate?.longitude === longitude) {
-          return result;
-        } else {
-          return this.fetchCurrentTimeFromApi(latitude, longitude);
-        }        
-      });
+    return new trello.Promise((resolve, reject) => {
+      this.storage.get<ITimeModel>(this.t, 'card', this.STORAGE_KEY)
+        .then(result => {
+          if (result?.coordinate?.latitude === latitude && result?.coordinate?.longitude === longitude) {
+            resolve(result);
+          } else {
+            this.fetchCurrentTimeFromApi(latitude, longitude)
+              .then(model => {
+                resolve(model);
+              });
+          }  
+        });
+    });
   }
 
   public fetchCurrentTimeFromApi(latitude: number, longitude: number): Promise<ITimeModel> {

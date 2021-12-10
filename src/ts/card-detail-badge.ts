@@ -46,6 +46,9 @@ export namespace CardDetailBadge {
       ]) 
       .then(([settings, card]) => {
 
+        //DEBUG:
+        return null;
+        
         //VALIDATION
         if (!settings) {
           console.warn("Unable to retrieve settings", {settings});

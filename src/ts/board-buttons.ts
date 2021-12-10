@@ -55,6 +55,9 @@ export namespace BoardButtons {
       ]) 
       .then(([settings, members]) => {
 
+        //DEBUG:
+        return null;
+
         //VALIDATION
         if (!settings) {
           console.warn("Unable to retrieve settings", {settings});
