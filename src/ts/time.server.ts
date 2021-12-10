@@ -1,4 +1,5 @@
 import { ISettings, SettingsService } from "./settings.service";
+import { ITimeModel, TimeModel } from "./time.model";
 import { trello } from "./_common";
 
 
@@ -19,7 +20,7 @@ export class TimeService {
 
   //#region >> Current Time based on location <<
 
-  public fetchCurrentTime(lat: number, long: number) {
+  public fetchCurrentTime(latitude: number, longitude: number): Promise<ITimeModel> {
     return this.config
       .then((config: ISettings) => {
         if (!this.validateConfig(config)) {
@@ -30,7 +31,7 @@ export class TimeService {
 
         //note new url
         const url = this.buildUrl(config, "world-time", "coordinate")
-          + `?latitude=${lat}&longitude=${long}`;
+          + `?latitude=${latitude}&longitude=${longitude}`;
 
         const options: any = { 
           method: "GET",
@@ -46,8 +47,13 @@ export class TimeService {
           //else
           console.warn(`HTTP ERROR - ${resp.status} (${resp.statusText})`, resp);
           throw new Error("Unable to complete request");
+        })
+        .then((resp: any) => {
+          return new TimeModel({
+            ...resp,
+            coordinate: { latitude, longitude}
+          });
         });
-  
       });
   }  
 

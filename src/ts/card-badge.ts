@@ -1,43 +1,31 @@
 import { TimeService } from "./time.server";
 import { env, trello } from "./_common";
 import { DateHelper } from './date-helper';
+import { ITimeModel } from "./time.model";
 export namespace CardBadge {
 
   const processLocationCard = (t: any, card: any) => {
     if (card?.coordinates) {
       console.log("BADGE", {name: card.name, card});
-      let start:number = null;
-      let timestamp:number = null;
-      let time:Date = null;
+      let timeModel:ITimeModel = null;
 
       return {
         dynamic: () => {
-          if (time == null) {
+          if (timeModel == null) {
             const service = new TimeService(t);
             const {latitude, longitude} = card.coordinates;
             return service.fetchCurrentTime(latitude, longitude)
-              .then((result) => {
+              .then((result: ITimeModel) => {
                 //check for error
                 if (!result) { return null; }
 
-
-                start = new Date().getTime();
-                timestamp = Date.parse(result.dateTime);
-                console.log("CURRENT TIME", {name: card.name, start, timestamp, result});
-                
-                if (isNaN(timestamp)) {
-                  return {
-                    text: `invalid result`,
-                    icon: env.logo.white,
-                    color: 'red',
-                    refresh: 30
-                  };
-                }
-                //else
-                time = new Date(timestamp);
+                //else - set the label for the model
+                timeModel = result;
+                timeModel.label = card.locationName ?? card.address ?? card.name;
+                console.log("CURRENT TIME", {name: card.name, timeModel});
                 
                 return {
-                  text: `${DateHelper.dayOfWeek(time)}: ${DateHelper.time(time)}`,
+                  text: `${timeModel.dayOfTheWeek}: ${timeModel.time}`,
                   icon: env.logo.white,
                   color: 'sky',
                   refresh: 30
@@ -45,14 +33,13 @@ export namespace CardBadge {
               });
           }
           //else 
-          const delta = (new Date().getTime()) - start;
-          console.log("BADGE", {name: card.name, start, time, timestamp, delta});
+          console.log("BADGE UPDATE", {name: card.name, timeModel});
 
           return {
-              text: `${delta}`,
-              icon: env.logo.white,
-              color: 'lime',
-              refresh: 30
+            text: `${timeModel.dayOfTheWeek}: ${timeModel.time}`,
+            icon: env.logo.white,
+            color: 'lime',
+            refresh: 30
           };
         }
       };
