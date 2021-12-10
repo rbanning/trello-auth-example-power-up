@@ -14,7 +14,7 @@ export class StorageService {
   get<T>(t: any, scope: StorageScope | string, key: string, defaultValue: T = null): Promise<T> {
     return t.get(scope, this.visibility, key)
       .then((data: any) => {
-        console.log("Storage", {scope, key, data});
+        console.log("Storage", {scope, key, data, check1: "_v" in data});
         if ("_v" in data) {
           if (!data.exp || data.exp > Date.now()) {
             return data._v;
@@ -35,15 +35,12 @@ export class StorageService {
     }
     console.log("About to set storage item", {key, value, item});
     return new trello.Promise((resolve, reject) => {
-      resolve(item);
-      //todo: enable actually saving to the storage
-      
-      // t.set(scope, this.visibility, key, item)
-      //   .then(_ => {
-      //     console.log("Done setting storage item", {key, _});
-      //     resolve(item);
-      //   })
-      //   .catch(reject);
+      t.set(scope, this.visibility, key, item)
+        .then(_ => {
+          console.log("Done setting storage item", {key, _});
+          resolve(item);
+        })
+        .catch(reject);
 
     })
   }
