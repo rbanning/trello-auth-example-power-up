@@ -32,35 +32,42 @@ t.render(() => {
   const timeService = new TimeService(t);
   let card: any = null;
 
-  //START BY GETTING THE CARD'S INFO
-  t.card('id', 'name', 'coordinates', 'address', 'locationName')
-    .then((_card: any) => {
-      card = _card; //save
-      return timeService.getCardLocationTime(card);
-    })
-    .then((model: ITimeModel) => {
-      if (!model) {
-        console.warn("Problem getting the current time", {card, model});
-        showError("Could not located the current time");
-        return null;
-      }
+  try {
+    t.card('id', 'name', 'coordinates', 'address', 'locationName')
+      .then((_card: any) => {
+        card = _card; //save
+        return timeService.getCardLocationTime(card);
+      })
+      .then((model: ITimeModel) => {
+        if (!model) {
+          console.warn("Problem getting the current time", {card, model});
+          showError("Could not located the current time");
+          return null;
+        }
 
-      //else .. build the page
-      const title = getTitleElement();
-      const subtitle = getSubTitleElement();
-      const content = getContentElement();
+        //else .. build the page
+        const title = getTitleElement();
+        const subtitle = getSubTitleElement();
+        const content = getContentElement();
 
-      if (title) {
-        title.innerHTML = card.locationName;
-      }
-      if (subtitle) {
-        subtitle.innerHTML = model.timezone;
-      }
-      if (content) {
-        content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`
-      }
-       
-      loading.hide();
-      return t.sizeTo('#page');
-    });
+        if (title) {
+          title.innerHTML = card.locationName;
+        }
+        if (subtitle) {
+          subtitle.innerHTML = model.timezone;
+        }
+        if (content) {
+          content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`
+        }
+        
+        loading.hide();
+        return t.sizeTo('#page');
+      });    
+  } catch (error) {
+    console.error("Unhandled error building back section", {card, error});
+    const message: string = typeof(error) === 'string' ? error 
+      : "Could not get time";
+    showError(message);
+  }
+
 });
