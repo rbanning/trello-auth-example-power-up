@@ -68,11 +68,14 @@ export namespace CardBadge {
   };
 
   const debugLocationCard = (t: any, card: any) => {
-    return {
+    const badge = {
       text: `time`,
       icon: env.logo.white,
       color: 'sky',
     };
+    return new Promise((resolve, reject) => {
+      resolve(badge);
+    });
   }
 
   export const build = (t, opts) => {
