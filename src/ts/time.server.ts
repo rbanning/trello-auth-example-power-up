@@ -8,7 +8,8 @@ export const STORAGE_KEY = "time";
 export class TimeService {
   public readonly STORAGE_KEY = STORAGE_KEY;
   protected readonly URL_DELIM = '/';
-    
+  protected readonly CACHE_FOR = 60;  //cache the time for 60 minutes
+
   //cache the settings information needed to create requests
   private _config: Promise<ISettings>;
   public get config() { return this._config; }
@@ -78,7 +79,7 @@ export class TimeService {
                 coordinate: { latitude, longitude}
               });
               console.log("BACK FROM API", {resp, model});
-              this.storage.set(this.t, 'card', this.STORAGE_KEY, model);
+              this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR);
               resolve(model);
             })
             .catch(reject);
