@@ -23,6 +23,8 @@ export namespace CardBadge {
         return [
           formatLocationTime(timeModel)
         ].filter(Boolean);
-      });
+      }).catch(err => {
+        console.warn("REJECTED PROMISE", {err});
+      })
   };
 }

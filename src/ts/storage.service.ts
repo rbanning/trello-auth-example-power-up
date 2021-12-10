@@ -35,12 +35,14 @@ export class StorageService {
     }
     console.log("About to set storage item", {key, value, item});
     return new trello.Promise((resolve, reject) => {
-      t.set(scope, this.visibility, key, item)
-        .then(_ => {
-          console.log("Done setting storage item", {key, _});
-          resolve(item);
-        })
-        .catch(reject);
+      resolve(item);
+
+      // t.set(scope, this.visibility, key, item)
+      //   .then(_ => {
+      //     console.log("Done setting storage item", {key, _});
+      //     resolve(item);
+      //   })
+      //   .catch(reject);
 
     })
   }
