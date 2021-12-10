@@ -36,16 +36,33 @@ export class TimeService {
       t.card('id', 'name', 'shortLink', 'coordinates', 'address', 'locationName'),
       this.storage.get<ITimeModel>(t, 'card', this.STORAGE_KEY)
     ];
-    return trello.Promise.all(actions)
-      .then(([card, storage]: [any, ITimeModel]) => {
-        console.log("Card and Storage", {card, storage});
-        if (card?.coordinates) {
-          const {latitude, longitude} = card.coordinates;
-          return this.fetchCurrentTimeFromApi(latitude, longitude);
-        }
-        //else
-        return trello.Promise.resolve(null);
-      });
+    return new trello.Promise((resolve, reject) => {
+      let timeModel: ITimeModel = null;
+      let cardId: string = null;
+
+      trello.Promise.all(actions)
+        .then(([card, storage]: [any, ITimeModel]) => {
+          console.log("Card and Storage", {card, storage});
+          cardId = card.id;
+
+          if (card?.coordinates) {
+            const {latitude, longitude} = card.coordinates;
+            return this.fetchCurrentTimeFromApi(latitude, longitude)
+              
+          }
+          //else
+          return trello.Promise.resolve(null);
+        })
+        .then((model: ITimeModel) => {
+          timeModel = model;
+          return this.storage.set(t, cardId, this.STORAGE_KEY, model, this.CACHE_FOR);
+        })
+        .then(_ => {
+          resolve(timeModel);
+        })
+        .catch(reject);
+    })
+    return 
   }
 
 
@@ -90,12 +107,8 @@ export class TimeService {
                 coordinate: { latitude, longitude}
               });
               console.log("BACK FROM API", {resp, model});
-              return this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR);
-            })
-            .then(_ => {
-              console.log("Back from setting storage", {_});
               resolve(model);
-            })        
+            })
             .catch(reject);
         });
 

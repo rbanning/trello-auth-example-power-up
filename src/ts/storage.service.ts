@@ -25,7 +25,7 @@ export class StorageService {
       });
   }
 
-  set(t: any, scope: StorageScope, key: string, value: any, expiresIn: number = 0 /* minutes */): Promise<IStorageItem> {
+  set(t: any, scope: StorageScope | string, key: string, value: any, expiresIn: number = 0 /* minutes */): Promise<IStorageItem> {
     //wrap the value in IStorageItem
     const item: IStorageItem = {
       _v: value
