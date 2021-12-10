@@ -22,6 +22,22 @@ export class TimeService {
     this.storage = new StorageService();
   }
 
+  public getCardLocationTime(t: any = null) {
+    t = t ?? this.t;
+    const actions = [
+      t.card('id', 'name', 'shortLink', 'coordinates', 'address', 'locationName'),
+      this.storage.get<ITimeModel>(t, 'card', this.STORAGE_KEY)
+    ];
+    return trello.Promise.all(actions)
+      .then(([card, storage]: [any, ITimeModel]) => {
+        if (card?.coordinates) {
+          const {latitude, longitude} = card.coordinates;
+          return this.fetchCurrentTimeFromApi(latitude, longitude);
+        }
+        //else
+        return trello.Promise.resolve(null);
+      });
+  }
 
   //#region >> Current Time based on location <<
   public getCurrentTime(latitude: number, longitude: number): Promise<ITimeModel> {
