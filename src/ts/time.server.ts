@@ -3,6 +3,11 @@ import { StorageService } from "./storage.service";
 import { ITimeModel, TimeModel } from "./time.model";
 import { trello } from "./_common";
 
+//prevent too many API calls
+export const REQUEST_LIMIT = 10;
+export const REQUEST_WINDOW = 10 * 60 * 1000; //milliseconds before new window opens
+export const REQUEST_WATCHER = { start: 0, count: 0 };
+
 
 export const STORAGE_KEY = "time";
 export class TimeService {
@@ -50,7 +55,11 @@ export class TimeService {
       .then((config: ISettings) => {
         if (!this.validateConfig(config)) {
           console.error("power-up needs to be configured");
-          return null;
+          return trello.Promise.reject("not configured");
+        }
+
+        if (!this.OkToRunRequest()) {
+          return trello.Promise.reject("api limit - throttling");
         }
 
         return new trello.Promise((resolve, reject) => {
@@ -89,6 +98,34 @@ export class TimeService {
       });
   }  
 
+  //#endregion
+
+
+  //#region >> REQUEST THROTTLING <<
+
+  protected OkToRunRequest() {
+    const now = Date.now();
+
+    if (REQUEST_WATCHER.start + REQUEST_WINDOW >  now) {
+      REQUEST_WATCHER.count++;
+      return REQUEST_WATCHER.count <= REQUEST_LIMIT;
+    } else {
+      //reset watcher
+      REQUEST_WATCHER.start = now;
+      REQUEST_WATCHER.count = 1;
+      return true;
+    }
+
+  }
+
+  
+
+  //#endregion
+
+
+  //#region >> BASICS <<
+
+  
   protected buildUrl(settingsOrBaseUrl: ISettings | string, ...params: string[]): string {
     let url = typeof(settingsOrBaseUrl) === 'string' ? settingsOrBaseUrl : settingsOrBaseUrl.base_url;
     if (!url.endsWith(this.URL_DELIM)) { url += this.URL_DELIM; }
@@ -98,10 +135,6 @@ export class TimeService {
     return url;
   }
 
-  //#endregion
-
-
-  //#region >> BASICS <<
 
   protected validateConfig(config: ISettings) {
     return !!config.scope && !!config.base_url && config.scope.split("-").length === 5;
