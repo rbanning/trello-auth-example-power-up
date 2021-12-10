@@ -72,6 +72,8 @@ export class TimeService {
           headers: this.getHeaders(config)
           };
 
+          let model: ITimeModel = null;
+
           fetch(url, options)
             .then((resp: Response) => {
               if (resp.ok) {
@@ -83,17 +85,17 @@ export class TimeService {
               throw new Error("Unable to complete request");
             })
             .then((resp: any) => {
-              var model = new TimeModel({
+              model = new TimeModel({
                 ...resp,
                 coordinate: { latitude, longitude}
               });
               console.log("BACK FROM API", {resp, model});
-              this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR)
-                .then(_ => {
-                  console.log("Done setting storage", {_});
-                  resolve(model);
-                });
+              return this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR);
             })
+            .then(_ => {
+              console.log("Back from setting storage", {_});
+              resolve(model);
+            })        
             .catch(reject);
         });
 

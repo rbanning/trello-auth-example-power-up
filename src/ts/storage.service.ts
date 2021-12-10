@@ -25,7 +25,7 @@ export class StorageService {
       });
   }
 
-  set(t: any, scope: StorageScope, key: string, value: any, expiresIn: number = 0 /* minutes */): Promise<any> {
+  set(t: any, scope: StorageScope, key: string, value: any, expiresIn: number = 0 /* minutes */): Promise<IStorageItem> {
     //wrap the value in IStorageItem
     const item: IStorageItem = {
       _v: value
@@ -33,7 +33,15 @@ export class StorageService {
     if (expiresIn !== 0) {
       item.exp = Date.now() + (expiresIn * 60 * 1000) //convert to milliseconds
     }
-    console.log("About to set storage item", {value, item});
-    return t.set(scope, this.visibility, key, item);
+    console.log("About to set storage item", {key, value, item});
+    return new trello.Promise((resolve, reject) => {
+      t.set(scope, this.visibility, key, item)
+        .then(_ => {
+          console.log("Done setting storage item", {key, _});
+          resolve(item);
+        })
+        .catch(reject);
+
+    })
   }
 }
