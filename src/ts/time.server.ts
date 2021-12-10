@@ -44,7 +44,7 @@ export class TimeService {
           //verify that this is a valid ITimeModel instance
           if (typeof(storage?.isValid) === 'function' && storage.isValid()) {
             //verify that the coordinates are correct
-            if (storage.coordinates?.latitude === latitude && storage.coordinates.longitude === longitude) {
+            if (storage.coordinates?.latitude === latitude && storage.coordinates?.longitude === longitude) {
               console.log("using cached TimeModel");
               return storage;
             }
@@ -85,8 +85,8 @@ export class TimeService {
           + `?latitude=${latitude}&longitude=${longitude}`;
 
           const options: any = { 
-          method: "GET",
-          headers: this.getHeaders(config)
+            method: "GET",
+            headers: this.getHeaders(config)
           };
 
           let model: ITimeModel = null;
@@ -104,7 +104,7 @@ export class TimeService {
             .then((resp: any) => {
               model = new TimeModel({
                 ...resp,
-                coordinate: { latitude, longitude}
+                coordinates: { latitude, longitude}
               });
               console.log("BACK FROM API", {resp, model});
               resolve(model);
