@@ -79,7 +79,7 @@ export class TimeService {
                 coordinate: { latitude, longitude}
               });
               console.log("BACK FROM API", {resp, model});
-              this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR);
+              //this.storage.set(this.t, 'card', this.STORAGE_KEY, model, this.CACHE_FOR);
               resolve(model);
             })
             .catch(reject);
