@@ -68,13 +68,11 @@ export namespace CardBadge {
   };
 
   const debugLocationCard = (t: any, card: any) => {
-    return new trello.Promise((resolve, reject) => {
-      return {
-        text: `time`,
-        icon: env.logo.white,
-        color: 'sky',
-      };
-    });
+    return {
+      text: `time`,
+      icon: env.logo.white,
+      color: 'sky',
+    };
   }
 
   export const build = (t, opts) => {
