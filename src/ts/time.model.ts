@@ -7,7 +7,7 @@ export interface ICoordinate {
 
 export interface ITimeModel {
   label: string;
-  coordinate: ICoordinate;
+  coordinates: ICoordinate;
   timezone: string;
   
   readonly raw: any;
@@ -26,7 +26,7 @@ export class TimeModel implements ITimeModel {
   readonly raw: any;
 
   label: string;
-  coordinate: ICoordinate;
+  coordinates: ICoordinate;
   timezone: string;
 
   get dayOfTheWeek() {
@@ -52,7 +52,7 @@ export class TimeModel implements ITimeModel {
     this.raw = obj;
     if (obj) {
       this.label = obj.label ?? obj.name;
-      this.coordinate = obj.coordinate ?? { latitude: obj.latitude, longitude: obj.longitude };
+      this.coordinates = obj.coordinates ?? { latitude: obj.latitude, longitude: obj.longitude };
       this.timezone = obj.timezone ?? obj.timeZone;
 
       if (typeof(obj.value) === 'object' && typeof(obj.value.getTime) === 'function') {

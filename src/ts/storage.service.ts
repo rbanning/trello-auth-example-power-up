@@ -1,9 +1,5 @@
 import { trello } from "./_common";
 
-export interface IStorageService {
-  get: (key: string, defaultValue: any) => any;
-  set: (key: string, value: any, expiresIn: number) => void;
-}
 export interface IStore {
   getItem: (key: string) => any;
   setItem: (key: string) => void;
@@ -14,11 +10,11 @@ export interface IStorageItem {
   exp?: number //timestamp
 }
 
-export class StorageService implements IStorageService {
+export class StorageService {
 
   constructor(private store: Storage = window.localStorage) {}
 
-  get<T>(key: string, defaultValue: T = null): Promise<T> {
+  get<T>(key: string, defaultValue: T = null, converter: (d) => T = null): Promise<T> {
     let result = defaultValue;
     const json = this.store.getItem(key);
     if (json) {
@@ -30,6 +26,10 @@ export class StorageService implements IStorageService {
       }
     }
 
+    //try to convert the result (if converter is provided)
+    if (result && typeof(converter) === 'function') {
+      result = converter(result);
+    }
     //done
     return trello.Promise.resolve(result);
   }

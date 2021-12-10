@@ -36,15 +36,20 @@ export class TimeService {
     return new trello.Promise((resolve, reject) => {
       let timeModel: ITimeModel = null;
 
-      this.storage.get<ITimeModel>(this.cardToStorageKey(card))
+      this.storage.get<ITimeModel>(this.cardToStorageKey(card), null, (data) => new TimeModel(data))
         .then((storage: ITimeModel) => {
           console.log("Card and Storage", {card, storage});
+          const {latitude, longitude} = card.coordinates;
 
+          //verify that this is a valid ITimeModel instance
           if (typeof(storage?.isValid) === 'function' && storage.isValid()) {
-            return storage;
+            //verify that the coordinates are correct
+            if (storage.coordinates?.latitude === latitude && storage.coordinates.longitude === longitude) {
+              console.log("using cached TimeModel");
+              return storage;
+            }
           }
           //else (need to get the current time)
-          const {latitude, longitude} = card.coordinates;
           return this.fetchCurrentTimeFromApi(latitude, longitude);
         })
         .then((model: ITimeModel) => {
