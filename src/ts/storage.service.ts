@@ -1,31 +1,40 @@
 import { trello } from "./_common";
 
-export type StorageScope = 'board' | 'card' | 'member' | 'organization';
-export type StorageVisibility = 'shared' | 'private'
+export interface IStorageService {
+  get: (key: string, defaultValue: any) => any;
+  set: (key: string, value: any, expiresIn: number) => void;
+}
+export interface IStore {
+  getItem: (key: string) => any;
+  setItem: (key: string) => void;
+}
+
 export interface IStorageItem {
   _v: any;
   exp?: number //timestamp
 }
 
-export class StorageService {
+export class StorageService implements IStorageService {
 
-  constructor(public visibility: StorageVisibility = 'shared') {}
+  constructor(private store: Storage = window.localStorage) {}
 
-  get<T>(t: any, scope: StorageScope | string, key: string, defaultValue: T = null): Promise<T> {
-    return t.get(scope, this.visibility, key)
-      .then((data: any) => {
-        console.log("Storage", {scope, key, data, check1: "_v" in data});
-        if ("_v" in data) {
-          if (!data.exp || data.exp > Date.now()) {
-            return data._v;
-          }
+  get<T>(key: string, defaultValue: T = null): Promise<T> {
+    let result = defaultValue;
+    const json = this.store.getItem(key);
+    if (json) {
+      const data = JSON.parse(json);
+      if (data && "_v" in data) {
+        if (!data.exp || Date.now() < data.exp) {
+          result = data._v;
         }
-        //else
-        return defaultValue;
-      });
+      }
+    }
+
+    //done
+    return trello.Promise.resolve(result);
   }
 
-  set(t: any, scope: StorageScope | string, key: string, value: any, expiresIn: number = 0 /* minutes */): Promise<IStorageItem> {
+  set(key: string, value: any, expiresIn: number = 0 /* minutes */): Promise<IStorageItem> {
     //wrap the value in IStorageItem
     const item: IStorageItem = {
       _v: value
@@ -33,15 +42,8 @@ export class StorageService {
     if (expiresIn !== 0) {
       item.exp = Date.now() + (expiresIn * 60 * 1000) //convert to milliseconds
     }
-    console.log("About to set storage item", {key, value, item});
-    return new trello.Promise((resolve, reject) => {
-      t.set(scope, this.visibility, key, item)
-        .then(_ => {
-          console.log("Done setting storage item", {key, _});
-          resolve(item);
-        })
-        .catch(reject);
-
-    })
+    this.store.setItem(key, JSON.stringify(item));
+    console.log("Set storage item", {key, value, item});
+    return trello.Promise.resolve(item);
   }
 }

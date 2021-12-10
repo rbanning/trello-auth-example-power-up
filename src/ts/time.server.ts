@@ -36,7 +36,7 @@ export class TimeService {
     return new trello.Promise((resolve, reject) => {
       let timeModel: ITimeModel = null;
 
-      this.storage.get<ITimeModel>(this.t, card.id, this.STORAGE_KEY)
+      this.storage.get<ITimeModel>(this.cardToStorageKey(card))
         .then((storage: ITimeModel) => {
           console.log("Card and Storage", {card, storage});
 
@@ -50,7 +50,7 @@ export class TimeService {
         .then((model: ITimeModel) => {
           timeModel = model;
           console.log("DONE GETTING TIME", {card, model});
-          return this.storage.set(this.t, card.id, this.STORAGE_KEY, model, this.CACHE_FOR);
+          return this.storage.set(this.cardToStorageKey(card), model, this.CACHE_FOR);
         })
         .then(_ => {
           resolve(timeModel);
@@ -115,6 +115,10 @@ export class TimeService {
 
 
   //#region >> REQUEST THROTTLING <<
+
+  protected cardToStorageKey(card: any) {
+    return `${this.STORAGE_KEY}-${card.id}`;
+  }
 
   protected OkToRunRequest() {
     const now = Date.now();
