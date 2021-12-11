@@ -39,7 +39,13 @@ export namespace DateHelper {
   };
 
   export const time = (d: Date) => {
-    return d.toTimeString();
+    let h = d.getHours();
+    let m = d.getMinutes();
+    let s = d.getSeconds();
+    const ampm = h >= 12 ? 'pm' : 'am';
+    h = h % 12;
+    if (h === 0) { h = 1; }
+    return `${h}:${String(m).padStart(2, '0')}:${String(m).padStart(2, '0')}${ampm}`;
   }
 
   export const dayOfWeek = (d: Date, short: boolean = false) => {

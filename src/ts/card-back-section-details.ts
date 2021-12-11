@@ -57,7 +57,11 @@ t.render(() => {
           subtitle.innerHTML = model.timezone;
         }
         if (content) {
-          content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`
+          content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
+          //update every 20 seconds
+          window.setInterval(() => {
+            content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
+          }, 20 * 1000);
         }
         
         loading.hide();
