@@ -1,6 +1,3 @@
-import { AboutPage } from "./about-page";
-import { ITimeModel } from "./time.model";
-import { TimeService } from "./time.server";
 import { env } from "./_common";
 
 export namespace CardBackSection {

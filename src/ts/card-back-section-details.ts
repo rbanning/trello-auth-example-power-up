@@ -1,5 +1,4 @@
 import { LoadingService } from "./loading.service";
-import { HallpassService } from "./hallpass.service";
 import { trello } from "./_common";
 import { TimeService } from "./time.server";
 import { ITimeModel } from "./time.model";
