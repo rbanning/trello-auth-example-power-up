@@ -54,14 +54,14 @@ t.render(() => {
           title.innerHTML = card.locationName;
         }
         if (subtitle) {
-          subtitle.innerHTML = model.timezone;
-        }
-        if (content) {
-          content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
+          subtitle.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
           //update every 20 seconds
           window.setInterval(() => {
-            content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
+            subtitle.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
           }, 1000); //approx every second
+        }
+        if (content) {
+          content.innerHTML = `Timezone: ${model.timezone}`;
         }
         
         loading.hide();
