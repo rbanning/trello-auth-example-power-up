@@ -60,8 +60,9 @@ t.render(() => {
           content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
           //update every 20 seconds
           window.setInterval(() => {
+            console.log("Updating", {model});
             content.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
-          }, 20 * 1000);
+          }, 1000); //approx every second
         }
         
         loading.hide();

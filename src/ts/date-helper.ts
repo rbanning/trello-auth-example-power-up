@@ -42,10 +42,10 @@ export namespace DateHelper {
     let h = d.getHours();
     let m = d.getMinutes();
     let s = d.getSeconds();
-    const ampm = h >= 12 ? 'pm' : 'am';
+    const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12;
     if (h === 0) { h = 1; }
-    return `${h}:${String(m).padStart(2, '0')}:${String(m).padStart(2, '0')}${ampm}`;
+    return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} ${ampm}`;
   }
 
   export const dayOfWeek = (d: Date, short: boolean = false) => {
