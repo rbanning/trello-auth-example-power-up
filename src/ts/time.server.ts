@@ -38,7 +38,6 @@ export class TimeService {
 
       this.storage.get<ITimeModel>(this.cardToStorageKey(card), null, (data) => new TimeModel(data))
         .then((storage: ITimeModel) => {
-          console.log("Card and Storage", {card, storage});
           const {latitude, longitude} = card.coordinates;
 
           //verify that this is a valid ITimeModel instance
@@ -54,7 +53,6 @@ export class TimeService {
         })
         .then((model: ITimeModel) => {
           timeModel = model;
-          console.log("DONE GETTING TIME", {card, model});
           return this.storage.set(this.cardToStorageKey(card), model, this.CACHE_FOR);
         })
         .then(_ => {
@@ -106,7 +104,6 @@ export class TimeService {
                 ...resp,
                 coordinates: { latitude, longitude}
               });
-              console.log("BACK FROM API", {resp, model});
               resolve(model);
             })
             .catch(reject);

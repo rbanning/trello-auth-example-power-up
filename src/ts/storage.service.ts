@@ -43,7 +43,6 @@ export class StorageService {
       item.exp = Date.now() + (expiresIn * 60 * 1000) //convert to milliseconds
     }
     this.store.setItem(key, JSON.stringify(item));
-    console.log("Set storage item", {key, value, item});
     return trello.Promise.resolve(item);
   }
 }
