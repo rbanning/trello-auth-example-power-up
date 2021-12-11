@@ -67,6 +67,9 @@ export class TimeModel implements ITimeModel {
       }  
       else if ("dateTime" in obj || "datetime" in obj) {
         this.setInitialTime(Date.parse(obj.dateTime ?? obj.datetime));
+      } else {
+        this._start = obj._start;
+        this._initial = obj._initial;
       }
     }
   }
