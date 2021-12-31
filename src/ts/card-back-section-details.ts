@@ -1,7 +1,5 @@
 import { LoadingService } from "./loading.service";
 import { trello } from "./_common";
-import { TimeService } from "./time.server";
-import { ITimeModel } from "./time.model";
 
 const t = trello.t();
 const loading = new LoadingService();
@@ -28,39 +26,25 @@ const showError = (message: string) => {
 
 t.render(() => {
 
-  const timeService = new TimeService(t);
   let card: any = null;
 
   try {
-    t.card('id', 'name', 'coordinates', 'address', 'locationName')
+    t.card('id', 'name')
       .then((_card: any) => {
         card = _card; //save
-        return timeService.getCardLocationTime(card);
-      })
-      .then((model: ITimeModel) => {
-        if (!model) {
-          console.warn("Problem getting the current time", {card, model});
-          showError("Could not located the current time");
-          return null;
-        }
-
         //else .. build the page
         const title = getTitleElement();
         const subtitle = getSubTitleElement();
         const content = getContentElement();
 
         if (title) {
-          title.innerHTML = card.locationName;
+          title.innerHTML = card.name;
         }
         if (subtitle) {
-          subtitle.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
-          //update every 20 seconds
-          window.setInterval(() => {
-            subtitle.innerHTML = `${model.dayOfTheWeek} - ${model.time}`;
-          }, 1000); //approx every second
+          subtitle.innerHTML = 'Testing';
         }
         if (content) {
-          content.innerHTML = `Timezone: ${model.timezone}`;
+          content.innerHTML = `Content Goes Here`;
         }
         
         loading.hide();
