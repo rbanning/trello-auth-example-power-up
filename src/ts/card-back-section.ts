@@ -1,13 +1,19 @@
-import { env } from "./_common";
+import { Context } from "./context.namespace";
+import { env, trello } from "./_common";
 
 export namespace CardBackSection {
 
   export const build = (t: any) => {
-    return t.card('coordinates')
-      .then((card: any) => {
+    const actions = [
+      trello.Promise.resolve(Context.getContext(t)),
+      t.card('name', 'coordinates')
+    ];
+    return trello.Promise.all(actions)
+      .then(([context, card]: [Context.IContext, any]) => {
+        console.log("DEBUG", card.name, {context})
         //only return a value if the card has coordinates
         return card?.coordinates ? {
-          title: `Current Time`,
+          title: `Auth Example`,
           icon: env.logo.gray,
           content: {
             type: 'iframe',
