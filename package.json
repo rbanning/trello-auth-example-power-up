@@ -1,9 +1,9 @@
 {
-  "name": "trello-current-time-power-up",
+  "name": "trello-auth-example-power-up",
   "version": "1.0.0",
-  "description": "Trello Power Up that shows the current time for a card's location",
+  "description": "Trello Power Up that uses current user's creds to post a comment",
   "main": "index.js",
-  "repository": "https://github.com/rbanning/trello-base-power-up.git",
+  "repository": "https://github.com/rbanning/trello-auth-example-power-up.git",
   "author": "rbanning <rob@myhallpass.com>",
   "license": "MIT",
   "private": true,
