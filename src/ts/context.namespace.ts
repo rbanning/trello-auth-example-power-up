@@ -10,13 +10,15 @@ export namespace Context {
   export interface IContext {
     //each of the following represent IDs of entity listed
     board: string;
+    list: string;
     card: string;
-    command: string;
     member: string;
     organization: string;
     enterprise: string;
+    command: string;
 
     permissions: IContextPermission;
+    version: string;
   }
 
 

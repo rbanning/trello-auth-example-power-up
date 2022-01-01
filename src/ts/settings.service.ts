@@ -1,6 +1,6 @@
 import { env } from "./_common";
 
-export const setting_fields = ['scope', 'base_url'];
+export const setting_fields = ['api_key', 'scope', 'base_url'];
 
 export interface ISettings {
   scope?: string;
