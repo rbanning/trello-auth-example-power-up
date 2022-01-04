@@ -168,58 +168,69 @@ export class AuthService {
 
   private authorize(t: any, opts: any) {
 
-    //SETUP OPTS
-    opts = opts || {};
-    opts.callback_method = "fragment";
-    opts.return_url = "https://os.hallpassandfriends.com";  ///???
-    opts.expiration = opts.expiration || "1hour";
-    opts.scope = opts.scope || "read";
+    this.waitUntilLoaded()
+      .then(_ => {
 
-    const oauthUrl = this.authUrl(opts);
+        console.log("DEBUG: authorize ready", this.settings);
 
-    const tokenLooksValid = function(token) {
-      return /^[0-9a-f]{64}$/.test(token);
-    }
+        //SETUP OPTS
+        opts = opts || {};
+        opts.callback_method = "fragment";
+        opts.return_url = "https://os.hallpassandfriends.com";  ///???
+        opts.expiration = opts.expiration || "1hour";
+        opts.scope = opts.scope || "read";
+
+        const oauthUrl = this.authUrl(opts);
+
+        const tokenLooksValid = function(token) {
+          return /^[0-9a-f]{64}$/.test(token);
+        }
 
 
-    const authorizeOpts = {
-      height: 680,
-      width: 580,
-      validToken: tokenLooksValid,
-      windowCallback: function(authorizeWindow) {
-        // This callback gets called with the handle to the
-        // authorization window. This can be useful if you
-        // can't call window.close() in your new window
-        // (such as the case when your authorization page
-        // is rendered inside an iframe).
-        const storageHandler = (evt) => {
-          console.log("DEBUG: storageHandler", {evt});
-          if (evt.key === 'token' && evt.newValue) {
-            // Do something with the token here, then...
-            authorizeWindow?.close();
-            window.removeEventListener('storage', storageHandler);
+        const authorizeOpts = {
+          height: 680,
+          width: 580,
+          validToken: tokenLooksValid,
+          windowCallback: function(authorizeWindow) {
+            // This callback gets called with the handle to the
+            // authorization window. This can be useful if you
+            // can't call window.close() in your new window
+            // (such as the case when your authorization page
+            // is rendered inside an iframe).
+            const storageHandler = (evt) => {
+              console.log("DEBUG: storageHandler", {evt});
+              if (evt.key === 'token' && evt.newValue) {
+                // Do something with the token here, then...
+                authorizeWindow?.close();
+                window.removeEventListener('storage', storageHandler);
+              }
+            };
+            window.addEventListener('storage', storageHandler);
           }
         };
-        window.addEventListener('storage', storageHandler);
-      }
-    };
 
-    //run!!
-    console.log("Running authorize", {oauthUrl, authorizeOpts});
-    t.authorize(oauthUrl, authorizeOpts)
-    .then(function(token) {
-      console.log("DEBUG: GOT TOKEN", {token});
-      return t.set('organization', 'private', 'token', token)
-      .catch(t.NotHandled, function() {
-        // fall back to storing at board level
-        return t.set('board', 'private', 'token', token);
-      });
-    })
-    .then(function() {
-      // now that the token is stored, we can close this popup
-      // you might alternatively choose to open a new popup
-      return t.closePopup();
-    });
+        //run!!
+        console.log("Running authorize", {oauthUrl, authorizeOpts});
+        t.authorize(oauthUrl, authorizeOpts)
+        .then(function(token) {
+          console.log("DEBUG: GOT TOKEN", {token});
+          return t.set('organization', 'private', 'token', token)
+          .catch(t.NotHandled, function() {
+            // fall back to storing at board level
+            return t.set('board', 'private', 'token', token);
+          });
+        })
+        .then(function() {
+          // now that the token is stored, we can close this popup
+          // you might alternatively choose to open a new popup
+          return t.closePopup();
+        });
+
+      })
+      .catch(reason => {
+        console.warn("Unable to authorize! - cannot read settings", {reason});
+      }) //end waitUntilLoaded
+
   }
 
 }
