@@ -31,7 +31,9 @@ export class AuthService {
         // success: (param: any) => resolve({success: true, resp: param}),
         // error: (param: any) => reject({success: false, resp: param})
       };
-      this.authorize(t, authOpts);
+      this.authPopup(authOpts)
+        .then(result => { console.log("Back from authPopup", result); })
+        .catch(reason => { console.log("Back from authPopup - ERROR", reason); })
     });
   }
 
@@ -78,86 +80,100 @@ export class AuthService {
     return `${this.authEndpoint}/${this.authVersion}/authorize?key=${this.settings.api_key}&${query}`;
   }
 
-  private authPopup(opts: any) {
-    this.waitUntilLoaded()
-      .then (_ => {
-      // waitUntil('authorized', (isAuthorized) => {
-      //   if (isAuthorized) {
-      //     persistToken();
-      //     if (isFunction(authorizeOpts.success)) {
-      //       authorizeOpts.success();
-      //     }
-      //     return;
-      //   }
-      //   if (isFunction(authorizeOpts.error)) {
-      //     authorizeOpts.error();
-      //   }
-      // });
+  private authPopup(opts: any): Promise<IAuthResult> {
+    return new trello.Promise((resolve, reject) => {
 
-      let token: string = null;
+      this.waitUntilLoaded()
+        .then (_ => {
+        // waitUntil('authorized', (isAuthorized) => {
+        //   if (isAuthorized) {
+        //     persistToken();
+        //     if (isFunction(authorizeOpts.success)) {
+        //       authorizeOpts.success();
+        //     }
+        //     return;
+        //   }
+        //   if (isFunction(authorizeOpts.error)) {
+        //     authorizeOpts.error();
+        //   }
+        // });
 
-      const scope = Object.keys(opts.scope || {})
-        .reduce((accum, k) => {
-          if (opts.scope[k]) {
-            accum.push(k);
+        let token: string = null;
+
+        const scope = opts.scope || "read";
+
+        const { location } = window;
+
+        const width = 720;
+        const height = 800;
+        const left = window.screenX + (window.innerWidth - width) / 2;
+        const top = window.screenY + (window.innerHeight - height) / 2;
+
+        const originMatch = new RegExp(`^[a-z]+://[^/]*`).exec(location?.origin);
+        const origin = originMatch && originMatch[0];
+
+        const receiveMessage = function (event) {
+          console.log("DEBUG: receiveMessage", {event});
+
+          if (
+            event.origin !== this.authEndpoint ||
+            event.source !== authWindow
+          ) {
+            return; //not our message
           }
-          return accum;
-        }, [])
-        .join(',');
 
-      const { location } = window;
+          if (event.source != null) {
+            event.source.close();
+          }
 
-      const width = 720;
-      const height = 800;
-      const left = window.screenX + (window.innerWidth - width) / 2;
-      const top = window.screenY + (window.innerHeight - height) / 2;
+          if (event.data != null && /[0-9a-f]{64}/.test(event.data)) {
+            token = event.data;
+          } else {
+            token = null;
+          }
 
-      const originMatch = new RegExp(`^[a-z]+://[^/]*`).exec(location?.origin);
-      const origin = originMatch && originMatch[0];
-      const authWindow = window.open(
-        this.authUrl({
-          return_url: origin,
-          callback_method: 'postMessage',
-          scope,
-          expiration: opts.expiration,
-          name: opts.name,
-        }),
-        'trello',
-        `width=${width},height=${height},left=${left},top=${top}`
-      );
+          if (typeof(window.removeEventListener) === 'function') {
+            window.removeEventListener('message', receiveMessage, false);
+          }
 
-      const receiveMessage = function (event) {
-        console.log("DEBUG: receiveMessage", {event});
+          resolve({success: !!token, token, resp: event});
 
-        if (
-          event.origin !== this.authEndpoint ||
-          event.source !== authWindow
-        ) {
-          return; //not our message
-        }
+        };
 
-        if (event.source != null) {
-          event.source.close();
-        }
+        const authWindow = window.open(
+          this.authUrl({
+            return_url: origin,
+            callback_method: 'postMessage',
+            scope,
+            expiration: opts.expiration,
+            name: opts.name,
+          }),
+          'trello',
+          `width=${width},height=${height},left=${left},top=${top}`
+        );
 
-        if (event.data != null && /[0-9a-f]{64}/.test(event.data)) {
-          token = event.data;
+        if (!authWindow) {
+          
+          reject("Looks like Popup Windows have been blocked");
+
         } else {
-          token = null;
+          
+          // Listen for messages from the auth window
+          if (typeof(window.addEventListener) === 'function') {
+            window.addEventListener('message', receiveMessage, false);
+          }
+
         }
 
-        if (typeof(window.removeEventListener) === 'function') {
-          window.removeEventListener('message', receiveMessage, false);
-        }
-      };
 
-      // Listen for messages from the auth window
-      if (typeof(window.addEventListener) === 'function') {
-        window.addEventListener('message', receiveMessage, false);
-      }
-    })
-    .catch(reason => {
-      console.warn("Unable to authorize", {reason});
+
+        
+      })
+      .catch(reason => {
+        console.warn("Unable to authorize", {reason});
+        reject(reason);
+      });
+
     });
   }
 
