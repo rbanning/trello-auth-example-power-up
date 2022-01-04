@@ -1,10 +1,12 @@
 export interface ITrelloEnvironment {
   Promise: any;
   t: () => any;
+  authorize: (opts: any) => void;
 }
 export const trello: ITrelloEnvironment = {
   Promise: (window as any).TrelloPowerUp.Promise,
-  t:  () => (window as any).TrelloPowerUp.iframe()
+  t:  () => (window as any).TrelloPowerUp.iframe(),
+  authorize: (opts: any) => (window as any).Trello.authorize(opts)
 };
 
 export const env = {
