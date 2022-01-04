@@ -22,7 +22,7 @@ export class AuthService {
       })
   }
 
-  getToken(): Promise<IAuthResult> {
+  getToken(t): Promise<IAuthResult> {
     return new trello.Promise((resolve, reject) => {
       const authOpts = {
         name: env.name || "Hallpass App",
