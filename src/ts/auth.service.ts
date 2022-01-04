@@ -115,8 +115,8 @@ export class AuthService {
 
         let authWindow = null;
 
-        const receiveMessage = function (event) {
-          console.log("DEBUG: receiveMessage", {event, authEndpoint: this.authEndpoint, check: event.source !== authWindow});
+        const receiveMessage = (event) => {
+          console.log("DEBUG: receiveMessage", {event, endpoint: this.authEndpoint, check: event.source !== authWindow});
 
           if (
             event.origin !== this.authEndpoint ||
