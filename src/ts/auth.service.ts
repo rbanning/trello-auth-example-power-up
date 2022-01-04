@@ -26,14 +26,10 @@ export class AuthService {
     return new trello.Promise((resolve, reject) => {
       const authOpts = {
         name: env.name || "Hallpass App",
-        scope: {
-          read: true,
-          write: false,
-          account: false
-        },
+        scope: "read",
         expires: '1hour',
-        success: (param: any) => resolve({success: true, resp: param}),
-        error: (param: any) => reject({success: false, resp: param})
+        // success: (param: any) => resolve({success: true, resp: param}),
+        // error: (param: any) => reject({success: false, resp: param})
       };
       this.authorize(t, authOpts);
     });
@@ -224,6 +220,9 @@ export class AuthService {
           // now that the token is stored, we can close this popup
           // you might alternatively choose to open a new popup
           return t.closePopup();
+        })
+        .catch(reason => {
+          console.warn("Error authorizing", {reason});
         });
 
       })
