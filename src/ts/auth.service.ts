@@ -180,6 +180,7 @@ export class AuthService {
         const oauthUrl = this.authUrl(opts);
 
         const tokenLooksValid = function(token) {
+          console.log("DEBUG: tokenLooksValid", token, /^[0-9a-f]{64}$/.test(token));
           return /^[0-9a-f]{64}$/.test(token);
         }
 
@@ -194,6 +195,7 @@ export class AuthService {
             // can't call window.close() in your new window
             // (such as the case when your authorization page
             // is rendered inside an iframe).
+            console.log("DEBUG: windowCallback", {authorizeWindow});
             const storageHandler = (evt) => {
               console.log("DEBUG: storageHandler", {evt});
               if (evt.key === 'token' && evt.newValue) {
