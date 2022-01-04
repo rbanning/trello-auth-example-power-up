@@ -112,8 +112,11 @@ export class AuthService {
         const originMatch = new RegExp(`^[a-z]+://[^/]*`).exec(location?.origin);
         const origin = originMatch && originMatch[0];
 
+
+        let authWindow = null;
+
         const receiveMessage = function (event) {
-          console.log("DEBUG: receiveMessage", {event});
+          console.log("DEBUG: receiveMessage", {event, authEndpoint: this.authEndpoint, check: event.source !== authWindow});
 
           if (
             event.origin !== this.authEndpoint ||
@@ -140,7 +143,7 @@ export class AuthService {
 
         };
 
-        const authWindow = window.open(
+         authWindow = window.open(
           this.authUrl({
             return_url: origin,
             callback_method: 'postMessage',
