@@ -171,8 +171,8 @@ export class AuthService {
 
         //SETUP OPTS
         opts = opts || {};
-        opts.callback_method = "postMessage";
-        opts.return_url = window.location.origin;  ///???
+        opts.callback_method = "fragment";
+        opts.return_url = window.location.origin;  ///return to this page
         opts.response_type = "token";
         opts.expiration = opts.expiration || "1hour";
         opts.scope = opts.scope || "read";
@@ -207,7 +207,7 @@ export class AuthService {
         };
 
         //run!!
-        console.log("Running authorize", {oauthUrl, authorizeOpts});
+        console.log("Running authorize", {oauthUrl, authorizeOpts, opts});
         t.authorize(oauthUrl, authorizeOpts)
         .then(function(token) {
           console.log("DEBUG: GOT TOKEN", {token});
