@@ -11,7 +11,7 @@ export namespace CardDetailBadges {
       text: "authenticate",
       color: "blue",
       callback: () => {
-        const auth = new AuthService();
+        const auth = new AuthService(t);
         auth.getToken()
           .then(result => {
             console.log("DEBUG: auth successful", result);

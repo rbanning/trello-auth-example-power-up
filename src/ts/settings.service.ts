@@ -3,6 +3,7 @@ import { env } from "./_common";
 export const setting_fields = ['api_key', 'scope', 'base_url'];
 
 export interface ISettings {
+  api_key?: string;
   scope?: string;
   base_url?: string;
 }
@@ -19,7 +20,7 @@ export class SettingsService {
     this._cache = this.mergeSettings(env);
   }  
 
-  get(t: any) {
+  get(t: any): Promise<ISettings> {
     return t.get('board', this.VISIBILITY, env.SETTINGS_KEY, {})
       .then((result: any) => {
         if (result) {
