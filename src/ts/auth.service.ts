@@ -27,7 +27,7 @@ export class AuthService {
       const authOpts = {
         name: env.name || "Hallpass App",
         scope: "read",
-        expires: '1hour',
+        expiration: '1hour',
         // success: (param: any) => resolve({success: true, resp: param}),
         // error: (param: any) => reject({success: false, resp: param})
       };
@@ -171,8 +171,9 @@ export class AuthService {
 
         //SETUP OPTS
         opts = opts || {};
-        opts.callback_method = "fragment";
-        opts.return_url = "https://os.hallpassandfriends.com";  ///???
+        opts.callback_method = "postMessage";
+        opts.return_url = window.location.origin;  ///???
+        opts.response_type = "token";
         opts.expiration = opts.expiration || "1hour";
         opts.scope = opts.scope || "read";
 
