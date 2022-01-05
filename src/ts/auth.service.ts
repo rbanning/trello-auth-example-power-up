@@ -1,4 +1,5 @@
 import { ISettings, SettingsService } from "./settings.service";
+import { toastr } from "./toastr.service";
 import { env, trello } from "./_common";
 
 export interface IAuthResult {
@@ -33,7 +34,10 @@ export class AuthService {
       };
       this.authPopup(authOpts)
         .then(result => { console.log("Back from authPopup", result); })
-        .catch(reason => { console.log("Back from authPopup - ERROR", reason); })
+        .catch(reason => { 
+          console.log("Back from authPopup - ERROR", reason); 
+          toastr.error(t, reason);
+        });
     });
   }
 
