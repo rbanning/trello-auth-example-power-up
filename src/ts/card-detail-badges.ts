@@ -52,7 +52,7 @@ export namespace CardDetailBadges {
   
   const authenticatedActions = (t: any, member: any) => {
     const auth = new AuthService(t);
-    console.log("DEBUG: In authenticatedActions", {t, auth});
+    console.log("DEBUG: In authenticatedActions", {t, auth, member});
     return auth.getAuthCredentials(t, member)
       .then((creds: IAuthCred) => {
         console.log("DEBUG: about to make a decision", creds, creds?.isValid());
@@ -65,9 +65,10 @@ export namespace CardDetailBadges {
   export const build = (t: any) => {
     return t.member('id', 'username')
       .then(member => {
-        return [
-          authenticatedActions(t, member)  
-        ];
+        return authenticatedActions(t, member)
+          .then(result => {
+            return [result];
+          });
       });
   }
 }
