@@ -14,10 +14,10 @@ export namespace CardDetailBadges {
         const auth = new AuthService(t);
         auth.getAuthCredentials(t)
           .then(result => {
-            console.log("DEBUG: auth successful", result);
+            console.log(`DEBUG: auth {result?.isValid() ? "successful" : "failed"}`, result);
           })
           .catch(result => {
-            console.log("DEBUG: auth failed", result);
+            console.log("DEBUG: auth rejected", result);
           });
       }
     }

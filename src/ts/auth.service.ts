@@ -9,6 +9,33 @@ export interface IAuthCred {
   expires?: number;
   isValid(): boolean;
 }
+export class AuthCred implements IAuthCred {
+  id: string;
+  username: string;
+  token: string;
+  expires: number;
+
+  constructor(obj: any = null) {
+    if (obj) {
+      this.id = obj.id;
+      this.username = obj.username;
+      this.token = obj.token;
+      this.expires = obj.expires;
+    }
+  }
+
+  isValid(): boolean {
+    if (this.id && this.username && this.token) {
+      if (typeof(this.expires) === 'number') {
+        return Date.now() < this.expires;
+      }
+      //else (does not expire)
+      return true;
+    } 
+    //else 
+    return false;
+  }
+}
 export interface IAuthResult {
   success: boolean;
   token?: string;
@@ -39,6 +66,7 @@ export class AuthService {
 
           this.getCredsFromStorage(t, member)
             .then(cred => {
+              console.log("DEBUG: back from getCredsFromStorage", cred, cred?.isValid());
               if (cred?.isValid()) {
                 resolve(cred);
               } else {
@@ -69,25 +97,18 @@ export class AuthService {
 
 
   private buildAuthCred (member: any, token: string, expires: number = null): IAuthCred {
-    return {
+    return new AuthCred({
       id: member?.id,
       username: member?.username,
       token,
-      expires,
-      isValid: function () {
-        if (this.id && this.username && this.token) {
-          return this.expires > 0 ? Date.now < this.expires : true;
-        } 
-        //else 
-        return false;
-      } 
-    }
+      expires
+    });
   };
 
   private getCredsFromStorage (t: any, member: any): Promise<IAuthCred> {
     return t.get('member', 'private', this.storageKey)
       .then((result) => {
-        return result?.id === member?.id ? result : this.buildAuthCred(member, null);
+        return result?.id === member?.id ? new AuthCred(result) : this.buildAuthCred(member, null);
       });
   };
 
