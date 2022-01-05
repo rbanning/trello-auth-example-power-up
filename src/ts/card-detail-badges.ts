@@ -71,7 +71,12 @@ export namespace CardDetailBadges {
             callback: (tt, opts) => { console.log("DEBUG: PROFILE", {opts}); close(tt); }
           }, {
             text: 'DeAuthorize',
-            callback: (tt, opts) => { console.log("DEBUG: DeAuthorize", {opts}); close(tt); }
+            callback: (tt, opts) => { 
+              const auth = new AuthService(tt);
+              auth.deAuthorize(tt)
+                .then(_ => toastr.success(tt, "You're account has been de-authorized"));
+              close(tt); 
+            }
           }]
         });
       }
@@ -82,7 +87,7 @@ export namespace CardDetailBadges {
     const auth = new AuthService(t);
     return auth.getAuthCredentials(t, member)
       .then((creds: IAuthCred) => {
-        return (creds?.isValid() ? [actionBadge(), accountBadge(member?.fullName)] : authenticateBadge());
+        return (creds?.isValid() ? [accountBadge(member?.fullName), actionBadge()] : authenticateBadge());
       });
   }
 

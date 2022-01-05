@@ -10,7 +10,7 @@ const showToast = (t: any, display: string, message: string, duration: number) =
 };
 
 const toastFn = (display: string) => {
-  return (t: any, message: string, duration: number = 5) => {
+  return (t: any, message: string, duration: number = 10) => {
     return showToast(t, display, message, duration);
   };
 };

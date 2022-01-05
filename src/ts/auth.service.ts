@@ -91,6 +91,9 @@ export class AuthService {
       });
   }
 
+  deAuthorize(t): Promise<boolean> {
+    return this.saveCredsToStorage(t, null);
+  }
 
   private buildAuthCred (member: any, token: string, expires: number = null): IAuthCred {
     return new AuthCred({
