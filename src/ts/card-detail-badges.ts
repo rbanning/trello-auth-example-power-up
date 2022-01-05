@@ -53,13 +53,11 @@ export namespace CardDetailBadges {
   const authenticatedActions = (t: any, member: any) => {
     const auth = new AuthService(t);
     console.log("DEBUG: In authenticatedActions", {t, auth});
-    return new trello.Promise((resolve, reject) => {
-      auth.getAuthCredentials(t, member)
+    return auth.getAuthCredentials(t, member)
       .then((creds: IAuthCred) => {
         console.log("DEBUG: about to make a decision", creds, creds?.isValid());
-        resolve(creds?.isValid() ? actionBadge() : authenticateBadge());
-      }).catch(reject);
-    }); 
+        return (creds?.isValid() ? actionBadge() : authenticateBadge());
+      });
   }
 
 

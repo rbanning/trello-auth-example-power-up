@@ -72,25 +72,24 @@ export class AuthService {
   }
 
   authenticate(t, member: any): Promise<IAuthCred> {
-    return new trello.Promise((resolve, reject) => {
-      //todo: work on scope and expiration as params
-      const authOpts = {
-        name: env.name || "Hallpass App",
-        scope: "read",
-        expiration: '1hour'
-      };
-      return this.authPopup(authOpts)
-        .then(result => { 
-          const creds = this.buildAuthCred(member, result.token);
-          console.log("Back from authPopup", {result, creds});
-          this.saveCredsToStorage(t, creds);
-          return creds;
-        })
-        .catch(reason => { 
-          console.log("Back from authPopup - ERROR", reason); 
-          toastr.error(t, reason, 10 /* long delay */);
-        });
-    });
+     //todo: work on scope and expiration as params
+     const authOpts = {
+      name: env.name || "Hallpass App",
+      scope: "read",
+      expiration: '1hour'
+    };
+    return this.authPopup(authOpts)
+      .then((result: IAuthResult) => { 
+        const creds: IAuthCred = this.buildAuthCred(member, result.token);
+        console.log("Back from authPopup", {result, creds});
+        this.saveCredsToStorage(t, creds);
+        return creds;
+      })
+      .catch(reason => { 
+        console.log("Back from authPopup - ERROR", reason); 
+        toastr.error(t, reason, 10 /* long delay */);
+        return null;
+      });
   }
 
 
