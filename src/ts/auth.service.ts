@@ -64,7 +64,7 @@ export class AuthService {
       console.log("DEBUG: getting credentials", {t});
       t.member('id', 'username')
         .then(member => {
-
+console.log("DEBUG: got member info and now to check storage", {member});
           this.getCredsFromStorage(t, member)
             .then(cred => {
               console.log("DEBUG: back from getCredsFromStorage", cred, cred?.isValid());
