@@ -67,31 +67,39 @@ export class AuthService {
           this.getCredsFromStorage(t, member)
             .then(cred => {
               console.log("DEBUG: back from getCredsFromStorage", cred, cred?.isValid());
-              if (cred?.isValid()) {
-                resolve(cred);
-              } else {
-                const authOpts = {
-                  name: env.name || "Hallpass App",
-                  scope: "read",
-                  expiration: '1hour',
-                  // success: (param: any) => resolve({success: true, resp: param}),
-                  // error: (param: any) => reject({success: false, resp: param})
-                };
-                this.authPopup(authOpts)
-                  .then(result => { 
-                    const creds = this.buildAuthCred(member, result.token);
-                    console.log("Back from authPopup", {result, creds});
-                    this.saveCredsToStorage(t, creds);
-                    resolve(creds);
-                  })
-                  .catch(reason => { 
-                    console.log("Back from authPopup - ERROR", reason); 
-                    toastr.error(t, reason, 10 /* long delay */);
-                    reject(reason);
-                  });
-          
-              }
+              resolve(cred?.isValid() ? cred : null);
             })
+        }).catch(reject);
+
+    });
+  
+  }
+
+  authenticate(t): Promise<IAuthCred> {
+    return new trello.Promise((resolve, reject) => {
+      t.member('id', 'username')
+        .then(member => {
+
+          const authOpts = {
+            name: env.name || "Hallpass App",
+            scope: "read",
+            expiration: '1hour',
+            // success: (param: any) => resolve({success: true, resp: param}),
+            // error: (param: any) => reject({success: false, resp: param})
+          };
+          this.authPopup(authOpts)
+            .then(result => { 
+              const creds = this.buildAuthCred(member, result.token);
+              console.log("Back from authPopup", {result, creds});
+              this.saveCredsToStorage(t, creds);
+              resolve(creds);
+            })
+            .catch(reason => { 
+              console.log("Back from authPopup - ERROR", reason); 
+              toastr.error(t, reason, 10 /* long delay */);
+              reject(reason);
+            });
+            
         }).catch(reject);
 
     });

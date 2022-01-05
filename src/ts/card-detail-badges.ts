@@ -1,16 +1,14 @@
-import { AuthService } from "./auth.service";
+import { AuthService, IAuthCred } from "./auth.service";
 import { env } from "./_common";
 
 export namespace CardDetailBadges {
   
-
-  export function auth(t: any) {
-
+  const authenticateBadge = () => {
     return {
       title: env.name || "Hallpass Auth",
-      text: "authenticate",
-      color: "blue",
-      callback: () => {
+      text: "Please Authenticate",
+      color: "gray",
+      callback: (t) => {
         const auth = new AuthService(t);
         auth.getAuthCredentials(t)
           .then(result => {
@@ -20,14 +18,50 @@ export namespace CardDetailBadges {
             console.log("DEBUG: auth rejected", result);
           });
       }
-    }
+    };
+  }
+
+  const actionBadge = () => {
+    const close = (t) => {
+      t.closePopup();
+    };
+
+    return {
+      title: env.name || "Hallpass Auth",
+      text: "Take Action",
+      color: "blue",
+      callback: (t) => {
+        return t.popup({
+          title: 'Snooze Card',
+          items: [{
+            text: 'In 15 Minutes',
+            callback: (tt, opts) => { console.log("DEBUG: SNOOZE - 15 Minutes", {opts}); close(tt); }
+          }, {
+            text: 'In 1 hour',
+            callback: (tt, opts) => { console.log("DEBUG: SNOOZE - 1 hour", {opts}); close(tt); }
+          }, {
+            text: 'In 2 hours',
+            callback: (tt, opts) => { console.log("DEBUG: SNOOZE - 2 hours", {opts}); close(tt); }
+          }]
+        });
+      }
+    };
+
+  }
+  
+  const authenticatedActions = (t: any) => {
+    const auth = new AuthService(t);
+    return auth.getAuthCredentials(t)
+      .then((creds: IAuthCred) => {
+        return creds?.isValid() ? actionBadge() : authenticateBadge();
+      });
   }
 
 
 
-  export function build(t: any) {
+  export const build = (t: any) => {
     return [
-      auth(t)
+      authenticatedActions(t)
     ].filter(Boolean);
   }
 }
