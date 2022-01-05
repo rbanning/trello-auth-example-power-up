@@ -1,9 +1,10 @@
 import { AuthService, IAuthCred } from "./auth.service";
-import { env } from "./_common";
+import { env, trello } from "./_common";
 
 export namespace CardDetailBadges {
   
   const authenticateBadge = () => {
+    console.log("DEBUG: authenticateBadge");
     return {
       title: env.name || "Hallpass Auth",
       text: "Please Authenticate",
@@ -52,11 +53,13 @@ export namespace CardDetailBadges {
   const authenticatedActions = (t: any) => {
     const auth = new AuthService(t);
     console.log("DEBUG: In authenticatedActions", {t, auth});
-    return auth.getAuthCredentials(t)
+    return new trello.Promise((resolve, reject) => {
+      auth.getAuthCredentials(t)
       .then((creds: IAuthCred) => {
         console.log("DEBUG: about to make a decision", creds, creds?.isValid());
-        return creds?.isValid() ? actionBadge() : authenticateBadge();
-      });
+        resolve(creds?.isValid() ? actionBadge() : authenticateBadge());
+      }).catch(reject);
+    }); 
   }
 
 
