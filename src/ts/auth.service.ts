@@ -65,11 +65,12 @@ export class AuthService {
       t.member('id', 'username')
         .then(member => {
 console.log("DEBUG: got member info and now to check storage", {member});
-          this.getCredsFromStorage(t, member)
-            .then(cred => {
-              console.log("DEBUG: back from getCredsFromStorage", cred, cred?.isValid());
-              resolve(cred?.isValid() ? cred : null);
-            })
+resolve(null);
+          // this.getCredsFromStorage(t, member)
+          //   .then(cred => {
+          //     console.log("DEBUG: back from getCredsFromStorage", cred, cred?.isValid());
+          //     resolve(cred?.isValid() ? cred : null);
+          //   });
         }).catch(reject);
 
     });
