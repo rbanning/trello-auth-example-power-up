@@ -36,7 +36,7 @@ export class AuthService {
         .then(result => { console.log("Back from authPopup", result); })
         .catch(reason => { 
           console.log("Back from authPopup - ERROR", reason); 
-          toastr.error(t, reason);
+          toastr.error(t, reason, 10 /* long delay */);
         });
     });
   }
