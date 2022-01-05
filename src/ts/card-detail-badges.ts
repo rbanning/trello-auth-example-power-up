@@ -53,23 +53,47 @@ export namespace CardDetailBadges {
     };
 
   }
+
+  const accountBadge = (name) => {
+    const close = (t) => {
+      t.closePopup();
+    };
+
+    return {
+      title: "Account",
+      text: name,
+      color: "blue",
+      callback: (t) => {
+        return t.popup({
+          title: 'My Account',
+          items: [{
+            text: 'Profile',
+            callback: (tt, opts) => { console.log("DEBUG: PROFILE", {opts}); close(tt); }
+          }, {
+            text: 'DeAuthorize',
+            callback: (tt, opts) => { console.log("DEBUG: DeAuthorize", {opts}); close(tt); }
+          }]
+        });
+      }
+    }
+  }
   
   const authenticatedActions = (t: any, member: any) => {
     const auth = new AuthService(t);
     return auth.getAuthCredentials(t, member)
       .then((creds: IAuthCred) => {
-        return (creds?.isValid() ? actionBadge() : authenticateBadge());
+        return (creds?.isValid() ? [actionBadge(), accountBadge(member?.fullName)] : authenticateBadge());
       });
   }
 
 
 
   export const build = (t: any) => {
-    return t.member('id', 'username')
+    return t.member('id', 'username', 'fullName')
       .then(member => {
         return authenticatedActions(t, member)
-          .then(result => {
-            return [result];
+          .then(results => {
+            return results;
           });
       });
   }
