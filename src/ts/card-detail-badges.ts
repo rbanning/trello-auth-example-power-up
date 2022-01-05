@@ -4,14 +4,14 @@ import { env, trello } from "./_common";
 
 export namespace CardDetailBadges {
   
-  const authenticateBadge = () => {
+  const authenticateBadge = (member: any) => {
     return {
       title: env.name || "Hallpass Auth",
       text: "Please Authenticate",
       color: "gray",
       callback: (t) => {
         const auth = new AuthService(t);
-        auth.getAuthCredentials(t)
+        auth.authenticate(t, member)
           .then(result => {
             if (result?.isValid()) {
               toastr.success(t, "You have been authenticated");
@@ -87,7 +87,7 @@ export namespace CardDetailBadges {
     const auth = new AuthService(t);
     return auth.getAuthCredentials(t, member)
       .then((creds: IAuthCred) => {
-        return (creds?.isValid() ? [accountBadge(member?.fullName), actionBadge()] : authenticateBadge());
+        return (creds?.isValid() ? [accountBadge(member?.fullName), actionBadge()] : authenticateBadge(member));
       });
   }
 
