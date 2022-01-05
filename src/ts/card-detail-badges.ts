@@ -51,8 +51,10 @@ export namespace CardDetailBadges {
   
   const authenticatedActions = (t: any) => {
     const auth = new AuthService(t);
+    console.log("DEBUG: In authenticatedActions", {t, auth});
     return auth.getAuthCredentials(t)
       .then((creds: IAuthCred) => {
+        console.log("DEBUG: about to make a decision", creds, creds?.isValid());
         return creds?.isValid() ? actionBadge() : authenticateBadge();
       });
   }

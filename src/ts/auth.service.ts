@@ -61,6 +61,7 @@ export class AuthService {
 
   getAuthCredentials(t): Promise<IAuthCred> {
     return new trello.Promise((resolve, reject) => {
+      console.log("DEBUG: getting credentials", {t});
       t.member('id', 'username')
         .then(member => {
 
@@ -99,7 +100,7 @@ export class AuthService {
               toastr.error(t, reason, 10 /* long delay */);
               reject(reason);
             });
-            
+
         }).catch(reject);
 
     });
