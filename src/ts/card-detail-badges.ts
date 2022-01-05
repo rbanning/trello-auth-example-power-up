@@ -50,11 +50,11 @@ export namespace CardDetailBadges {
 
   }
   
-  const authenticatedActions = (t: any) => {
+  const authenticatedActions = (t: any, member: any) => {
     const auth = new AuthService(t);
     console.log("DEBUG: In authenticatedActions", {t, auth});
     return new trello.Promise((resolve, reject) => {
-      auth.getAuthCredentials(t)
+      auth.getAuthCredentials(t, member)
       .then((creds: IAuthCred) => {
         console.log("DEBUG: about to make a decision", creds, creds?.isValid());
         resolve(creds?.isValid() ? actionBadge() : authenticateBadge());
@@ -65,8 +65,11 @@ export namespace CardDetailBadges {
 
 
   export const build = (t: any) => {
-    return [
-      authenticatedActions(t)
-    ].filter(Boolean);
+    return t.member('id', 'username')
+      .then(member => {
+        return [
+          authenticatedActions(t, member)  
+        ];
+      });
   }
 }

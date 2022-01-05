@@ -7,7 +7,7 @@ export interface IAuthCred {
   username: string;
   token: string;
   expires?: number;
-  isValid(): boolean;
+  isValid(member?: any): boolean;
 }
 export class AuthCred implements IAuthCred {
   id: string;
@@ -24,8 +24,12 @@ export class AuthCred implements IAuthCred {
     }
   }
 
-  isValid(): boolean {
+  isValid(member?: any): boolean {
     if (this.id && this.username && this.token) {
+      //check the member information (if provided)
+      if (member && (this.id !== member.id || this.username !== member.username)) { return false; }
+
+      //check expiration (if exists)
       if (typeof(this.expires) === 'number') {
         return Date.now() < this.expires;
       }
@@ -59,51 +63,33 @@ export class AuthService {
       })
   }
 
-  getAuthCredentials(t): Promise<IAuthCred> {
-    return new trello.Promise((resolve, reject) => {
-      console.log("DEBUG: getting credentials", {t});
-      t.member('id', 'username')
-        .then(member => {
-console.log("DEBUG: got member info and now to check storage", {member});
-resolve(null);
-          // this.getCredsFromStorage(t, member)
-          //   .then(cred => {
-          //     console.log("DEBUG: back from getCredsFromStorage", cred, cred?.isValid());
-          //     resolve(cred?.isValid() ? cred : null);
-          //   });
-        }).catch(reject);
-
-    });
-  
+  getAuthCredentials(t, member: any = null): Promise<IAuthCred> {
+    return this.getCredsFromStorage(t, member)
+      .then(cred => {
+        console.log("DEBUG: back from getCredsFromStorage", {cred, member}, cred?.isValid(member));
+        return cred?.isValid(member) ? cred : null
+      });
   }
 
-  authenticate(t): Promise<IAuthCred> {
+  authenticate(t, member: any): Promise<IAuthCred> {
     return new trello.Promise((resolve, reject) => {
-      t.member('id', 'username')
-        .then(member => {
-
-          const authOpts = {
-            name: env.name || "Hallpass App",
-            scope: "read",
-            expiration: '1hour',
-            // success: (param: any) => resolve({success: true, resp: param}),
-            // error: (param: any) => reject({success: false, resp: param})
-          };
-          this.authPopup(authOpts)
-            .then(result => { 
-              const creds = this.buildAuthCred(member, result.token);
-              console.log("Back from authPopup", {result, creds});
-              this.saveCredsToStorage(t, creds);
-              resolve(creds);
-            })
-            .catch(reason => { 
-              console.log("Back from authPopup - ERROR", reason); 
-              toastr.error(t, reason, 10 /* long delay */);
-              reject(reason);
-            });
-
-        }).catch(reject);
-
+      //todo: work on scope and expiration as params
+      const authOpts = {
+        name: env.name || "Hallpass App",
+        scope: "read",
+        expiration: '1hour'
+      };
+      return this.authPopup(authOpts)
+        .then(result => { 
+          const creds = this.buildAuthCred(member, result.token);
+          console.log("Back from authPopup", {result, creds});
+          this.saveCredsToStorage(t, creds);
+          return creds;
+        })
+        .catch(reason => { 
+          console.log("Back from authPopup - ERROR", reason); 
+          toastr.error(t, reason, 10 /* long delay */);
+        });
     });
   }
 
