@@ -2,13 +2,22 @@ import { ISettings, SettingsService } from "./settings.service";
 import { toastr } from "./toastr.service";
 import { env, trello } from "./_common";
 
+export interface IAuthCred {
+  id: string;
+  username: string;
+  token: string;
+  expires?: number;
+  isValid(): boolean;
+}
 export interface IAuthResult {
   success: boolean;
   token?: string;
   resp?: any;
 }
 
+
 export class AuthService {
+  private readonly storageKey = "hallpass-auth";
   private readonly authEndpoint = "https://trello.com";
   private readonly authVersion = "1";
   private deferred = {};
@@ -23,41 +32,69 @@ export class AuthService {
       })
   }
 
-  getToken(t): Promise<IAuthResult> {
+  getAuthCredentials(t): Promise<IAuthCred> {
     return new trello.Promise((resolve, reject) => {
-      const authOpts = {
-        name: env.name || "Hallpass App",
-        scope: "read",
-        expiration: '1hour',
-        // success: (param: any) => resolve({success: true, resp: param}),
-        // error: (param: any) => reject({success: false, resp: param})
-      };
-      this.authPopup(authOpts)
-        .then(result => { console.log("Back from authPopup", result); })
-        .catch(reason => { 
-          console.log("Back from authPopup - ERROR", reason); 
-          toastr.error(t, reason, 10 /* long delay */);
-        });
+      t.member('id', 'username')
+        .then(member => {
+
+          this.getCredsFromStorage(t, member)
+            .then(cred => {
+              if (cred?.isValid()) {
+                resolve(cred);
+              } else {
+                const authOpts = {
+                  name: env.name || "Hallpass App",
+                  scope: "read",
+                  expiration: '1hour',
+                  // success: (param: any) => resolve({success: true, resp: param}),
+                  // error: (param: any) => reject({success: false, resp: param})
+                };
+                this.authPopup(authOpts)
+                  .then(result => { 
+                    console.log("Back from authPopup", result);
+                    resolve(this.buildAuthCred(member, result.token));
+                  })
+                  .catch(reason => { 
+                    console.log("Back from authPopup - ERROR", reason); 
+                    toastr.error(t, reason, 10 /* long delay */);
+                    reject(reason);
+                  });
+          
+              }
+            })
+        }).catch(reject);
+
     });
   }
 
 
-  private waitUntil (name, fx) {
-    if (!this.deferred[name]) {
-      this.deferred[name] = [];
+  private buildAuthCred (member: any, token: string, expires: number = null): IAuthCred {
+    return {
+      id: member?.id,
+      username: member?.username,
+      token,
+      expires,
+      isValid: function () {
+        if (this.id && this.username && this.token) {
+          return this.expires > 0 ? Date.now < this.expires : true;
+        } 
+        //else 
+        return false;
+      } 
     }
-    this.deferred[name].push(fx);
   };
 
-  private isReady (name, value) {
-    if (this.deferred[name]) {
-      const fxs = this.deferred[name];
-      delete this.deferred[name];
-      for (const fx of fxs) {
-        fx(value);
-      }
-    }
+  private getCredsFromStorage (t: any, member: any): Promise<IAuthCred> {
+    return t.get('member', 'private', this.storageKey)
+      .then((result) => {
+        return result?.id === member?.id ? result : this.buildAuthCred(member, null);
+      });
   };
+
+  private saveCredsToStorage(t: any, creds: IAuthCred): Promise<boolean> {
+    return t.set('member', 'private', this.storageKey, creds)
+      .then(_ => true);
+  }
 
   private waitUntilLoaded(max_attempts: number = 5, delay: number = 300): Promise<boolean> {
     return new trello.Promise((resolve, reject) => {

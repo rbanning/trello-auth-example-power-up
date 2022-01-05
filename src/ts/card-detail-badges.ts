@@ -12,7 +12,7 @@ export namespace CardDetailBadges {
       color: "blue",
       callback: () => {
         const auth = new AuthService(t);
-        auth.getToken(t)
+        auth.getAuthCredentials(t)
           .then(result => {
             console.log("DEBUG: auth successful", result);
           })
