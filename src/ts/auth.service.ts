@@ -66,7 +66,6 @@ export class AuthService {
   getAuthCredentials(t, member: any = null): Promise<IAuthCred> {
     return this.getCredsFromStorage(t, member)
       .then(cred => {
-        console.log("DEBUG: back from getCredsFromStorage", {cred, member}, cred?.isValid(member));
         return cred?.isValid(member) ? cred : null
       });
   }
@@ -142,20 +141,8 @@ export class AuthService {
   private authPopup(opts: any): Promise<IAuthResult> {
     return new trello.Promise((resolve, reject) => {
 
-      this.waitUntilLoaded()
+      this.waitUntilLoaded()  //need to first get the settings
         .then (_ => {
-        // waitUntil('authorized', (isAuthorized) => {
-        //   if (isAuthorized) {
-        //     persistToken();
-        //     if (isFunction(authorizeOpts.success)) {
-        //       authorizeOpts.success();
-        //     }
-        //     return;
-        //   }
-        //   if (isFunction(authorizeOpts.error)) {
-        //     authorizeOpts.error();
-        //   }
-        // });
 
         let token: string = null;
 
@@ -175,8 +162,6 @@ export class AuthService {
         let authWindow = null;
 
         const receiveMessage = (event) => {
-          console.log("DEBUG: receiveMessage", {event, endpoint: this.authEndpoint, check: event.source !== authWindow});
-
           if (
             event.origin !== this.authEndpoint ||
             event.source !== authWindow

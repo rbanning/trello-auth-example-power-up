@@ -1,10 +1,10 @@
 import { AuthService, IAuthCred } from "./auth.service";
+import { toastr } from "./toastr.service";
 import { env, trello } from "./_common";
 
 export namespace CardDetailBadges {
   
   const authenticateBadge = () => {
-    console.log("DEBUG: authenticateBadge");
     return {
       title: env.name || "Hallpass Auth",
       text: "Please Authenticate",
@@ -13,10 +13,14 @@ export namespace CardDetailBadges {
         const auth = new AuthService(t);
         auth.getAuthCredentials(t)
           .then(result => {
-            console.log(`DEBUG: auth ${result?.isValid() ? "successful" : "failed"}`, result);
+            if (result?.isValid()) {
+              toastr.success(t, "You have been authenticated");
+            } else {
+              toastr.warning(t, "Unable to authenticate you");
+            }
           })
           .catch(result => {
-            console.log("DEBUG: auth rejected", result);
+            //ignore (handled by auth);
           });
       }
     };
@@ -52,10 +56,8 @@ export namespace CardDetailBadges {
   
   const authenticatedActions = (t: any, member: any) => {
     const auth = new AuthService(t);
-    console.log("DEBUG: In authenticatedActions", {t, auth, member});
     return auth.getAuthCredentials(t, member)
       .then((creds: IAuthCred) => {
-        console.log("DEBUG: about to make a decision", creds, creds?.isValid());
         return (creds?.isValid() ? actionBadge() : authenticateBadge());
       });
   }
