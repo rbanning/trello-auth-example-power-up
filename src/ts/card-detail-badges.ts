@@ -91,9 +91,38 @@ export namespace CardDetailBadges {
       });
   }
 
+  export class Button {
+    size: 'sm' | 'med' | 'lg' = 'med';
+    color: string = 'red';
+    label: string = "Label";
+  }
 
+  export class Story<T> {
+    component: { new(): T};
+    props: T
+  }
 
   export const build = (t: any) => {
+    const Template = (args: Button): Story<Button> => ({
+      component: Button,
+      props: args
+    });
+    const Default = Template.bind({});
+    const Primary = Template.bind({});
+    Primary.args = {
+      size: 'lg',
+      label: 'Primary'
+    };
+    const Secondary = Template.bind({});
+    Secondary.args = {
+      color: 'blue',
+      label: 'Secondary'
+    }
+
+    console.log("DEBUG: Story Template", {Template, Default, Primary, Secondary});
+
+    
+
     return t.member('id', 'username', 'fullName')
       .then(member => {
         return authenticatedActions(t, member)
