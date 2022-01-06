@@ -119,9 +119,16 @@ export namespace CardDetailBadges {
       label: 'Secondary'
     }
 
-    console.log("DEBUG: Story Template", {Template, Default, Primary, Secondary});
+    const param = new Button();
 
-    
+    console.log("DEBUG: Story Template", {
+      Template: { cls: Template, inst: Template(param)}, 
+      Default: { cls: Default, inst: Default(param)}, 
+      Primary: { cls: Primary, inst: Primary(param)}, 
+      Secondary: { cls: Secondary, inst: Secondary(param)}
+    });
+
+
 
     return t.member('id', 'username', 'fullName')
       .then(member => {
